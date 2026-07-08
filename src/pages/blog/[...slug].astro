@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import { href, formatDate, formatDateTr } from "../../lib/site";
-import { renderBilingual, readingMinutes } from "../../lib/i18n";
+import { renderBilingual, readingMinutes, enWordCount } from "../../lib/i18n";
 import T from "../../components/T.astro";
 
 export async function getStaticPaths() {
@@ -26,6 +26,8 @@ const descriptionTr = post.data.description_tr ?? description;
 const { enHtml, trHtml, bilingual } = renderBilingual(post.body ?? "");
 const mins = readingMinutes(post.body ?? "");
 const metaDual = !!post.data.title_tr || !!post.data.description_tr;
+// SEO keywords: explicit frontmatter list if given, else the post's tags.
+const keywords = post.data.keywords ?? tags;
 
 const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
 const url = abs(Astro.url.pathname);
@@ -39,7 +41,11 @@ const jsonLd = {
   dateModified: (post.data.updatedDate ?? pubDate).toISOString(),
   author: { "@type": "Person", name: author },
   publisher: { "@type": "Organization", name: "XRack Technologies" },
-  keywords: tags.join(", "),
+  keywords: keywords.join(", "),
+  articleSection: tags[0],
+  inLanguage: "en",
+  wordCount: enWordCount(post.body ?? ""),
+  timeRequired: `PT${mins}M`,
   image,
   mainEntityOfPage: url,
   url,
@@ -49,7 +55,7 @@ const jsonLd = {
 <Base
   title={title}
   description={description}
-  keywords={tags}
+  keywords={keywords}
   ogType="article"
   image={image}
   publishedTime={pubDate.toISOString()}

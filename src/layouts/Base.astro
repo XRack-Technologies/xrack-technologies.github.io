@@ -69,6 +69,8 @@ const year = new Date().getFullYear();
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="tr_TR" />
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     {ogType === "article" && <meta property="article:author" content={SITE.author} />}
     {articleTags.map((t) => <meta property="article:tag" content={t} />)}
@@ -216,7 +218,7 @@ const year = new Date().getFullYear();
 
         <div class="site-foot-bottom">
           <div>&copy; {year} XRack Technologies. <T en="All rights reserved." tr="Tüm hakları saklıdır." /></div>
-          <div><T en="Built with cognition." tr="Bilişle inşa edildi." /></div>
+          <div><T en="Built with cognition and passion." tr="Bilişle ve tutkuyla inşa edildi." /></div>
         </div>
       </div>
     </footer>
