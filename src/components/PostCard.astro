@@ -10,17 +10,17 @@ const { title, description, pubDate, tags, author } = post.data;
 const primaryTag = tags[0];
 ---
 
-<article class="card">
-  <a class="card-link" href={href(`blog/${post.id}`)}>
-    <div class="card-meta">
-      {primaryTag && <span class="chip">{primaryTag}</span>}
+<article class="card-chrome reveal-on-view">
+  <a class="post-card__link" href={href(`blog/${post.id}`)}>
+    <div class="post-card__meta">
+      {primaryTag && <span class="pill pill-primary">{primaryTag}</span>}
       <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
     </div>
-    <h2>{title}</h2>
-    <p>{description}</p>
-    <div class="card-foot">
+    <h2 class="post-card__title">{title}</h2>
+    <p class="post-card__excerpt">{description}</p>
+    <div class="post-card__foot">
       <span>{author}</span>
-      <span class="read-more">Read &rarr;</span>
+      <span class="read">Read &rarr;</span>
     </div>
   </a>
 </article>

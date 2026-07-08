@@ -5,8 +5,9 @@ import { href, SITE } from "../lib/site";
 
 <Base title="About">
   <article class="article">
-    <header class="article-head wrap wrap--narrow">
-      <h1>About</h1>
+    <header class="wrap wrap--narrow article-head">
+      <span class="eyebrow-strong">About</span>
+      <h1 class="display-title">The XRack Blog</h1>
     </header>
     <div class="wrap wrap--narrow prose">
       <p>
@@ -18,9 +19,8 @@ import { href, SITE } from "../lib/site";
         This blog is where we write down how it is built and where it is going — engineering
         deep-dives, research, field notes, and the convictions behind the harness.
       </p>
-      <p>
-        The product itself lives at <a href={SITE.homepage}>xrack.io</a>.
-      </p>
+      <blockquote>The model proposes, the runtime executes, the ledger proves.</blockquote>
+      <p>The product itself lives at <a href={SITE.homepage}>xrack.io</a>.</p>
       <p><a class="back-link" href={href()}>&larr; All posts</a></p>
     </div>
   </article>

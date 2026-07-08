@@ -11,10 +11,13 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 
 <Base>
   <section class="hero">
-    <div class="wrap">
-      <span class="eyebrow">Journal</span>
-      <h1>{SITE.title}</h1>
-      <p>{SITE.description}</p>
+    <div class="hero-aura"></div>
+    <div class="wrap hero-inner">
+      <span class="status-chip"><span class="dot"></span> The XRack Journal</span>
+      <h1 class="display-title">
+        Notes from the <span class="serif-accent">observable</span> harness
+      </h1>
+      <p class="lede">{SITE.description}</p>
     </div>
   </section>
 

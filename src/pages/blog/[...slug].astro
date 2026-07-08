@@ -15,12 +15,12 @@ const { Content } = await render(post);
 
 <Base title={title} description={description}>
   <article class="article">
-    <header class="article-head wrap wrap--narrow">
-      <div class="card-meta" style="justify-content:center;">
-        {tags[0] && <span class="chip">{tags[0]}</span>}
+    <header class="wrap wrap--narrow article-head">
+      <div class="post-card__meta" style="justify-content:center;">
+        {tags[0] && <span class="pill pill-primary">{tags[0]}</span>}
         <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
       </div>
-      <h1>{title}</h1>
+      <h1 class="display-title">{title}</h1>
       <p class="article-lead">{description}</p>
       <div class="byline">by <b>{author}</b></div>
     </header>
@@ -29,11 +29,11 @@ const { Content } = await render(post);
       <Content />
     </div>
 
-    <footer class="wrap wrap--narrow article-foot">
+    <div class="wrap wrap--narrow article-foot">
       <div class="tag-list">
-        {tags.map((tag) => <a class="chip chip--muted" href={href(`tags/${tag}`)}>{tag}</a>)}
+        {tags.map((tag) => <a class="pill" href={href(`tags/${tag}`)}>{tag}</a>)}
       </div>
       <a class="back-link" href={href()}>&larr; All posts</a>
-    </footer>
+    </div>
   </article>
 </Base>

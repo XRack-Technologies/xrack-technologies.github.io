@@ -2,14 +2,18 @@
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
+import { NAV } from "../../lib/site";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
-  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+  // Every tag used in a post, plus every nav category (so nav links never 404,
+  // even before that category has its first post).
+  const tags = [...new Set([...NAV.map((n) => n.tag), ...posts.flatMap((p) => p.data.tags)])];
   return tags.map((tag) => ({
     params: { tag },
     props: {
       tag,
+      label: NAV.find((n) => n.tag === tag)?.label ?? tag,
       posts: posts
         .filter((p) => p.data.tags.includes(tag))
         .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
@@ -17,24 +21,28 @@ export async function getStaticPaths() {
   }));
 }
 
-const { tag, posts } = Astro.props;
+const { tag, label, posts } = Astro.props;
 const count = posts.length;
 ---
 
-<Base title={`#${tag}`}>
-  <section class="hero hero--sub">
-    <div class="wrap">
-      <span class="eyebrow">Category</span>
-      <h1>{tag}</h1>
-      <p>{count} {count === 1 ? "post" : "posts"}</p>
+<Base title={label}>
+  <section class="hero" style="padding-bottom:1rem;">
+    <div class="wrap section-head">
+      <span class="eyebrow-strong">Category</span>
+      <h1 class="display-title">{label}</h1>
+      <p class="lede">{count} {count === 1 ? "post" : "posts"}</p>
     </div>
   </section>
 
-  <section class="feed">
+  <section class="feed" style="padding-top:1.5rem;">
     <div class="wrap">
-      <div class="card-grid">
-        {posts.map((post) => <PostCard post={post} />)}
-      </div>
+      {
+        count ? (
+          <div class="card-grid">{posts.map((post) => <PostCard post={post} />)}</div>
+        ) : (
+          <p class="empty">No posts in this category yet — check back soon.</p>
+        )
+      }
     </div>
   </section>
 </Base>

@@ -1,9 +1,11 @@
 export const SITE = {
   title: "XRack Blog",
+  tagline: "Sovereign Cognitive Runtime",
   description:
     "Engineering, research, and field notes from the team building the observable agentic harness.",
   author: "Ege Dogan Dursun",
   homepage: "https://xrack.io",
+  cta: "https://calendly.com/dogandursun-xrack/20min",
 };
 
 export const NAV = [

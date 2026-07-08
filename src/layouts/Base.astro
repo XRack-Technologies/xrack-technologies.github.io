@@ -7,9 +7,11 @@ interface Props {
   description?: string;
 }
 const { title, description = SITE.description } = Astro.props;
-const pageTitle = title ? `${title} — ${SITE.title}` : SITE.title;
-const pathname = Astro.url.pathname;
+const pageTitle = title ? `${title} — ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
+const path = Astro.url.pathname.replace(/\/$/, "");
 const logo = href("logo.png");
+const isActive = (tag: string) => path === href(`tags/${tag}`).replace(/\/$/, "");
+const year = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -20,42 +22,48 @@ const logo = href("logo.png");
     <link rel="icon" type="image/png" href={logo} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={logo} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <div class="site-bg" aria-hidden="true"></div>
-
-    <header class="site-head">
-      <div class="wrap site-head-inner">
+    <header id="topbar" class="topbar-shell">
+      <div class="topbar-inner">
         <a class="brand" href={href()}>
-          <img src={logo} alt="XRack" />
-          <span>XRack Blog</span>
+          <span class="brand-mark"><img src={logo} alt="" /></span>
+          <span class="brand-name">
+            <b>XRack</b>
+            <span>Blog · Sovereign Cognitive Runtime</span>
+          </span>
         </a>
-        <nav class="site-nav" aria-label="Primary">
-          <ul>
-            {
-              NAV.map((item) => {
-                const url = href(`tags/${item.tag}`);
-                const active = pathname.replace(/\/$/, "") === url.replace(/\/$/, "");
-                return (
-                  <li>
-                    <a href={url} aria-current={active ? "page" : undefined}>{item.label}</a>
-                  </li>
-                );
-              })
-            }
-          </ul>
-          <a class="nav-cta" href={SITE.homepage} target="_blank" rel="noopener">xrack.io &rarr;</a>
+
+        <nav class="nav-rail" aria-label="Primary">
+          {
+            NAV.map((item) => (
+              <a
+                class="nav-link"
+                href={href(`tags/${item.tag}`)}
+                aria-current={isActive(item.tag) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
         </nav>
+
+        <a class="btn-primary" href={SITE.cta} target="_blank" rel="noopener">
+          Book a Demo
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </header>
 
@@ -64,16 +72,72 @@ const logo = href("logo.png");
     </main>
 
     <footer class="site-foot">
-      <div class="wrap site-foot-inner">
-        <div class="foot-brand">
-          <img src={logo} alt="" />
-          <span>XRack Blog</span>
+      <div class="wrap">
+        <div class="site-foot-top">
+          <div class="foot-about">
+            <a class="brand" href={href()}>
+              <span class="brand-mark"><img src={logo} alt="" /></span>
+              <span class="brand-name">
+                <b>XRack</b>
+                <span>Sovereign Cognitive Runtime</span>
+              </span>
+            </a>
+            <p>{SITE.description}</p>
+          </div>
+
+          <div class="foot-cols">
+            <div>
+              <h4 class="eyebrow">Blog</h4>
+              <ul>
+                <li><a href={href()}>Latest</a></li>
+                {NAV.map((item) => <li><a href={href(`tags/${item.tag}`)}>{item.label}</a></li>)}
+              </ul>
+            </div>
+            <div>
+              <h4 class="eyebrow">XRack</h4>
+              <ul>
+                <li><a href={SITE.homepage} target="_blank" rel="noopener">Product</a></li>
+                <li><a href={`${SITE.homepage}/demos.html`} target="_blank" rel="noopener">Demos</a></li>
+                <li><a href={href("about")}>About</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="eyebrow">Contact</h4>
+              <ul>
+                <li><a href="mailto:dogandursun@xrack.io">dogandursun@xrack.io</a></li>
+                <li><a href={SITE.cta} target="_blank" rel="noopener">Book a Demo</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <p>
-          &copy; {new Date().getFullYear()} XRack. Built with cognition.
-          <a href={SITE.homepage} target="_blank" rel="noopener">xrack.io</a>
-        </p>
+
+        <div class="site-foot-bottom">
+          <div>&copy; {year} XRack Technologies. All rights reserved.</div>
+          <div>Built with cognition.</div>
+        </div>
       </div>
     </footer>
+
+    <script>
+      // Header elevation on scroll
+      const bar = document.getElementById("topbar");
+      const onScroll = () => bar?.classList.toggle("is-scrolled", window.scrollY > 8);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      // Scroll-reveal
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
+      );
+      document.querySelectorAll(".reveal-on-view").forEach((el) => io.observe(el));
+    </script>
   </body>
 </html>
