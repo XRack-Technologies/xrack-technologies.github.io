@@ -4,6 +4,9 @@ dist/
 .astro/
 # dependencies
 node_modules/
+# local npm cache workaround dirs
+.npm-tmp-cache/
+.npmcache/
 # logs
 npm-debug.log*
 # environment
