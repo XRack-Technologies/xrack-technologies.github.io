@@ -26,6 +26,32 @@ match the [xrack.io](https://xrack.io) landing page. Fully independent of the ma
 
 The filename becomes the URL slug (`my-post.md` → `/blog/my-post`).
 
+### Bilingual posts (EN / TR)
+
+Put both languages in the **same** file. Add the Turkish metadata to the frontmatter and separate
+the two bodies with a `<!-- tr -->` marker (English first, Turkish after):
+
+```markdown
+---
+title: English title
+title_tr: Türkçe başlık
+description: English summary.
+description_tr: Türkçe özet.
+pubDate: 2026-07-10
+tags: ["engineering"]
+---
+
+English body in Markdown...
+
+<!-- tr -->
+
+Türkçe gövde, Markdown olarak...
+```
+
+A global **EN / TR** switch in the header lets readers pick a language; the choice is remembered in
+the browser (`localStorage`) across pages and visits. If a post omits the Turkish parts, it simply
+shows the English version in both modes — so single-language posts still work.
+
 ## Categories
 
 Navigation categories live in `src/lib/site.ts` (`NAV`). Any tag you use in a post automatically

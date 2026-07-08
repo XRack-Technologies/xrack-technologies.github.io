@@ -5,11 +5,13 @@ const blog = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
   schema: z.object({
     title: z.string(),
+    title_tr: z.string().optional(),
     description: z.string(),
+    description_tr: z.string().optional(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
-    author: z.string().default("Ege Dogan Dursun"),
+    author: z.string().default("Vincent E. Dogan Dursun - CEO & Co-Founder"),
     draft: z.boolean().default(false),
   }),
 });

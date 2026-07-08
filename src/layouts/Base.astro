@@ -26,6 +26,11 @@ const year = new Date().getFullYear();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script is:inline>
+      // Apply the remembered language before paint (no flash of the wrong language).
+      try { document.documentElement.dataset.lang = localStorage.getItem("xrack-blog-lang") || "en"; }
+      catch (e) { document.documentElement.dataset.lang = "en"; }
+    </script>
     <link rel="icon" type="image/png" href={logo} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -67,6 +72,10 @@ const year = new Date().getFullYear();
         </nav>
 
         <div class="topbar-actions nav-desktop">
+          <div class="lang-toggle" role="group" aria-label="Language">
+            <button class="lang-opt" type="button" data-lang-opt="en">EN</button>
+            <button class="lang-opt" type="button" data-lang-opt="tr">TR</button>
+          </div>
           <a class="btn-ghost" href={SITE.homepage} target="_blank" rel="noopener">
             xrack.io
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
@@ -97,6 +106,10 @@ const year = new Date().getFullYear();
               )
             }
           </nav>
+          <div class="lang-toggle lang-toggle--mobile" role="group" aria-label="Language">
+            <button class="lang-opt" type="button" data-lang-opt="en">EN</button>
+            <button class="lang-opt" type="button" data-lang-opt="tr">TR</button>
+          </div>
           <div class="mobile-actions">
             <a class="btn-ghost" href={SITE.homepage} target="_blank" rel="noopener">xrack.io</a>
             <a class="btn-primary" href={SITE.cta} target="_blank" rel="noopener">Book a Demo</a>
@@ -187,6 +200,22 @@ const year = new Date().getFullYear();
       menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
       document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
       window.addEventListener("resize", () => { if (window.innerWidth > 900) setMenu(false); });
+
+      // Language switch (EN/TR) — remembers the choice in localStorage
+      const LANG_KEY = "xrack-blog-lang";
+      const langButtons = document.querySelectorAll(".lang-opt");
+      const applyLang = (lang) => {
+        const l = lang === "tr" ? "tr" : "en";
+        document.documentElement.dataset.lang = l;
+        try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
+        langButtons.forEach((b) =>
+          b.classList.toggle("is-active", b.getAttribute("data-lang-opt") === l),
+        );
+      };
+      langButtons.forEach((b) =>
+        b.addEventListener("click", () => applyLang(b.getAttribute("data-lang-opt"))),
+      );
+      applyLang(document.documentElement.dataset.lang || "en");
 
       // Scroll-reveal
       const io = new IntersectionObserver(

@@ -1,7 +1,8 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import { href, formatDate } from "../../lib/site";
+import { renderBilingual } from "../../lib/i18n";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -10,7 +11,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { title, description, pubDate, tags, author } = post.data;
-const { Content } = await render(post);
+const titleTr = post.data.title_tr ?? title;
+const descriptionTr = post.data.description_tr ?? description;
+const { enHtml, trHtml } = renderBilingual(post.body ?? "");
 ---
 
 <Base title={title} description={description}>
@@ -20,13 +23,20 @@ const { Content } = await render(post);
         {tags[0] && <span class="pill pill-primary">{tags[0]}</span>}
         <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
       </div>
-      <h1 class="display-title">{title}</h1>
-      <p class="article-lead">{description}</p>
+      <h1 class="display-title">
+        <span data-lang-content="en">{title}</span>
+        <span data-lang-content="tr">{titleTr}</span>
+      </h1>
+      <p class="article-lead">
+        <span data-lang-content="en">{description}</span>
+        <span data-lang-content="tr">{descriptionTr}</span>
+      </p>
       <div class="byline">by <b>{author}</b></div>
     </header>
 
-    <div class="wrap wrap--narrow prose">
-      <Content />
+    <div class="wrap wrap--narrow">
+      <div class="prose" data-lang-content="en" set:html={enHtml}></div>
+      <div class="prose" data-lang-content="tr" set:html={trHtml}></div>
     </div>
 
     <div class="wrap wrap--narrow article-foot">

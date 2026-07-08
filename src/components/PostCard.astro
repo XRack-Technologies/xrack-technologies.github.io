@@ -7,6 +7,8 @@ interface Props {
 }
 const { post } = Astro.props;
 const { title, description, pubDate, tags, author } = post.data;
+const titleTr = post.data.title_tr ?? title;
+const descriptionTr = post.data.description_tr ?? description;
 const primaryTag = tags[0];
 ---
 
@@ -16,8 +18,14 @@ const primaryTag = tags[0];
       {primaryTag && <span class="pill pill-primary">{primaryTag}</span>}
       <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
     </div>
-    <h2 class="post-card__title">{title}</h2>
-    <p class="post-card__excerpt">{description}</p>
+    <h2 class="post-card__title">
+      <span data-lang-content="en">{title}</span>
+      <span data-lang-content="tr">{titleTr}</span>
+    </h2>
+    <p class="post-card__excerpt">
+      <span data-lang-content="en">{description}</span>
+      <span data-lang-content="tr">{descriptionTr}</span>
+    </p>
     <div class="post-card__foot">
       <span>{author}</span>
       <span class="read">Read &rarr;</span>
