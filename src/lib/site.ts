@@ -18,7 +18,7 @@ export const NAV = [
 
 export const SITE_TR = {
   description:
-    "Gözlemlenebilir agentic harness'ı inşa eden ekipten mühendislik, araştırma ve saha notları.",
+    "Gözlemlenebilir agentic harness'ı geliştiren ekibin mühendislik, araştırma ve saha notları.",
 };
 
 const BASE = import.meta.env.BASE_URL;
