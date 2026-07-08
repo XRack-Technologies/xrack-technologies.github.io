@@ -37,6 +37,12 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
 
   <section class="feed">
     <div class="wrap">
+      {posts.length === 0 ? (
+      <p class="empty">
+        <T en="No posts yet — the first one is on its way." tr="Henüz yazı yok — ilki yolda." />
+      </p>
+      ) : (
+      <>
       <div class="controls">
         <label class="search">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -75,6 +81,8 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
       <p class="empty" id="feedEmpty" hidden>
         <T en="No posts match your search." tr="Eşleşen yazı bulunamadı." />
       </p>
+      </>
+      )}
     </div>
   </section>
 

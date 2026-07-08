@@ -4,42 +4,129 @@ import T from "../components/T.astro";
 import { href, SITE } from "../lib/site";
 ---
 
-<Base title="About">
+<Base title="About" description={SITE.description}>
   <article class="article">
     <header class="wrap wrap--narrow article-head">
       <span class="eyebrow-strong"><T en="About" tr="Hakkında" /></span>
-      <h1 class="display-title"><T en="The XRack Blog" tr="XRack Blog" /></h1>
+      <h1 class="display-title">
+        <T en="The runtime, and this blog" tr="Çalışma zamanı ve bu blog" />
+      </h1>
     </header>
 
+    <!-- English -->
     <div class="wrap wrap--narrow prose" data-lang-content="en">
       <p>
-        XRack is an agentic harness built on a single conviction: an agent you cannot observe is an
-        agent you cannot trust. Every cycle it runs is traced, every decision carries its own
-        evidence, and every grant of authority is scoped and expiring.
-      </p>
-      <p>
-        This blog is where we write down how it is built and where it is going — engineering
-        deep-dives, research, field notes, and the convictions behind the harness.
+        <strong>XRack is a sovereign cognitive runtime for regulated enterprise AI.</strong> It turns
+        AI from a rogue black box into a tamper-proof <em>glass box</em>: enterprises get agents that
+        remember, act, verify, and prove every decision — running as a self-hosted appliance inside
+        your own perimeter, on your own LLM, with your own audit trail.
       </p>
       <blockquote>The model proposes, the runtime executes, the ledger proves.</blockquote>
-      <p>The product itself lives at <a href={SITE.homepage}>xrack.io</a>.</p>
+
+      <h2>Why it exists</h2>
+      <p>
+        Free-form prompt loops drift, and when they fail you cannot say why. Regulated organizations
+        can't put that in production. XRack replaces the open-ended loop with a <strong>deterministic
+        cognitive cycle</strong> and an <strong>immutable ledger</strong>: every step an agent takes is
+        traced, every decision carries its own evidence, and every grant of authority is scoped and
+        expiring. The system fails closed by default — the safe state is the starting state.
+      </p>
+
+      <h2>The four planes</h2>
+      <ul>
+        <li><strong>Mind — the Harness.</strong> The reasoning core. A single agent runs a fixed,
+        replayable cognitive cycle (observe → reason → plan → act → verify → learn) instead of an
+        open-ended prompt loop, so its behaviour is legible and debuggable.</li>
+        <li><strong>Organization — the Grid.</strong> Many agents with roles, governance, and shared
+        memory, coordinated into an accountable organization that works a goal end to end.</li>
+        <li><strong>Portfolio — Federation.</strong> Multiple grids federated so cognition and
+        doctrine stay in sync across a portfolio — without leaking any single unit's private context.</li>
+        <li><strong>Body — Embodiment.</strong> The same traced, evidence-backed cognition extended to
+        physical systems and robots, so real-world action is as auditable as anything on screen.</li>
+      </ul>
+
+      <h2>Sovereign by design</h2>
+      <p>
+        XRack ships as an appliance you run inside your perimeter. You bring your own model, keep your
+        data on your side of the boundary, and own the audit trail end to end. Nothing about a
+        decision lives somewhere you can't inspect.
+      </p>
+
+      <h2>About this blog</h2>
+      <p>
+        This is where the team writes down how the runtime is built and where it is going —
+        <strong>engineering</strong> deep-dives into the internals, <strong>research</strong> and
+        benchmarks, <strong>field notes</strong> from real deployments, <strong>security</strong>, and
+        <strong>product</strong> updates. Every post is filed under a category you can browse from the
+        navigation, and you can read the blog in English or Turkish with the EN/TR switch in the
+        header.
+      </p>
+      <p>
+        See the product at <a href={SITE.homepage}>xrack.io</a>, or
+        <a href={SITE.cta}>book a demo</a>. Questions:
+        <a href="mailto:dogandursun@xrack.io">dogandursun@xrack.io</a>.
+      </p>
     </div>
 
+    <!-- Türkçe -->
     <div class="wrap wrap--narrow prose" data-lang-content="tr">
       <p>
-        XRack, tek bir inanç üzerine kurulu bir agentic harness'tır: gözlemleyemediğin bir ajana
-        güvenemezsin. Çalıştırdığı her döngü izlenir, her karar kendi kanıtını taşır ve her yetki
-        sınırlı, gözetimli, ve sürelidir.
-      </p>
-      <p>
-        Bu blog, harness'ın nasıl inşa edildiğini ve nereye gittiğini yazıya döktüğümüz yer —
-        mühendislik incelemeleri, araştırma, saha notları ve arkasındaki ilkeler.
+        <strong>XRack, regüle kurumsal yapay zekâ için bağımsız bir bilişsel çalışma zamanıdır.</strong>
+        Yapay zekâyı başına buyruk bir kara kutudan, kurcalanamayan bir <em>cam kutuya</em> çevirir:
+        kurumlar; hatırlayan, eyleme geçen, doğrulayan ve verdiği her kararı kanıtlayan ajanlar elde
+        eder — kendi çevreniz içinde, kendi LLM'inizle, kendi denetim kaydınızla çalışan, kendi
+        sunucunuzda barındırılan bir uygulama olarak.
       </p>
       <blockquote>Model önerir, çalışma zamanı yürütür, defter kanıtlar.</blockquote>
-      <p>Ürünün kendisi <a href={SITE.homepage}>xrack.io</a> adresinde.</p>
+
+      <h2>Neden var</h2>
+      <p>
+        Serbest biçimli prompt döngüleri savrulur ve hata verdiklerinde nedenini söyleyemezsiniz.
+        Regüle kurumlar bunu canlıya alamaz. XRack, bu açık uçlu döngünün yerine
+        <strong>deterministik bir bilişsel döngü</strong> ve <strong>değiştirilemez bir defter</strong>
+        koyar: bir ajanın attığı her adım izlenir, her karar kendi kanıtını taşır ve her yetki
+        kapsamlı ve sürelidir. Sistem varsayılan olarak <em>kapalı</em> başlar — güvenli durum,
+        başlangıç durumudur.
+      </p>
+
+      <h2>Dört düzlem</h2>
+      <ul>
+        <li><strong>Zihin — Harness.</strong> Akıl yürütme çekirdeği. Tek bir ajan; açık uçlu bir
+        prompt döngüsü yerine sabit ve yeniden oynatılabilir bir bilişsel döngü çalıştırır (gözlemle →
+        akıl yürüt → planla → eyleme geç → doğrula → öğren) — böylece davranışı okunur ve
+        ayıklanabilir olur.</li>
+        <li><strong>Organizasyon — Grid.</strong> Rolleri, yönetişimi ve ortak belleği olan çok
+        sayıda ajan; bir hedefi baştan sona götüren, hesap verebilir bir organizasyon halinde koordine
+        edilir.</li>
+        <li><strong>Portföy — Federation.</strong> Birden çok grid federe edilir; böylece biliş ve
+        doktrin, her birimin özel bağlamını sızdırmadan bir portföy genelinde eşitlenir.</li>
+        <li><strong>Beden — Embodiment.</strong> Aynı izlenen, kanıta dayalı biliş fiziksel sistemlere
+        ve robotlara taşınır; gerçek dünyadaki eylem de ekrandaki kadar denetlenebilir olur.</li>
+      </ul>
+
+      <h2>Tasarımı gereği bağımsız</h2>
+      <p>
+        XRack, kendi çevreniz içinde çalıştırdığınız bir uygulama olarak gelir. Kendi modelinizi
+        getirir, verinizi sınırın kendi tarafınızda tutar ve denetim kaydına baştan sona sahip
+        olursunuz. Bir karara dair hiçbir şey, inceleyemeyeceğiniz bir yerde durmaz.
+      </p>
+
+      <h2>Bu blog hakkında</h2>
+      <p>
+        Ekibin, çalışma zamanının nasıl inşa edildiğini ve nereye gittiğini yazıya döktüğü yer burası:
+        iç mimariye dair <strong>mühendislik</strong> incelemeleri, <strong>araştırma</strong> ve
+        kıyaslamalar, gerçek kurulumlardan <strong>saha notları</strong>, <strong>güvenlik</strong> ve
+        <strong>ürün</strong> güncellemeleri. Her yazı, navigasyondan gezinebileceğiniz bir kategoriye
+        işlenir; blogu üstteki EN/TR anahtarıyla İngilizce ya da Türkçe okuyabilirsiniz.
+      </p>
+      <p>
+        Ürünü <a href={SITE.homepage}>xrack.io</a> adresinde görebilir ya da
+        <a href={SITE.cta}>demo planlayabilirsiniz</a>. Sorular:
+        <a href="mailto:dogandursun@xrack.io">dogandursun@xrack.io</a>.
+      </p>
     </div>
 
-    <div class="wrap wrap--narrow" style="margin-top:2rem;">
+    <div class="wrap wrap--narrow" style="margin-top:2.5rem;">
       <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
     </div>
   </article>
