@@ -2,7 +2,7 @@
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://xrack-technologies.github.io",
+  site: "https://blog.xrack.io",
   base: "/",
   trailingSlash: "ignore",
 });
