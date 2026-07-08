@@ -1,0 +1,79 @@
+---
+import "../styles/global.css";
+import { SITE, NAV, href } from "../lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = SITE.description } = Astro.props;
+const pageTitle = title ? `${title} — ${SITE.title}` : SITE.title;
+const pathname = Astro.url.pathname;
+const logo = href("logo.png");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href={logo} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={logo} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="site-bg" aria-hidden="true"></div>
+
+    <header class="site-head">
+      <div class="wrap site-head-inner">
+        <a class="brand" href={href()}>
+          <img src={logo} alt="XRack" />
+          <span>XRack Blog</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <ul>
+            {
+              NAV.map((item) => {
+                const url = href(`tags/${item.tag}`);
+                const active = pathname.replace(/\/$/, "") === url.replace(/\/$/, "");
+                return (
+                  <li>
+                    <a href={url} aria-current={active ? "page" : undefined}>{item.label}</a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+          <a class="nav-cta" href={SITE.homepage} target="_blank" rel="noopener">xrack.io &rarr;</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-foot">
+      <div class="wrap site-foot-inner">
+        <div class="foot-brand">
+          <img src={logo} alt="" />
+          <span>XRack Blog</span>
+        </div>
+        <p>
+          &copy; {new Date().getFullYear()} XRack. Built with cognition.
+          <a href={SITE.homepage} target="_blank" rel="noopener">xrack.io</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { href, formatDate } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, tags, author } = post.data;
+const { Content } = await render(post);
+---
+
+<Base title={title} description={description}>
+  <article class="article">
+    <header class="article-head wrap wrap--narrow">
+      <div class="card-meta" style="justify-content:center;">
+        {tags[0] && <span class="chip">{tags[0]}</span>}
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+      </div>
+      <h1>{title}</h1>
+      <p class="article-lead">{description}</p>
+      <div class="byline">by <b>{author}</b></div>
+    </header>
+
+    <div class="wrap wrap--narrow prose">
+      <Content />
+    </div>
+
+    <footer class="wrap wrap--narrow article-foot">
+      <div class="tag-list">
+        {tags.map((tag) => <a class="chip chip--muted" href={href(`tags/${tag}`)}>{tag}</a>)}
+      </div>
+      <a class="back-link" href={href()}>&larr; All posts</a>
+    </footer>
+  </article>
+</Base>

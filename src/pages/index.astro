@@ -1,0 +1,34 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import PostCard from "../components/PostCard.astro";
+import { SITE } from "../lib/site";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+---
+
+<Base>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Journal</span>
+      <h1>{SITE.title}</h1>
+      <p>{SITE.description}</p>
+    </div>
+  </section>
+
+  <section class="feed">
+    <div class="wrap">
+      {
+        posts.length ? (
+          <div class="card-grid">
+            {posts.map((post) => <PostCard post={post} />)}
+          </div>
+        ) : (
+          <p class="empty">No posts yet — the first one is on its way.</p>
+        )
+      }
+    </div>
+  </section>
+</Base>

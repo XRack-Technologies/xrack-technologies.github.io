@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import PostCard from "../../components/PostCard.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+const count = posts.length;
+---
+
+<Base title={`#${tag}`}>
+  <section class="hero hero--sub">
+    <div class="wrap">
+      <span class="eyebrow">Category</span>
+      <h1>{tag}</h1>
+      <p>{count} {count === 1 ? "post" : "posts"}</p>
+    </div>
+  </section>
+
+  <section class="feed">
+    <div class="wrap">
+      <div class="card-grid">
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
+    </div>
+  </section>
+</Base>

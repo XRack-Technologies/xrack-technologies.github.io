@@ -1,0 +1,27 @@
+---
+import Base from "../layouts/Base.astro";
+import { href, SITE } from "../lib/site";
+---
+
+<Base title="About">
+  <article class="article">
+    <header class="article-head wrap wrap--narrow">
+      <h1>About</h1>
+    </header>
+    <div class="wrap wrap--narrow prose">
+      <p>
+        XRack is an agentic harness built on a single conviction: an agent you cannot observe is an
+        agent you cannot trust. Every cycle it runs is traced, every decision carries its own
+        evidence, and every grant of authority is scoped and expiring.
+      </p>
+      <p>
+        This blog is where we write down how it is built and where it is going — engineering
+        deep-dives, research, field notes, and the convictions behind the harness.
+      </p>
+      <p>
+        The product itself lives at <a href={SITE.homepage}>xrack.io</a>.
+      </p>
+      <p><a class="back-link" href={href()}>&larr; All posts</a></p>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,26 @@
+---
+import { href, formatDate } from "../lib/site";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+const { post } = Astro.props;
+const { title, description, pubDate, tags, author } = post.data;
+const primaryTag = tags[0];
+---
+
+<article class="card">
+  <a class="card-link" href={href(`blog/${post.id}`)}>
+    <div class="card-meta">
+      {primaryTag && <span class="chip">{primaryTag}</span>}
+      <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+    </div>
+    <h2>{title}</h2>
+    <p>{description}</p>
+    <div class="card-foot">
+      <span>{author}</span>
+      <span class="read-more">Read &rarr;</span>
+    </div>
+  </a>
+</article>
