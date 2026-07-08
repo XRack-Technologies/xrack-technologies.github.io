@@ -1,23 +1,41 @@
 ---
 import "../styles/global.css";
 import { getCollection } from "astro:content";
-import { SITE, NAV, href } from "../lib/site";
+import { SITE, SITE_TR, NAV, href } from "../lib/site";
+import T from "../components/T.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  keywords?: string[];
+  ogType?: string;
+  publishedTime?: string;
+  articleTags?: string[];
+  showProgress?: boolean;
+  jsonLd?: unknown;
 }
 
 // Which categories actually have published posts — used to gray out empty ones.
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const activeTags = new Set(allPosts.flatMap((p) => p.data.tags));
 const hasPosts = (tag: string) => activeTags.has(tag);
-const { title, description = SITE.description } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  keywords = [],
+  ogType = "website",
+  publishedTime,
+  articleTags = [],
+  showProgress = false,
+  jsonLd,
+} = Astro.props;
 const pageTitle = title ? `${title} — ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
 const path = Astro.url.pathname.replace(/\/$/, "");
 const logo = href("logo.png");
 const isActive = (tag: string) => path === href(`tags/${tag}`).replace(/\/$/, "");
 const homeActive = path === href().replace(/\/$/, "");
+const aboutActive = path === href("about").replace(/\/$/, "");
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
 const year = new Date().getFullYear();
 ---
 
@@ -34,12 +52,24 @@ const year = new Date().getFullYear();
     <link rel="icon" type="image/png" href={logo} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta property="og:type" content="website" />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href={href("rss.xml")} />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={logo} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.title} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {ogType === "article" && <meta property="article:author" content={SITE.author} />}
+    {articleTags.map((t) => <meta property="article:tag" content={t} />)}
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={logo} />
     <meta name="generator" content={Astro.generator} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -48,27 +78,29 @@ const year = new Date().getFullYear();
     />
   </head>
   <body>
+    {showProgress && <div class="read-progress" id="readProgress" aria-hidden="true"></div>}
     <header id="topbar" class="topbar-shell">
       <div class="topbar-inner">
         <a class="brand" href={href()}>
           <span class="brand-mark"><img src={logo} alt="" /></span>
           <span class="brand-name">
             <b>XRack</b>
-            <span>Blog · Sovereign Cognitive Runtime</span>
+            <span><T en="Blog · Sovereign Cognitive Runtime" tr="Blog · Bağımsız Bilişsel Runtime" /></span>
           </span>
         </a>
 
         <nav class="nav-rail nav-desktop" aria-label="Primary">
-          <a class="nav-link" href={href()} aria-current={homeActive ? "page" : undefined}>All</a>
+          <a class="nav-link" href={href()} aria-current={homeActive ? "page" : undefined}><T en="All" tr="Tümü" /></a>
           {
             NAV.map((item) =>
               hasPosts(item.tag) ? (
-                <a class="nav-link" href={href(`tags/${item.tag}`)} aria-current={isActive(item.tag) ? "page" : undefined}>{item.label}</a>
+                <a class="nav-link" href={href(`tags/${item.tag}`)} aria-current={isActive(item.tag) ? "page" : undefined}><T en={item.label} tr={item.label_tr} /></a>
               ) : (
-                <span class="nav-link nav-link--empty" aria-disabled="true" title="No posts yet">{item.label}</span>
+                <span class="nav-link nav-link--empty" aria-disabled="true" title="No posts yet"><T en={item.label} tr={item.label_tr} /></span>
               ),
             )
           }
+          <a class="nav-link" href={href("about")} aria-current={aboutActive ? "page" : undefined}><T en="About" tr="Hakkında" /></a>
         </nav>
 
         <div class="topbar-actions nav-desktop">
@@ -81,7 +113,7 @@ const year = new Date().getFullYear();
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
           </a>
           <a class="btn-primary" href={SITE.cta} target="_blank" rel="noopener">
-            Book a Demo
+            <T en="Book a Demo" tr="Demo Planla" />
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
           </a>
         </div>
@@ -95,16 +127,17 @@ const year = new Date().getFullYear();
       <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu__inner">
           <nav class="mobile-nav" aria-label="Mobile">
-            <a href={href()} aria-current={homeActive ? "page" : undefined}>All</a>
+            <a href={href()} aria-current={homeActive ? "page" : undefined}><T en="All" tr="Tümü" /></a>
             {
               NAV.map((item) =>
                 hasPosts(item.tag) ? (
-                  <a href={href(`tags/${item.tag}`)} aria-current={isActive(item.tag) ? "page" : undefined}>{item.label}</a>
+                  <a href={href(`tags/${item.tag}`)} aria-current={isActive(item.tag) ? "page" : undefined}><T en={item.label} tr={item.label_tr} /></a>
                 ) : (
-                  <span class="is-empty" aria-disabled="true">{item.label}</span>
+                  <span class="is-empty" aria-disabled="true"><T en={item.label} tr={item.label_tr} /></span>
                 ),
               )
             }
+            <a href={href("about")} aria-current={aboutActive ? "page" : undefined}><T en="About" tr="Hakkında" /></a>
           </nav>
           <div class="lang-toggle lang-toggle--mobile" role="group" aria-label="Language">
             <button class="lang-opt" type="button" data-lang-opt="en">EN</button>
@@ -112,7 +145,7 @@ const year = new Date().getFullYear();
           </div>
           <div class="mobile-actions">
             <a class="btn-ghost" href={SITE.homepage} target="_blank" rel="noopener">xrack.io</a>
-            <a class="btn-primary" href={SITE.cta} target="_blank" rel="noopener">Book a Demo</a>
+            <a class="btn-primary" href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a>
           </div>
         </div>
       </div>
@@ -130,24 +163,24 @@ const year = new Date().getFullYear();
               <span class="brand-mark"><img src={logo} alt="" /></span>
               <span class="brand-name">
                 <b>XRack</b>
-                <span>Sovereign Cognitive Runtime</span>
+                <span><T en="Sovereign Cognitive Runtime" tr="Bağımsız Bilişsel Runtime" /></span>
               </span>
             </a>
-            <p>{SITE.description}</p>
+            <p><span data-lang-content="en">{SITE.description}</span><span data-lang-content="tr">{SITE_TR.description}</span></p>
           </div>
 
           <div class="foot-cols">
             <div>
               <h4 class="eyebrow">Blog</h4>
               <ul>
-                <li><a href={href()}>All</a></li>
+                <li><a href={href()}><T en="All" tr="Tümü" /></a></li>
                 {
                   NAV.map((item) => (
                     <li>
                       {hasPosts(item.tag) ? (
-                        <a href={href(`tags/${item.tag}`)}>{item.label}</a>
+                        <a href={href(`tags/${item.tag}`)}><T en={item.label} tr={item.label_tr} /></a>
                       ) : (
-                        <span class="is-empty" title="No posts yet">{item.label}</span>
+                        <span class="is-empty" title="No posts yet"><T en={item.label} tr={item.label_tr} /></span>
                       )}
                     </li>
                   ))
@@ -157,24 +190,24 @@ const year = new Date().getFullYear();
             <div>
               <h4 class="eyebrow">XRack</h4>
               <ul>
-                <li><a href={SITE.homepage} target="_blank" rel="noopener">Product</a></li>
-                <li><a href={`${SITE.homepage}/demos.html`} target="_blank" rel="noopener">Demos</a></li>
-                <li><a href={href("about")}>About</a></li>
+                <li><a href={SITE.homepage} target="_blank" rel="noopener"><T en="Product" tr="Ürün" /></a></li>
+                <li><a href={`${SITE.homepage}/demos.html`} target="_blank" rel="noopener"><T en="Demos" tr="Demolar" /></a></li>
+                <li><a href={href("about")}><T en="About" tr="Hakkında" /></a></li>
               </ul>
             </div>
             <div>
-              <h4 class="eyebrow">Contact</h4>
+              <h4 class="eyebrow"><T en="Contact" tr="İletişim" /></h4>
               <ul>
                 <li><a href="mailto:dogandursun@xrack.io">dogandursun@xrack.io</a></li>
-                <li><a href={SITE.cta} target="_blank" rel="noopener">Book a Demo</a></li>
+                <li><a href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a></li>
               </ul>
             </div>
           </div>
         </div>
 
         <div class="site-foot-bottom">
-          <div>&copy; {year} XRack Technologies. All rights reserved.</div>
-          <div>Built with cognition.</div>
+          <div>&copy; {year} XRack Technologies. <T en="All rights reserved." tr="Tüm hakları saklıdır." /></div>
+          <div><T en="Built with cognition." tr="Bilişle inşa edildi." /></div>
         </div>
       </div>
     </footer>
@@ -211,6 +244,10 @@ const year = new Date().getFullYear();
         langButtons.forEach((b) =>
           b.classList.toggle("is-active", b.getAttribute("data-lang-opt") === l),
         );
+        document.querySelectorAll("[data-ph-en]").forEach((el) => {
+          const ph = l === "tr" ? el.getAttribute("data-ph-tr") : el.getAttribute("data-ph-en");
+          if (ph) el.setAttribute("placeholder", ph);
+        });
       };
       langButtons.forEach((b) =>
         b.addEventListener("click", () => applyLang(b.getAttribute("data-lang-opt"))),
@@ -230,6 +267,20 @@ const year = new Date().getFullYear();
         { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
       );
       document.querySelectorAll(".reveal-on-view").forEach((el) => io.observe(el));
+
+      // Reading-progress bar (article pages only)
+      const progress = document.getElementById("readProgress");
+      if (progress) {
+        const onProgress = () => {
+          const h = document.documentElement;
+          const max = h.scrollHeight - h.clientHeight;
+          const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+          progress.style.width = pct + "%";
+        };
+        onProgress();
+        window.addEventListener("scroll", onProgress, { passive: true });
+        window.addEventListener("resize", onProgress, { passive: true });
+      }
     </script>
   </body>
 </html>

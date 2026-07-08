@@ -1,8 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import { href, formatDate } from "../../lib/site";
-import { renderBilingual } from "../../lib/i18n";
+import { href, formatDate, SITE } from "../../lib/site";
+import { renderBilingual, readingMinutes } from "../../lib/i18n";
+import T from "../../components/T.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -14,14 +15,42 @@ const { title, description, pubDate, tags, author } = post.data;
 const titleTr = post.data.title_tr ?? title;
 const descriptionTr = post.data.description_tr ?? description;
 const { enHtml, trHtml } = renderBilingual(post.body ?? "");
+const mins = readingMinutes(post.body ?? "");
+
+const url = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const image = Astro.site ? new URL(href("logo.png"), Astro.site).href : href("logo.png");
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? pubDate).toISOString(),
+  author: { "@type": "Person", name: author },
+  publisher: { "@type": "Organization", name: "XRack Technologies" },
+  keywords: tags.join(", "),
+  image,
+  ...(url ? { mainEntityOfPage: url, url } : {}),
+};
 ---
 
-<Base title={title} description={description}>
+<Base
+  title={title}
+  description={description}
+  keywords={tags}
+  ogType="article"
+  publishedTime={pubDate.toISOString()}
+  articleTags={tags}
+  showProgress={true}
+  jsonLd={jsonLd}
+>
   <article class="article">
     <header class="wrap wrap--narrow article-head">
       <div class="post-card__meta" style="justify-content:center;">
         {tags[0] && <span class="pill pill-primary">{tags[0]}</span>}
         <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        <span class="dot">&middot;</span>
+        <span><T en={`${mins} min read`} tr={`${mins} dk okuma`} /></span>
       </div>
       <h1 class="display-title">
         <span data-lang-content="en">{title}</span>
@@ -31,7 +60,7 @@ const { enHtml, trHtml } = renderBilingual(post.body ?? "");
         <span data-lang-content="en">{description}</span>
         <span data-lang-content="tr">{descriptionTr}</span>
       </p>
-      <div class="byline">by <b>{author}</b></div>
+      <div class="byline"><T en="by" tr="yazan" /> <b>{author}</b></div>
     </header>
 
     <div class="wrap wrap--narrow">
@@ -43,7 +72,7 @@ const { enHtml, trHtml } = renderBilingual(post.body ?? "");
       <div class="tag-list">
         {tags.map((tag) => <a class="pill" href={href(`tags/${tag}`)}>{tag}</a>)}
       </div>
-      <a class="back-link" href={href()}>&larr; All posts</a>
+      <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
     </div>
   </article>
 </Base>

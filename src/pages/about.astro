@@ -1,15 +1,17 @@
 ---
 import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
 import { href, SITE } from "../lib/site";
 ---
 
 <Base title="About">
   <article class="article">
     <header class="wrap wrap--narrow article-head">
-      <span class="eyebrow-strong">About</span>
-      <h1 class="display-title">The XRack Blog</h1>
+      <span class="eyebrow-strong"><T en="About" tr="Hakkında" /></span>
+      <h1 class="display-title"><T en="The XRack Blog" tr="XRack Blog" /></h1>
     </header>
-    <div class="wrap wrap--narrow prose">
+
+    <div class="wrap wrap--narrow prose" data-lang-content="en">
       <p>
         XRack is an agentic harness built on a single conviction: an agent you cannot observe is an
         agent you cannot trust. Every cycle it runs is traced, every decision carries its own
@@ -21,7 +23,24 @@ import { href, SITE } from "../lib/site";
       </p>
       <blockquote>The model proposes, the runtime executes, the ledger proves.</blockquote>
       <p>The product itself lives at <a href={SITE.homepage}>xrack.io</a>.</p>
-      <p><a class="back-link" href={href()}>&larr; All posts</a></p>
+    </div>
+
+    <div class="wrap wrap--narrow prose" data-lang-content="tr">
+      <p>
+        XRack, tek bir inanç üzerine kurulu bir agentic harness'tır: gözlemleyemediğin bir ajana
+        güvenemezsin. Çalıştırdığı her döngü izlenir, her karar kendi kanıtını taşır ve her yetki
+        sınırlı, gözetimli, ve sürelidir.
+      </p>
+      <p>
+        Bu blog, harness'ın nasıl inşa edildiğini ve nereye gittiğini yazıya döktüğümüz yer —
+        mühendislik incelemeleri, araştırma, saha notları ve arkasındaki ilkeler.
+      </p>
+      <blockquote>Model önerir, çalışma zamanı yürütür, defter kanıtlar.</blockquote>
+      <p>Ürünün kendisi <a href={SITE.homepage}>xrack.io</a> adresinde.</p>
+    </div>
+
+    <div class="wrap wrap--narrow" style="margin-top:2rem;">
+      <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
     </div>
   </article>
 </Base>

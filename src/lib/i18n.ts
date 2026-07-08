@@ -24,3 +24,10 @@ export function renderBilingual(body: string): { enHtml: string; trHtml: string 
     trHtml: marked.parse(tr ?? "", { async: false }),
   };
 }
+
+/** Estimated reading time in minutes (based on the English body, ~200 wpm). */
+export function readingMinutes(body: string): number {
+  const en = body.split(TR_MARKER)[0] ?? body;
+  const words = en.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}

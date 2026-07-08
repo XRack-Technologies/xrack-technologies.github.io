@@ -9,12 +9,17 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: "Engineering", tag: "engineering" },
-  { label: "Field Notes", tag: "field-notes" },
-  { label: "Research", tag: "research" },
-  { label: "Security", tag: "security" },
-  { label: "Vision", tag: "vision" },
+  { label: "Engineering", label_tr: "Mühendislik", tag: "engineering" },
+  { label: "Field Notes", label_tr: "Saha Notları", tag: "field-notes" },
+  { label: "Research", label_tr: "Araştırma", tag: "research" },
+  { label: "Security", label_tr: "Güvenlik", tag: "security" },
+  { label: "Vision", label_tr: "Vizyon", tag: "vision" },
 ];
+
+export const SITE_TR = {
+  description:
+    "Gözlemlenebilir agentic harness'ı inşa eden ekipten mühendislik, araştırma ve saha notları.",
+};
 
 const BASE = import.meta.env.BASE_URL;
 

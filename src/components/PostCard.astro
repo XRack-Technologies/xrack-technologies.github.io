@@ -1,5 +1,7 @@
 ---
 import { href, formatDate } from "../lib/site";
+import { readingMinutes } from "../lib/i18n";
+import T from "./T.astro";
 import type { CollectionEntry } from "astro:content";
 
 interface Props {
@@ -10,13 +12,23 @@ const { title, description, pubDate, tags, author } = post.data;
 const titleTr = post.data.title_tr ?? title;
 const descriptionTr = post.data.description_tr ?? description;
 const primaryTag = tags[0];
+const mins = readingMinutes(post.body ?? "");
+// lowercase haystack (both languages) for client-side search
+const search = [title, titleTr, description, descriptionTr, ...tags].join(" ").toLowerCase();
 ---
 
-<article class="card-chrome reveal-on-view">
+<article
+  class="card-chrome reveal-on-view post-card"
+  data-tags={tags.join(" ")}
+  data-date={pubDate.toISOString()}
+  data-search={search}
+>
   <a class="post-card__link" href={href(`blog/${post.id}`)}>
     <div class="post-card__meta">
       {primaryTag && <span class="pill pill-primary">{primaryTag}</span>}
       <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+      <span class="dot">&middot;</span>
+      <span><T en={`${mins} min read`} tr={`${mins} dk okuma`} /></span>
     </div>
     <h2 class="post-card__title">
       <span data-lang-content="en">{title}</span>
@@ -28,7 +40,7 @@ const primaryTag = tags[0];
     </p>
     <div class="post-card__foot">
       <span>{author}</span>
-      <span class="read">Read &rarr;</span>
+      <span class="read"><T en="Read" tr="Oku" /> &rarr;</span>
     </div>
   </a>
 </article>

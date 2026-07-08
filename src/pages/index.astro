@@ -2,36 +2,124 @@
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import PostCard from "../components/PostCard.astro";
-import { SITE } from "../lib/site";
+import T from "../components/T.astro";
+import { SITE, SITE_TR, NAV } from "../lib/site";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
+
+// Every tag actually used, with counts — new tags appear here automatically.
+const tagCounts = new Map<string, number>();
+for (const p of posts) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+const tagList = [...tagCounts.keys()].sort();
+const labelFor = (t: string) => NAV.find((n) => n.tag === t)?.label ?? t;
+const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
 ---
 
 <Base>
   <section class="hero">
     <div class="hero-aura"></div>
     <div class="wrap hero-inner">
-      <span class="status-chip"><span class="dot"></span> The XRack Journal</span>
+      <span class="status-chip">
+        <span class="dot"></span> <T en="The XRack Journal" tr="XRack Güncesi" />
+      </span>
       <h1 class="display-title">
-        Notes from the <span class="serif-accent">observable</span> harness
+        <span data-lang-content="en">Notes from the <span class="serif-accent">observable</span> harness</span>
+        <span data-lang-content="tr">Gözlemlenebilir <span class="serif-accent">harness</span>'tan notlar</span>
       </h1>
-      <p class="lede">{SITE.description}</p>
+      <p class="lede">
+        <span data-lang-content="en">{SITE.description}</span>
+        <span data-lang-content="tr">{SITE_TR.description}</span>
+      </p>
     </div>
   </section>
 
   <section class="feed">
     <div class="wrap">
-      {
-        posts.length ? (
-          <div class="card-grid">
-            {posts.map((post) => <PostCard post={post} />)}
-          </div>
-        ) : (
-          <p class="empty">No posts yet — the first one is on its way.</p>
-        )
-      }
+      <div class="controls">
+        <label class="search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            aria-label="Search posts"
+            data-ph-en="Search posts…"
+            data-ph-tr="Yazılarda ara…"
+            placeholder="Search posts…"
+          />
+        </label>
+        <div class="sort-group" role="group" aria-label="Sort">
+          <button class="sort-opt is-active" type="button" data-sort="newest"><T en="Newest" tr="En yeni" /></button>
+          <button class="sort-opt" type="button" data-sort="oldest"><T en="Oldest" tr="En eski" /></button>
+        </div>
+      </div>
+
+      <div class="filter-chips" id="filterChips">
+        <button class="filter-chip is-active" type="button" data-tag="all">
+          <T en="All" tr="Tümü" /> <span class="c">{posts.length}</span>
+        </button>
+        {
+          tagList.map((t) => (
+            <button class="filter-chip" type="button" data-tag={t}>
+              <T en={labelFor(t)} tr={labelTrFor(t)} /> <span class="c">{tagCounts.get(t)}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="card-grid" id="postGrid">
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
+      <p class="empty" id="feedEmpty" hidden>
+        <T en="No posts match your search." tr="Aramanızla eşleşen yazı yok." />
+      </p>
     </div>
   </section>
+
+  <script>
+    const grid = document.getElementById("postGrid");
+    const cards = Array.from(document.querySelectorAll(".post-card"));
+    const searchInput = document.getElementById("searchInput");
+    const chips = Array.from(document.querySelectorAll(".filter-chip"));
+    const sortOpts = Array.from(document.querySelectorAll(".sort-opt"));
+    const emptyEl = document.getElementById("feedEmpty");
+    let activeTag = "all";
+    let sortMode = "newest";
+
+    function apply() {
+      const q = searchInput.value.trim().toLowerCase();
+      const shown = cards.filter((c) => {
+        const okTag = activeTag === "all" || c.dataset.tags.split(" ").includes(activeTag);
+        const okText = !q || c.dataset.search.includes(q);
+        return okTag && okText;
+      });
+      shown.sort((a, b) =>
+        sortMode === "oldest"
+          ? a.dataset.date.localeCompare(b.dataset.date)
+          : b.dataset.date.localeCompare(a.dataset.date),
+      );
+      cards.forEach((c) => { c.style.display = "none"; });
+      shown.forEach((c) => { c.style.display = ""; c.classList.add("is-visible"); grid.appendChild(c); });
+      emptyEl.hidden = shown.length > 0;
+    }
+
+    searchInput.addEventListener("input", apply);
+    chips.forEach((ch) =>
+      ch.addEventListener("click", () => {
+        activeTag = ch.dataset.tag;
+        chips.forEach((c) => c.classList.toggle("is-active", c === ch));
+        apply();
+      }),
+    );
+    sortOpts.forEach((s) =>
+      s.addEventListener("click", () => {
+        sortMode = s.dataset.sort;
+        sortOpts.forEach((o) => o.classList.toggle("is-active", o === s));
+        apply();
+      }),
+    );
+    apply();
+  </script>
 </Base>
