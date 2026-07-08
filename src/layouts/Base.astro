@@ -49,8 +49,13 @@ const year = new Date().getFullYear();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script is:inline>
       // Apply the remembered language before paint (no flash of the wrong language).
-      try { document.documentElement.dataset.lang = localStorage.getItem("xrack-blog-lang") || "en"; }
-      catch (e) { document.documentElement.dataset.lang = "en"; }
+      try {
+        var _l = localStorage.getItem("xrack-blog-lang") || "en";
+        document.documentElement.dataset.lang = _l;
+        document.documentElement.lang = _l;
+      } catch (e) {
+        document.documentElement.dataset.lang = "en";
+      }
     </script>
     <link rel="icon" type="image/png" href={logo} />
     <title>{pageTitle}</title>
@@ -100,7 +105,7 @@ const year = new Date().getFullYear();
               hasPosts(item.tag) ? (
                 <a class="nav-link" href={href(`tags/${item.tag}`)} aria-current={isActive(item.tag) ? "page" : undefined}><T en={item.label} tr={item.label_tr} /></a>
               ) : (
-                <span class="nav-link nav-link--empty" aria-disabled="true" title="No posts yet"><T en={item.label} tr={item.label_tr} /></span>
+                <span class="nav-link nav-link--empty" aria-disabled="true"><T en={item.label} tr={item.label_tr} /></span>
               ),
             )
           }
@@ -109,8 +114,8 @@ const year = new Date().getFullYear();
 
         <div class="topbar-actions nav-desktop">
           <div class="lang-toggle" role="group" aria-label="Language">
-            <button class="lang-opt" type="button" data-lang-opt="en">EN</button>
-            <button class="lang-opt" type="button" data-lang-opt="tr">TR</button>
+            <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="en">EN</button>
+            <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="tr">TR</button>
           </div>
           <a class="btn-ghost" href={SITE.homepage} target="_blank" rel="noopener">
             xrack.io
@@ -144,8 +149,8 @@ const year = new Date().getFullYear();
             <a href={href("about")} aria-current={aboutActive ? "page" : undefined}><T en="About" tr="Hakkında" /></a>
           </nav>
           <div class="lang-toggle lang-toggle--mobile" role="group" aria-label="Language">
-            <button class="lang-opt" type="button" data-lang-opt="en">EN</button>
-            <button class="lang-opt" type="button" data-lang-opt="tr">TR</button>
+            <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="en">EN</button>
+            <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="tr">TR</button>
           </div>
           <div class="mobile-actions">
             <a class="btn-ghost" href={SITE.homepage} target="_blank" rel="noopener">xrack.io</a>
@@ -175,7 +180,7 @@ const year = new Date().getFullYear();
 
           <div class="foot-cols">
             <div>
-              <h4 class="eyebrow">Blog</h4>
+              <h2 class="eyebrow">Blog</h2>
               <ul>
                 <li><a href={href()}><T en="All" tr="Tümü" /></a></li>
                 {
@@ -184,7 +189,7 @@ const year = new Date().getFullYear();
                       {hasPosts(item.tag) ? (
                         <a href={href(`tags/${item.tag}`)}><T en={item.label} tr={item.label_tr} /></a>
                       ) : (
-                        <span class="is-empty" title="No posts yet"><T en={item.label} tr={item.label_tr} /></span>
+                        <span class="is-empty"><T en={item.label} tr={item.label_tr} /></span>
                       )}
                     </li>
                   ))
@@ -192,7 +197,7 @@ const year = new Date().getFullYear();
               </ul>
             </div>
             <div>
-              <h4 class="eyebrow">XRack</h4>
+              <h2 class="eyebrow">XRack</h2>
               <ul>
                 <li><a href={SITE.homepage} target="_blank" rel="noopener"><T en="Product" tr="Ürün" /></a></li>
                 <li><a href={`${SITE.homepage}/demos.html`} target="_blank" rel="noopener"><T en="Demos" tr="Demolar" /></a></li>
@@ -200,7 +205,7 @@ const year = new Date().getFullYear();
               </ul>
             </div>
             <div>
-              <h4 class="eyebrow"><T en="Contact" tr="İletişim" /></h4>
+              <h2 class="eyebrow"><T en="Contact" tr="İletişim" /></h2>
               <ul>
                 <li><a href="mailto:dogandursun@xrack.io">dogandursun@xrack.io</a></li>
                 <li><a href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a></li>
@@ -226,9 +231,10 @@ const year = new Date().getFullYear();
       // Mobile menu
       const menuBtn = document.getElementById("menuBtn");
       const menu = document.getElementById("mobileMenu");
-      const setMenu = (open) => {
+      const setMenu = (open: boolean) => {
         menu?.classList.toggle("open", open);
         menuBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+        menuBtn?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
         bar?.classList.toggle("menu-open", open);
       };
       menuBtn?.addEventListener("click", () =>
@@ -241,20 +247,23 @@ const year = new Date().getFullYear();
       // Language switch (EN/TR) — remembers the choice in localStorage
       const LANG_KEY = "xrack-blog-lang";
       const langButtons = document.querySelectorAll(".lang-opt");
-      const applyLang = (lang) => {
+      const applyLang = (lang: string) => {
         const l = lang === "tr" ? "tr" : "en";
         document.documentElement.dataset.lang = l;
+        document.documentElement.lang = l;
         try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
-        langButtons.forEach((b) =>
-          b.classList.toggle("is-active", b.getAttribute("data-lang-opt") === l),
-        );
+        langButtons.forEach((b) => {
+          const on = b.getAttribute("data-lang-opt") === l;
+          b.classList.toggle("is-active", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
         document.querySelectorAll("[data-ph-en]").forEach((el) => {
           const ph = l === "tr" ? el.getAttribute("data-ph-tr") : el.getAttribute("data-ph-en");
           if (ph) el.setAttribute("placeholder", ph);
         });
       };
       langButtons.forEach((b) =>
-        b.addEventListener("click", () => applyLang(b.getAttribute("data-lang-opt"))),
+        b.addEventListener("click", () => applyLang(b.getAttribute("data-lang-opt") ?? "en")),
       );
       applyLang(document.documentElement.dataset.lang || "en");
 

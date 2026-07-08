@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import { href, formatDate, formatDateTr, SITE } from "../../lib/site";
+import { href, formatDate, formatDateTr } from "../../lib/site";
 import { renderBilingual, readingMinutes } from "../../lib/i18n";
 import T from "../../components/T.astro";
 
@@ -23,8 +23,9 @@ const { post, newer, older } = Astro.props;
 const { title, description, pubDate, tags, author, cover } = post.data;
 const titleTr = post.data.title_tr ?? title;
 const descriptionTr = post.data.description_tr ?? description;
-const { enHtml, trHtml } = renderBilingual(post.body ?? "");
+const { enHtml, trHtml, bilingual } = renderBilingual(post.body ?? "");
 const mins = readingMinutes(post.body ?? "");
+const metaDual = !!post.data.title_tr || !!post.data.description_tr;
 
 const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
 const url = abs(Astro.url.pathname);
@@ -68,12 +69,28 @@ const jsonLd = {
         <span><T en={`${mins} min read`} tr={`${mins} dk okuma`} /></span>
       </div>
       <h1 class="display-title">
-        <span data-lang-content="en">{title}</span>
-        <span data-lang-content="tr">{titleTr}</span>
+        {
+          metaDual ? (
+            <>
+              <span data-lang-content="en">{title}</span>
+              <span data-lang-content="tr">{titleTr}</span>
+            </>
+          ) : (
+            title
+          )
+        }
       </h1>
       <p class="article-lead">
-        <span data-lang-content="en">{description}</span>
-        <span data-lang-content="tr">{descriptionTr}</span>
+        {
+          metaDual ? (
+            <>
+              <span data-lang-content="en">{description}</span>
+              <span data-lang-content="tr">{descriptionTr}</span>
+            </>
+          ) : (
+            description
+          )
+        }
       </p>
       <div class="byline"><T en="by" tr="yazan" /> <b>{author}</b></div>
     </header>
@@ -87,8 +104,16 @@ const jsonLd = {
     }
 
     <div class="wrap wrap--narrow">
-      <div class="prose" data-lang-content="en" set:html={enHtml}></div>
-      <div class="prose" data-lang-content="tr" set:html={trHtml}></div>
+      {
+        bilingual ? (
+          <>
+            <div class="prose" data-lang-content="en" set:html={enHtml} />
+            <div class="prose" data-lang-content="tr" set:html={trHtml} />
+          </>
+        ) : (
+          <div class="prose" set:html={enHtml} />
+        )
+      }
     </div>
 
     <div class="wrap wrap--narrow article-foot">

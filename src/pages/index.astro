@@ -51,18 +51,18 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
           />
         </label>
         <div class="sort-group" role="group" aria-label="Sort">
-          <button class="sort-opt is-active" type="button" data-sort="newest"><T en="Newest" tr="En yeni" /></button>
-          <button class="sort-opt" type="button" data-sort="oldest"><T en="Oldest" tr="En eski" /></button>
+          <button class="sort-opt is-active" type="button" aria-pressed="true" data-sort="newest"><T en="Newest" tr="En yeni" /></button>
+          <button class="sort-opt" type="button" aria-pressed="false" data-sort="oldest"><T en="Oldest" tr="En eski" /></button>
         </div>
       </div>
 
       <div class="filter-chips" id="filterChips">
-        <button class="filter-chip is-active" type="button" data-tag="all">
+        <button class="filter-chip is-active" type="button" aria-pressed="true" data-tag="all">
           <T en="All" tr="Tümü" /> <span class="c">{posts.length}</span>
         </button>
         {
           tagList.map((t) => (
-            <button class="filter-chip" type="button" data-tag={t}>
+            <button class="filter-chip" type="button" aria-pressed="false" data-tag={t}>
               <T en={labelFor(t)} tr={labelTrFor(t)} /> <span class="c">{tagCounts.get(t)}</span>
             </button>
           ))
@@ -80,46 +80,56 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
 
   <script>
     const grid = document.getElementById("postGrid");
-    const cards = Array.from(document.querySelectorAll(".post-card"));
-    const searchInput = document.getElementById("searchInput");
-    const chips = Array.from(document.querySelectorAll(".filter-chip"));
-    const sortOpts = Array.from(document.querySelectorAll(".sort-opt"));
+    const searchInput = document.getElementById("searchInput") as HTMLInputElement | null;
     const emptyEl = document.getElementById("feedEmpty");
-    let activeTag = "all";
-    let sortMode = "newest";
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(".post-card"));
+    const chips = Array.from(document.querySelectorAll<HTMLElement>(".filter-chip"));
+    const sortOpts = Array.from(document.querySelectorAll<HTMLElement>(".sort-opt"));
 
-    function apply() {
-      const q = searchInput.value.trim().toLowerCase();
-      const shown = cards.filter((c) => {
-        const okTag = activeTag === "all" || c.dataset.tags.split(" ").includes(activeTag);
-        const okText = !q || c.dataset.search.includes(q);
-        return okTag && okText;
-      });
-      shown.sort((a, b) =>
-        sortMode === "oldest"
-          ? a.dataset.date.localeCompare(b.dataset.date)
-          : b.dataset.date.localeCompare(a.dataset.date),
+    if (grid && searchInput && emptyEl) {
+      let activeTag = "all";
+      let sortMode = "newest";
+
+      const apply = () => {
+        const q = searchInput.value.trim().toLowerCase();
+        const shown = cards.filter((c) => {
+          const okTag = activeTag === "all" || (c.dataset.tags ?? "").split(" ").includes(activeTag);
+          const okText = !q || (c.dataset.search ?? "").includes(q);
+          return okTag && okText;
+        });
+        shown.sort((a, b) => {
+          const da = a.dataset.date ?? "";
+          const db = b.dataset.date ?? "";
+          return sortMode === "oldest" ? da.localeCompare(db) : db.localeCompare(da);
+        });
+        cards.forEach((c) => { c.style.display = "none"; });
+        shown.forEach((c) => { c.style.display = ""; c.classList.add("is-visible"); grid.appendChild(c); });
+        emptyEl.hidden = shown.length > 0;
+      };
+
+      searchInput.addEventListener("input", apply);
+      const setActive = (group: HTMLElement[], current: HTMLElement) => {
+        group.forEach((el) => {
+          const on = el === current;
+          el.classList.toggle("is-active", on);
+          el.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      };
+      chips.forEach((ch) =>
+        ch.addEventListener("click", () => {
+          activeTag = ch.dataset.tag ?? "all";
+          setActive(chips, ch);
+          apply();
+        }),
       );
-      cards.forEach((c) => { c.style.display = "none"; });
-      shown.forEach((c) => { c.style.display = ""; c.classList.add("is-visible"); grid.appendChild(c); });
-      emptyEl.hidden = shown.length > 0;
+      sortOpts.forEach((s) =>
+        s.addEventListener("click", () => {
+          sortMode = s.dataset.sort ?? "newest";
+          setActive(sortOpts, s);
+          apply();
+        }),
+      );
+      apply();
     }
-
-    searchInput.addEventListener("input", apply);
-    chips.forEach((ch) =>
-      ch.addEventListener("click", () => {
-        activeTag = ch.dataset.tag;
-        chips.forEach((c) => c.classList.toggle("is-active", c === ch));
-        apply();
-      }),
-    );
-    sortOpts.forEach((s) =>
-      s.addEventListener("click", () => {
-        sortMode = s.dataset.sort;
-        sortOpts.forEach((o) => o.classList.toggle("is-active", o === s));
-        apply();
-      }),
-    );
-    apply();
   </script>
 </Base>

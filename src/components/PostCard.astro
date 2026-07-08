@@ -13,10 +13,12 @@ const titleTr = post.data.title_tr ?? title;
 const descriptionTr = post.data.description_tr ?? description;
 const primaryTag = tags[0];
 const mins = readingMinutes(post.body ?? "");
+const dual = !!post.data.title_tr || !!post.data.description_tr;
 const search = [title, titleTr, description, descriptionTr, ...tags].join(" ").toLowerCase();
 // Deterministic hue for the placeholder cover, within the warm-rust family.
 const hues = ["6 62% 50%", "12 62% 62%", "22 75% 58%", "348 58% 60%"];
-const hue = hues[(primaryTag?.length ?? 0) % hues.length];
+const hueSeed = [...(primaryTag ?? "xrack")].reduce((s, ch) => s + ch.charCodeAt(0), 0);
+const hue = hues[hueSeed % hues.length];
 ---
 
 <article
@@ -46,12 +48,28 @@ const hue = hues[(primaryTag?.length ?? 0) % hues.length];
         <span><T en={`${mins} min read`} tr={`${mins} dk okuma`} /></span>
       </div>
       <h2 class="post-card__title">
-        <span data-lang-content="en">{title}</span>
-        <span data-lang-content="tr">{titleTr}</span>
+        {
+          dual ? (
+            <>
+              <span data-lang-content="en">{title}</span>
+              <span data-lang-content="tr">{titleTr}</span>
+            </>
+          ) : (
+            title
+          )
+        }
       </h2>
       <p class="post-card__excerpt">
-        <span data-lang-content="en">{description}</span>
-        <span data-lang-content="tr">{descriptionTr}</span>
+        {
+          dual ? (
+            <>
+              <span data-lang-content="en">{description}</span>
+              <span data-lang-content="tr">{descriptionTr}</span>
+            </>
+          ) : (
+            description
+          )
+        }
       </p>
       <div class="post-card__foot">
         <span>{author}</span>

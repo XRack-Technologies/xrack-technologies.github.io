@@ -15,5 +15,9 @@
     "highlight.js": "^11.10.0",
     "marked": "^15.0.0",
     "marked-highlight": "^2.2.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^5.9.3"
   }
 }

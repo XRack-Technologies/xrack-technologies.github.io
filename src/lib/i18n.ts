@@ -30,12 +30,18 @@ marked.setOptions({ gfm: true, breaks: false });
 // If the marker is absent, the Turkish version falls back to the English one.
 const TR_MARKER = /\n<!--\s*tr\s*-->\s*\n/i;
 
-export function renderBilingual(body: string): { enHtml: string; trHtml: string } {
+export function renderBilingual(body: string): {
+  enHtml: string;
+  trHtml: string;
+  bilingual: boolean;
+} {
   const [en, ...rest] = body.split(TR_MARKER);
-  const tr = rest.length ? rest.join("\n") : en;
+  const bilingual = rest.length > 0;
+  const tr = bilingual ? rest.join("\n") : (en ?? "");
   return {
     enHtml: marked.parse(en ?? "", { async: false }),
-    trHtml: marked.parse(tr ?? "", { async: false }),
+    trHtml: marked.parse(tr, { async: false }),
+    bilingual,
   };
 }
 
