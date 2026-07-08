@@ -28,10 +28,12 @@ export function href(path = ""): string {
   return (BASE.endsWith("/") ? BASE : BASE + "/") + clean;
 }
 
+const DATE_OPTS: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
+
 export function formatDate(date: Date): string {
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  return date.toLocaleDateString("en-US", DATE_OPTS);
+}
+
+export function formatDateTr(date: Date): string {
+  return date.toLocaleDateString("tr-TR", DATE_OPTS);
 }

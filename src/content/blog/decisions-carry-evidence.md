@@ -17,6 +17,16 @@ led you astray.
 
 > Cognition you can trust is cognition that shows its work.
 
+## Reading it back
+
+Every action names the claim it inherited authority from, so you can walk the chain backwards:
+
+```python
+grid.trace(cycle_id="c-4821") \
+    .filter(kind="action") \
+    .explain()   # claim -> verify -> dispatch
+```
+
 ## Reproducible by construction
 
 Because claims are immutable and content-addressed, two runs over the same evidence produce the same

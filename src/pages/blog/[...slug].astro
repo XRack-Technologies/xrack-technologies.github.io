@@ -1,24 +1,34 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import { href, formatDate, SITE } from "../../lib/site";
+import { href, formatDate, formatDateTr, SITE } from "../../lib/site";
 import { renderBilingual, readingMinutes } from "../../lib/i18n";
 import T from "../../components/T.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+  );
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      newer: i > 0 ? posts[i - 1] : null,
+      older: i < posts.length - 1 ? posts[i + 1] : null,
+    },
+  }));
 }
 
-const { post } = Astro.props;
-const { title, description, pubDate, tags, author } = post.data;
+const { post, newer, older } = Astro.props;
+const { title, description, pubDate, tags, author, cover } = post.data;
 const titleTr = post.data.title_tr ?? title;
 const descriptionTr = post.data.description_tr ?? description;
 const { enHtml, trHtml } = renderBilingual(post.body ?? "");
 const mins = readingMinutes(post.body ?? "");
 
-const url = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
-const image = Astro.site ? new URL(href("logo.png"), Astro.site).href : href("logo.png");
+const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
+const url = abs(Astro.url.pathname);
+const image = cover ? abs(cover) : abs(href("logo.png"));
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -30,7 +40,8 @@ const jsonLd = {
   publisher: { "@type": "Organization", name: "XRack Technologies" },
   keywords: tags.join(", "),
   image,
-  ...(url ? { mainEntityOfPage: url, url } : {}),
+  mainEntityOfPage: url,
+  url,
 };
 ---
 
@@ -39,6 +50,7 @@ const jsonLd = {
   description={description}
   keywords={tags}
   ogType="article"
+  image={image}
   publishedTime={pubDate.toISOString()}
   articleTags={tags}
   showProgress={true}
@@ -48,7 +60,10 @@ const jsonLd = {
     <header class="wrap wrap--narrow article-head">
       <div class="post-card__meta" style="justify-content:center;">
         {tags[0] && <span class="pill pill-primary">{tags[0]}</span>}
-        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        <time datetime={pubDate.toISOString()}>
+          <span data-lang-content="en">{formatDate(pubDate)}</span>
+          <span data-lang-content="tr">{formatDateTr(pubDate)}</span>
+        </time>
         <span class="dot">&middot;</span>
         <span><T en={`${mins} min read`} tr={`${mins} dk okuma`} /></span>
       </div>
@@ -63,6 +78,14 @@ const jsonLd = {
       <div class="byline"><T en="by" tr="yazan" /> <b>{author}</b></div>
     </header>
 
+    {
+      cover && (
+        <figure class="article-cover wrap">
+          <img src={cover} alt={title} />
+        </figure>
+      )
+    }
+
     <div class="wrap wrap--narrow">
       <div class="prose" data-lang-content="en" set:html={enHtml}></div>
       <div class="prose" data-lang-content="tr" set:html={trHtml}></div>
@@ -74,5 +97,34 @@ const jsonLd = {
       </div>
       <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
     </div>
+
+    {
+      (newer || older) && (
+        <nav class="wrap wrap--narrow post-nav" aria-label="More posts">
+          {newer ? (
+            <a class="post-nav__item post-nav__item--prev" href={href(`blog/${newer.id}`)}>
+              <span class="post-nav__dir"><T en="Newer" tr="Daha yeni" /></span>
+              <span class="post-nav__title">
+                <span data-lang-content="en">{newer.data.title}</span>
+                <span data-lang-content="tr">{newer.data.title_tr ?? newer.data.title}</span>
+              </span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {older ? (
+            <a class="post-nav__item post-nav__item--next" href={href(`blog/${older.id}`)}>
+              <span class="post-nav__dir"><T en="Older" tr="Daha eski" /></span>
+              <span class="post-nav__title">
+                <span data-lang-content="en">{older.data.title}</span>
+                <span data-lang-content="tr">{older.data.title_tr ?? older.data.title}</span>
+              </span>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      )
+    }
   </article>
 </Base>

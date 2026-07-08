@@ -1,0 +1,26 @@
+---
+import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
+import { href } from "../lib/site";
+---
+
+<Base title="404">
+  <section class="hero" style="padding-bottom:4rem;">
+    <div class="hero-aura"></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow-strong">404</span>
+      <h1 class="display-title">
+        <T en="This page went off-trace" tr="Bu sayfa iz bırakmadan kayboldu" />
+      </h1>
+      <p class="lede">
+        <T
+          en="The page you're looking for doesn't exist or was moved."
+          tr="Aradığın sayfa mevcut değil ya da taşınmış."
+        />
+      </p>
+      <a class="btn-primary" href={href()} style="margin-top:.5rem;">
+        <T en="Back to the blog" tr="Bloga dön" />
+      </a>
+    </div>
+  </section>
+</Base>

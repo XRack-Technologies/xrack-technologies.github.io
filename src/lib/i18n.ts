@@ -1,8 +1,22 @@
-import { marked } from "marked";
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
 
 // localStorage key the browser uses to remember the last chosen language.
 export const LANG_KEY = "xrack-blog-lang";
 
+// Markdown engine with build-time syntax highlighting (output is static HTML +
+// CSS classes; no highlighter ships to the browser).
+const marked = new Marked(
+  markedHighlight({
+    emptyLangClass: "hljs",
+    langPrefix: "hljs language-",
+    highlight(code, lang) {
+      const language = lang && hljs.getLanguage(lang) ? lang : "plaintext";
+      return hljs.highlight(code, { language }).value;
+    },
+  }),
+);
 marked.setOptions({ gfm: true, breaks: false });
 
 // A single post body holds both languages, split by an HTML comment marker:

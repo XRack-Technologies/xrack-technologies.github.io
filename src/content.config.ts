@@ -10,6 +10,7 @@ const blog = defineCollection({
     description_tr: z.string().optional(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
+    cover: z.string().optional(), // e.g. "/covers/my-post.jpg" (in public/) or a full URL
     tags: z.array(z.string()).default([]),
     author: z.string().default("Vincent E. Dogan Dursun - CEO & Co-Founder"),
     draft: z.boolean().default(false),
