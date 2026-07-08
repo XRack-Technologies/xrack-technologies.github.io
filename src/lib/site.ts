@@ -3,7 +3,7 @@ export const SITE = {
   tagline: "Sovereign Cognitive Runtime",
   description:
     "Engineering, research, and field notes from the team building the observable agentic harness.",
-  author: "Ege Dogan Dursun",
+  author: "Vincent E. Dogan Dursun - CEO & Co-Founder",
   homepage: "https://xrack.io",
   cta: "https://calendly.com/dogandursun-xrack/20min",
 };
