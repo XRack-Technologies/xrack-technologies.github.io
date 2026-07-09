@@ -30,7 +30,7 @@ const {
   jsonLd,
   image,
 } = Astro.props;
-const pageTitle = title ? `${title} — ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
+const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} · ${SITE.tagline}`;
 const path = Astro.url.pathname.replace(/\/$/, "");
 const logo = href("logo.png");
 const isActive = (tag: string) => path === href(`tags/${tag}`).replace(/\/$/, "");
