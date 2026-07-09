@@ -20,8 +20,11 @@ export const AUTHORS: Record<string, Author> = {
     bioTr:
       "Vincent E. Dogan Dursun, XRack Technologies'in CEO'su ve kurucu ortağıdır; regüle kurumsal yapay zekâ için bağımsız bir bilişsel çalışma zamanının geliştirilmesine öncülük eder — agentic sistemleri opak kara kutulardan denetlenebilir cam kutulara dönüştürür. Burada, gözlemlenebilir bir agentic harness inşa etmenin ardındaki mühendislik, araştırma ve saha notlarını yazıyor.",
     email: "dogandursun@xrack.io",
-    // Add LinkedIn / X / GitHub profile URLs here to strengthen sameAs.
-    sameAs: ["https://xrack.io"],
+    sameAs: [
+      "https://xrack.io",
+      "https://www.linkedin.com/in/egedogandursun",
+      "https://github.com/egedursun",
+    ],
   },
 };
 
