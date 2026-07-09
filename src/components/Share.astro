@@ -96,4 +96,19 @@ const links = [
       window.setTimeout(() => btn.classList.remove("is-copied"), 1500);
     });
   });
+
+  const rail = document.querySelector<HTMLElement>(".share-rail");
+  const bar = document.querySelector<HTMLElement>(".share-bar");
+  if (rail && bar && "IntersectionObserver" in window && !rail.dataset.tuckBound) {
+    rail.dataset.tuckBound = "1";
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          rail.classList.toggle("is-tucked", entry.isIntersecting);
+        }
+      },
+      { rootMargin: "0px 0px -15% 0px" },
+    );
+    io.observe(bar);
+  }
 </script>

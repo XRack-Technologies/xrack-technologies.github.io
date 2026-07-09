@@ -27,7 +27,9 @@ keywords:
 
 Consider what we think we want from a decision-maker. We want correct answers; we want it to be accurate; we want it to solve a problem when we put one in front of it. Every one of these wants circles a single thing: the output itself. We call a system that produces good output a good system, and the measure seems so natural that it never occurs to us that another measure could exist. Yet what makes a decision-maker a decision-maker is not its output. It is being able to stand behind that output.
 
-The real issue is the gulf between an output and the ground beneath it. A sentence can be true and at the same time rest on nothing; a system can be accurate and at the same time not know why it is accurate. The difference is invisible, because both produce the very same sentence. But being invisible does not make it unimportant; on the contrary, the whole point of a decision-maker lives here. A system that speaks a truth it cannot account for, however accurate its speech, is nothing more than an oracle built without accountability.
+The real issue is the gulf between an output and the ground beneath it. A sentence can be true and at the same time rest on nothing; a system can be accurate and at the same time not know why it is accurate. The difference is invisible, because both produce the very same sentence. But being invisible does not make it unimportant; on the contrary, the whole point of a decision-maker lives here.
+
+> A system that speaks a truth it cannot account for, however accurate its speech, is nothing more than an oracle built without accountability.
 
 ## The shape of the problem
 
@@ -39,11 +41,12 @@ One thing must be underlined: the justification problem is not an engineering wr
 
 ## Knowing versus appearing to know
 
-Fifth century BC, Delphi. Chaerephon asks the oracle a single question: is anyone wiser than Socrates? The Pythia's answer is flat: no one. When Chaerephon carries the words back to Athens, Socrates is stunned, because he believes he knows nothing. He sets out to refute the oracle: he will find someone reputed to be wise, show himself less wise than that person, and so prove the oracle wrong.
-
-First he goes to a statesman, a man everyone takes to be wise. He talks, he questions, and he sees this: the man appears wise but is not; worse, pointing it out earns him an enemy. Then he goes to the poets; he notices that those who write the most beautiful lines cannot explain why the lines are beautiful. Then he goes to the craftsmen; they truly do know something, but because of it they imagine themselves wise about everything.
-
-At last Socrates resolves the oracle this way: the one thing that sets him apart is that he knows he does not know. He refuses to carry an ungrounded statement as if it were knowledge. The others may have said true things too, but they said them without knowing exactly what stood behind them. Even when their statements were true, this was not knowing, because there was nothing underneath.
+<aside class="anecdote">
+<span class="anecdote-label">An old story</span>
+<p>Fifth century BC, Delphi. Chaerephon asks the oracle a single question: is anyone wiser than Socrates? The Pythia's answer is flat: no one. When Chaerephon carries the words back to Athens, Socrates is stunned, because he believes he knows nothing. He sets out to refute the oracle: he will find someone reputed to be wise, show himself less wise than that person, and so prove the oracle wrong.</p>
+<p>First he goes to a statesman, a man everyone takes to be wise. He talks, he questions, and he sees this: the man appears wise but is not; worse, pointing it out earns him an enemy. Then he goes to the poets; he notices that those who write the most beautiful lines cannot explain why the lines are beautiful. Then he goes to the craftsmen; they truly do know something, but because of it they imagine themselves wise about everything.</p>
+<p>At last Socrates resolves the oracle this way: the one thing that sets him apart is that he knows he does not know. He refuses to carry an ungrounded statement as if it were knowledge. The others may have said true things too, but they said them without knowing exactly what stood behind them. Even when their statements were true, this was not knowing, because there was nothing underneath.</p>
+</aside>
 
 A sentence can be structurally true and still express nothing. Accepting this means giving up the most comfortable assumption in modern AI discourse, because that discourse looks for truth inside the sentence, whereas knowing does not sit inside the sentence; it sits in the thread that ties the sentence to its ground. We cannot count a system as "having known" merely because it produced a true sentence. If there is no ground behind that sentence, the accuracy is only a coincidence; and a coincidence, however many times it repeats, produces no knowing. An oracle can come out statistically consistent for years; that makes it not a knower but a lucky, or cautious, guesser. The difference looks invisible, but it is everything: one, when asked, can show what it rests on; the other can only show the result.
 
@@ -75,13 +78,17 @@ The last and deepest failure is at the place the chain stops. Every ground calls
 
 ## The value of silence
 
-The tyrant Phalaris of Akragas became infamous for a torture device he had built: a bronze bull that turned the screams of the person placed inside it into the bellowing of a bull. Its maker was the Athenian craftsman Perilaus. As he presented the device to the tyrant, Perilaus proudly described his own ingenuity, pouring out the subtleties of the mechanism. Phalaris listened, then decided the device's first trial should be performed on its inventor, and had Perilaus thrown inside his own bull.
-
-The real point: what finished Perilaus was not what he knew; it was the urge to say what he knew at every opening. Where he stayed silent, he could have survived. His desire to display his skill brought forward the one thing he should have held back.
+<aside class="anecdote">
+<span class="anecdote-label">An old story</span>
+<p>The tyrant Phalaris of Akragas became infamous for a torture device he had built: a bronze bull that turned the screams of the person placed inside it into the bellowing of a bull. Its maker was the Athenian craftsman Perilaus. As he presented the device to the tyrant, Perilaus proudly described his own ingenuity, pouring out the subtleties of the mechanism. Phalaris listened, then decided the device's first trial should be performed on its inventor, and had Perilaus thrown inside his own bull.</p>
+<p>The real point: what finished Perilaus was not what he knew; it was the urge to say what he knew at every opening. Where he stayed silent, he could have survived. His desire to display his skill brought forward the one thing he should have held back.</p>
+</aside>
 
 In the letters attributed to that same Phalaris, the worth of the wise who advised him is told from the opposite side: their value lay not in what they could say but in what, at a dangerous moment, they refrained from saying and held back. Perilaus always took speaking for a gain, and he was destroyed by letting out a real, grounded piece of knowledge at a moment that had no place for it. What makes a decision-maker valuable is knowing when to hold back the truth it holds. The difference between one who knows but can stay silent and one who fills every gap can be as sharp, in some situations, as the difference between surviving and perishing.
 
-We are used to measuring a decision-maker by what it can say. We test its knowledge, probe its range, ask how wide a field it can speak across, and the breadth of its answers impresses us. Yet an oracle's worth lies not in what it says but in when it stays silent. A being that has an answer to every question is, in truth, the same as a being that has a real answer to no question; because if nothing constrains its answers, none of its answers is bound to a ground. Boundless speech is another name for groundless speech.
+We are used to measuring a decision-maker by what it can say. We test its knowledge, probe its range, ask how wide a field it can speak across, and the breadth of its answers impresses us. Yet an oracle's worth lies not in what it says but in when it stays silent. A being that has an answer to every question is, in truth, the same as a being that has a real answer to no question; because if nothing constrains its answers, none of its answers is bound to a ground.
+
+> Boundless speech is another name for groundless speech.
 
 The answer looks simple but is hard to accept: it should be silent. It should not fill the gap. Instead of behaving as if it knows where it does not, it should admit there is a gap there and leave it as it is. This runs against our intuitions most of the time, because we tend to count silence as inadequacy or ignorance. Our trust in an expert who says "I don't know" is shaken; yet that "I don't know" moment is exactly the moment to be trusted. The expert who does not answer where it should not is the expert who respects its ground. A physician's most valuable sentence is often not a diagnosis but "I can't say this with this data; I need more." That sentence is not a flaw but a maturity.
 
@@ -109,13 +116,19 @@ The hardest engineering decision is who sets the gate's threshold. The moment th
 
 ## Where this leaves us
 
-Return to where we began. To entrust a decision to a decision-maker is to trust that it can account for that decision. Everything named here (anchoring to a ground, being able to stay silent, holding a boundary, not leaving the threshold in its own hands) serves one aim: building a system that can stand behind its output. The right answer is the easy part; being able to account for it is the hard part. And what makes a decision-maker a decision-maker is exactly that hard part.
+Return to where we began. To entrust a decision to a decision-maker is to trust that it can account for that decision. Everything named here (anchoring to a ground, being able to stay silent, holding a boundary, not leaving the threshold in its own hands) serves one aim: building a system that can stand behind its output.
+
+> The right answer is the easy part; being able to account for it is the hard part.
+
+And what makes a decision-maker a decision-maker is exactly that hard part.
 
 <!-- tr -->
 
 Bir karar vericiden ne istediğimizi sandığımızı düşünelim. Doğru cevaplar isteriz; isabetli olmasını isteriz; önüne bir sorun koyduğumuzda onu başarıyla çözmesini isteriz. Bütün bu istekler tek bir şeyin etrafında döner: çıktının kendisi. İyi çıktı veren sisteme iyi sistem deriz, ve bu ölçü o kadar doğal görünür ki başka bir ölçünün var olabileceği aklımıza bile gelmez. Oysa bir karar vericiyi karar verici yapan şey çıktısı değildir. Çıktının arkasında durabilmesidir.
 
-Asıl mesele, çıktı ile onun arkasındaki dayanak arasındaki uçurumdur. Bir cümle doğru olabilir ve aynı zamanda hiçbir şeye dayanmıyor olabilir; bir sistem isabetli olabilir ve aynı zamanda neden isabetli olduğunu bilmiyor olabilir. Aradaki fark görünmezdir, çünkü her ikisi de aynı cümleyi üretir. Ama görünmez olması, önemsiz olması demek değildir; tam tersine, bir karar vericinin bütün meselesi buradadır. Hesabını veremediği bir doğruyu söyleyen bir sistem, ne kadar isabetli konuşursa konuşsun, hesap veremez yapıda bir kâhinden başka bir şey değildir.
+Asıl mesele, çıktı ile onun arkasındaki dayanak arasındaki uçurumdur. Bir cümle doğru olabilir ve aynı zamanda hiçbir şeye dayanmıyor olabilir; bir sistem isabetli olabilir ve aynı zamanda neden isabetli olduğunu bilmiyor olabilir. Aradaki fark görünmezdir, çünkü her ikisi de aynı cümleyi üretir. Ama görünmez olması, önemsiz olması demek değildir; tam tersine, bir karar vericinin bütün meselesi buradadır.
+
+> Hesabını veremediği bir doğruyu söyleyen bir sistem, ne kadar isabetli konuşursa konuşsun, hesap veremez yapıda bir kâhinden başka bir şey değildir.
 
 ## Sorunun biçimi
 
@@ -127,11 +140,12 @@ Bu altı yüz tek bir iddiada birleşir. Bir karar vericinin epistemik değeri, 
 
 ## Bilmek ile bilir görünmek
 
-MÖ V. yüzyıl, Delphi. Khairephon kâhine tek bir soru sorar: Sokrates'ten daha bilge biri var mıdır? Pythia'nın cevabı kesindir: yoktur. Khairephon bu sözü Atina'ya taşıdığında Sokrates afallar, çünkü kendisinin hiçbir şey bilmediğini düşünmektedir. Kehaneti çürütmek için yola çıkar: bilge sayılan birini bulup ondan daha bilge olduğunu gösterecek, böylece kâhinin yanıldığını kanıtlayacaktır.
-
-Önce bir devlet adamına gider, herkesin bilge bildiği birine. Konuşur, sorgular, ve şunu görür: adam bilgeymiş gibi görünmektedir ama değildir; üstelik bunu ona gösterince kendine bir düşman kazanır. Sonra şairlere gider; en güzel dizeleri yazanların, o dizelerin neden güzel olduğunu açıklayamadığını fark eder. Sonra zanaatkârlara gider; onlar gerçekten bir şey bilmektedir, ama bildikleri yüzünden kendilerini her konuda bilge sanmaktadırlar.
-
-Sokrates en sonunda kehaneti şöyle çözer: onu ötekilerden ayıran tek şey, bilmediğini bilmesidir. Dayanağı olmayan bir ifadeyi bilgi diye taşımayı reddetmesidir. Ötekiler doğru şeyler de söylüyordu belki; ama söylediklerinin arkasında tam olarak neyin durduğunu bilmeden söylüyorlardı. İfadeleri doğru olsa bile bu bir bilme değildi, çünkü altları boştu.
+<aside class="anecdote">
+<span class="anecdote-label">Eski bir hikâye</span>
+<p>MÖ V. yüzyıl, Delphi. Khairephon kâhine tek bir soru sorar: Sokrates'ten daha bilge biri var mıdır? Pythia'nın cevabı kesindir: yoktur. Khairephon bu sözü Atina'ya taşıdığında Sokrates afallar, çünkü kendisinin hiçbir şey bilmediğini düşünmektedir. Kehaneti çürütmek için yola çıkar: bilge sayılan birini bulup ondan daha bilge olduğunu gösterecek, böylece kâhinin yanıldığını kanıtlayacaktır.</p>
+<p>Önce bir devlet adamına gider, herkesin bilge bildiği birine. Konuşur, sorgular, ve şunu görür: adam bilgeymiş gibi görünmektedir ama değildir; üstelik bunu ona gösterince kendine bir düşman kazanır. Sonra şairlere gider; en güzel dizeleri yazanların, o dizelerin neden güzel olduğunu açıklayamadığını fark eder. Sonra zanaatkârlara gider; onlar gerçekten bir şey bilmektedir, ama bildikleri yüzünden kendilerini her konuda bilge sanmaktadırlar.</p>
+<p>Sokrates en sonunda kehaneti şöyle çözer: onu ötekilerden ayıran tek şey, bilmediğini bilmesidir. Dayanağı olmayan bir ifadeyi bilgi diye taşımayı reddetmesidir. Ötekiler doğru şeyler de söylüyordu belki; ama söylediklerinin arkasında tam olarak neyin durduğunu bilmeden söylüyorlardı. İfadeleri doğru olsa bile bu bir bilme değildi, çünkü altları boştu.</p>
+</aside>
 
 Bir cümle yapısal olarak doğru olabilir ve yine de hiçbir şey ifade etmiyor olabilir. Bunu kabul etmek, modern yapay zekâ söyleminin en rahat varsayımını terk etmeyi gerektirir; çünkü o söylem doğruluğu cümlenin içinde arar, oysa biliş cümlenin içinde değil, onu cümleye bağlayan ipte durur. Bir sistemi, yalnızca doğru bir cümle üretti diye "bilmiş" sayamayız. O cümlenin arkasında bir dayanak yoksa, isabet yalnızca bir tesadüftür; ve tesadüf ne kadar tekrarlanırsa tekrarlansın bir biliş üretmez. Bir kâhin istatistiksel olarak yıllarca tutarlı çıkabilir; bu onu bir bilen değil, yalnızca şanslı ya da temkinli bir tahminci yapar. Aradaki fark görünmez gibidir ama aslında her şeydir: biri sorulduğunda neye dayandığını gösterebilir, öteki yalnızca sonucu gösterebilir.
 
@@ -163,13 +177,17 @@ Son ve en derin başarısızlık, zincirin durduğu yerdedir. Her dayanak bir ba
 
 ## Susmanın değeri
 
-Tiran Phalaris, Akragas'ta yaptırdığı işkence aletiyle ün salmıştır: içine konulan insanın çığlıklarını boğa böğürmesine çeviren tunç bir boğa. Bu aletin yapımcısı Atinalı zanaatkâr Perilaos'tur. Perilaos aleti tirana sunarken kendi marifetini de gururla anlatır, mekanizmanın inceliklerini döker. Phalaris onu dinler, sonra aletin ilk denemesinin tam da mucidi üzerinde yapılması gerektiğine karar verir ve Perilaos'u kendi boğasının içine attırır.
-
-Asıl mesele şu: Perilaos'u bitiren, bildiği değildi; bildiğini her boşlukta söyleme dürtüsüydü. Sustuğu yerde sağ kalabilirdi. Marifetini sergileme arzusu, tam da geri tutması gereken şeyi öne çıkardı.
+<aside class="anecdote">
+<span class="anecdote-label">Eski bir hikâye</span>
+<p>Tiran Phalaris, Akragas'ta yaptırdığı işkence aletiyle ün salmıştır: içine konulan insanın çığlıklarını boğa böğürmesine çeviren tunç bir boğa. Bu aletin yapımcısı Atinalı zanaatkâr Perilaos'tur. Perilaos aleti tirana sunarken kendi marifetini de gururla anlatır, mekanizmanın inceliklerini döker. Phalaris onu dinler, sonra aletin ilk denemesinin tam da mucidi üzerinde yapılması gerektiğine karar verir ve Perilaos'u kendi boğasının içine attırır.</p>
+<p>Asıl mesele şu: Perilaos'u bitiren, bildiği değildi; bildiğini her boşlukta söyleme dürtüsüydü. Sustuğu yerde sağ kalabilirdi. Marifetini sergileme arzusu, tam da geri tutması gereken şeyi öne çıkardı.</p>
+</aside>
 
 Aynı Phalaris'e atfedilen mektuplarda, ona danışmanlık eden bilgelerin değeri tersinden anlatılır: değerleri ne söyleyebildiklerinde değil, tehlikeli bir anda neyi söylemeyip geri tuttuklarındaydı. Perilaos konuşmayı her zaman bir kazanç sandı ve dayanağı olan gerçek bir bilgiyi, yeri olmayan bir anda dışarı vererek yıkıldı. Bir karar vericiyi değerli kılan, elindeki doğruyu ne zaman geri tutacağını bilmesidir. Bilen ama susabilen ile her boşluğu dolduran arasındaki fark, bazı durumlarda hayatta kalmakla helak olmak kadar keskindir.
 
-Bir karar vericinin neyi söyleyebildiğine bakarak onu ölçmeye alışmışız. Bilgisini sınarız, kapsamını yoklarız, ne kadar geniş bir alanda konuşabildiğini sorarız, ve cevaplarının genişliği bizi etkiler. Oysa bir kâhinin değeri ne söylediğinde değil, ne zaman sustuğunda gizlidir. Her soruya cevabı olan bir varlık, hiçbir soruya gerçek bir cevabı olmayan bir varlıkla aslında aynı şeydir; çünkü cevaplarını sınırlandıran bir şey yoksa, hiçbir cevabı bir dayanağa bağlı değildir. Sınırsız konuşma, dayanaksız konuşmanın başka adıdır.
+Bir karar vericinin neyi söyleyebildiğine bakarak onu ölçmeye alışmışız. Bilgisini sınarız, kapsamını yoklarız, ne kadar geniş bir alanda konuşabildiğini sorarız, ve cevaplarının genişliği bizi etkiler. Oysa bir kâhinin değeri ne söylediğinde değil, ne zaman sustuğunda gizlidir. Her soruya cevabı olan bir varlık, hiçbir soruya gerçek bir cevabı olmayan bir varlıkla aslında aynı şeydir; çünkü cevaplarını sınırlandıran bir şey yoksa, hiçbir cevabı bir dayanağa bağlı değildir.
+
+> Sınırsız konuşma, dayanaksız konuşmanın başka adıdır.
 
 Cevap basit görünür ama kabul etmesi zordur: susmalı. Boşluğu doldurmamalı. Bilmediği yerde bilir gibi davranmak yerine, orada bir boşluk olduğunu kabullenmeli ve onu olduğu gibi bırakmalı. Bu çoğu zaman sezgilerimize aykırıdır, çünkü susmayı bir yetersizlik ya da cehalet sayarız. "Bilmiyorum" diyen bir uzmana güvenimiz sarsılır; oysa o "bilmiyorum" anı, tam da güvenilmesi gereken andır. Cevap vermemesi gereken yerde cevap vermeyen uzman, dayanağına saygı duyan uzmandır. Bir hekimin en değerli cümlesi çoğu zaman bir teşhis değil, "bunu bu verilerle söyleyemem, daha fazlasına ihtiyacım var" cümlesidir. O cümle bir kusur değil, bir olgunluktur.
 
@@ -197,4 +215,8 @@ En zorlu mühendislik kararı, kapının eşiğini kimin belirlediğindedir. Day
 
 ## Nereye vardık
 
-Başladığımız yere dönelim. Bir karar vericiye bir kararı emanet etmek, onun o kararın hesabını verebileceğine güvenmektir. Buraya kadar adı geçen her şey (bir dayanağa demirlemek, susabilmek, bir sınırı tutabilmek, eşiği kendi eline bırakmamak) tek bir amaca hizmet eder: çıktısının arkasında durabilen bir sistem kurmak. Doğru cevap kolay olandır; onun hesabını verebilmek zor olandır. Ve bir karar vericiyi karar verici yapan, tam da o zor olandır.
+Başladığımız yere dönelim. Bir karar vericiye bir kararı emanet etmek, onun o kararın hesabını verebileceğine güvenmektir. Buraya kadar adı geçen her şey (bir dayanağa demirlemek, susabilmek, bir sınırı tutabilmek, eşiği kendi eline bırakmamak) tek bir amaca hizmet eder: çıktısının arkasında durabilen bir sistem kurmak.
+
+> Doğru cevap kolay olandır; onun hesabını verebilmek zor olandır.
+
+Ve bir karar vericiyi karar verici yapan, tam da o zor olandır.

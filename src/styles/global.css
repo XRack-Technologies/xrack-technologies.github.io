@@ -301,10 +301,11 @@ html:not([data-lang="tr"]) [data-lang-content="tr"] { display: none !important; 
 .share-copy.is-copied .i-link { display: none; }
 .share-copy.is-copied .i-check { display: inline; }
 
-/* Sticky vertical share rail — shown only when there's margin room beside the article */
-.share-rail { position: fixed; top: 50%; left: max(1.25rem, calc(50vw - 360px - 58px)); transform: translateY(-50%); display: none; z-index: 30; }
+.share-rail { position: fixed; top: 50%; left: max(1.25rem, calc(50vw - 360px - 58px)); transform: translateY(-50%); display: none; z-index: 30; opacity: 1; transition: opacity .35s ease, visibility .35s ease; }
 .share-rail .share-btns { flex-direction: column; gap: .5rem; }
+.share-rail.is-tucked { opacity: 0; visibility: hidden; pointer-events: none; }
 @media (min-width: 1120px) and (min-height: 640px) { .share-rail { display: block; } }
+@media (prefers-reduced-motion: reduce) { .share-rail { transition: none; } }
 
 .site-foot { position: relative; border-top: 1px solid hsl(var(--border) / 0.6); padding: 3.5rem 0 2.5rem; margin-top: 3rem; }
 .site-foot-top { display: flex; flex-direction: column; gap: 2.5rem; }
@@ -339,3 +340,64 @@ html:not([data-lang="tr"]) [data-lang-content="tr"] { display: none !important; 
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .reveal-on-view { opacity: 1; transform: none; }
 }
+
+/* ============================================================
+   Long-form article formatting (blog posts only: .article--post)
+   ============================================================ */
+
+/* Drop cap on the opening paragraph of each language block */
+.article--post .prose > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 3.6rem;
+  line-height: 0.72;
+  padding: 0.35rem 0.55rem 0.1rem 0;
+  color: hsl(var(--primary));
+}
+
+/* Numbered rust eyebrow before each section heading (01, 02, …) */
+.article--post .prose { counter-reset: sec; }
+.article--post .prose h2 { counter-increment: sec; }
+.article--post .prose h2::before {
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: hsl(var(--primary));
+  margin-bottom: 0.5rem;
+}
+
+/* Anecdote panel — a set-piece story told in a serif voice */
+.prose .anecdote {
+  margin: 2.25rem 0;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid hsl(var(--border));
+  border-left: 3px solid hsl(var(--primary) / 0.6);
+  border-radius: var(--radius);
+  background: hsl(var(--card-elevated) / 0.5);
+}
+.prose .anecdote .anecdote-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: hsl(var(--primary));
+  margin-bottom: 0.85rem;
+}
+.prose .anecdote p {
+  margin: 0 0 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: hsl(22 30% 88%);
+}
+.prose .anecdote p:last-child { margin-bottom: 0; }
+
+/* Rail tucks away once the inline share bar is in view (set by Share.astro JS) */
+.share-rail { transition: opacity .25s ease, transform .25s ease, visibility .25s; }
+.share-rail.is-tucked { opacity: 0; visibility: hidden; transform: translateY(-50%) translateX(-8px); pointer-events: none; }
