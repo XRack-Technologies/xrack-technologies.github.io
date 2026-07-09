@@ -49,7 +49,7 @@ GitHub identity (no new account for commenters). Rendered by
   tools. Comments are subject to
   [GitHub's Community Guidelines](https://docs.github.com/site-policy/github-terms/github-community-guidelines).
 - **Reporting:** flag abuse via GitHub's report feature or email
-  `dogandursun@xrack.io`.
+  `support@xrack.io`.
 - **Data:** comment content lives in GitHub Discussions on our repo; identity
   and auth are handled by GitHub. We store nothing extra and set no cookies.
 

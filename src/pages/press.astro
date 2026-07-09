@@ -10,7 +10,7 @@ const initials = (name: string) => {
   const w = name.split(/\s+/).filter(Boolean);
   return ((w[0]?.[0] ?? "") + (w.length > 1 ? (w[w.length - 1][0] ?? "") : "")).toUpperCase();
 };
-const pressEmail = "dogandursun@xrack.io";
+const pressEmail = "support@xrack.io";
 
 const facts: { k: { en: string; tr: string }; v: { en: string; tr: string }; url?: string }[] = [
   { k: { en: "Company", tr: "Şirket" }, v: { en: "XRack Technologies", tr: "XRack Technologies" } },

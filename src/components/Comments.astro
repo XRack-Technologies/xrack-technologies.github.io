@@ -10,7 +10,7 @@ interface Props {
 const { term, url, title } = Astro.props;
 const giscus = GISCUS;
 const xIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
-const mailto = `mailto:dogandursun@xrack.io?subject=${encodeURIComponent("Re: " + title)}`;
+const mailto = `mailto:support@xrack.io?subject=${encodeURIComponent("Re: " + title)}`;
 ---
 
 <section class="comments wrap wrap--narrow" aria-label="Comments">
