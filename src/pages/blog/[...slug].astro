@@ -4,6 +4,7 @@ import Base from "../../layouts/Base.astro";
 import { href, formatDate, formatDateTr } from "../../lib/site";
 import { renderBilingual, readingMinutes, enWordCount } from "../../lib/i18n";
 import T from "../../components/T.astro";
+import Share from "../../components/Share.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -120,6 +121,10 @@ const jsonLd = {
           <div class="prose" set:html={enHtml} />
         )
       }
+    </div>
+
+    <div class="wrap wrap--narrow">
+      <Share url={url} title={title} />
     </div>
 
     <div class="wrap wrap--narrow article-foot">

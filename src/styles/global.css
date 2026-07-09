@@ -1,9 +1,3 @@
-/* =========================================================================
-   XRack Blog — design system ported 1:1 from the xrack.io landing page
-   (website/src/styles.css). Warm-rust palette, dark glass, dot-texture ground,
-   ambient rust glows, Bricolage / Geist / JetBrains / Instrument Serif type.
-   ========================================================================= */
-
 :root {
   --background: 20 3% 5%;
   --foreground: 16 14% 92%;
@@ -29,7 +23,7 @@
   --font-serif: "Instrument Serif", "Newsreader", Georgia, serif;
   --font-mono: "JetBrains Mono", "SF Mono", "IBM Plex Mono", ui-monospace, "Menlo", monospace;
 
-  --maxw: 80rem;      /* max-w-7xl */
+  --maxw: 80rem;
   --maxw-narrow: 720px;
 }
 
@@ -50,7 +44,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Ambient rust glows (drifting) + fine dot texture — the landing-page ground */
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
   background:
@@ -76,7 +69,6 @@ a:hover { color: hsl(var(--primary)); }
 ::-webkit-scrollbar-thumb { background: hsl(var(--border-strong)); border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
 ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.6); background-clip: padding-box; }
 
-/* ---- Typography helpers ---- */
 .mono { font-family: var(--font-mono); font-variant-ligatures: none; font-weight: 600; }
 .display-title {
   font-family: var(--font-display); font-weight: 600; font-variation-settings: "opsz" 96;
@@ -92,13 +84,11 @@ a:hover { color: hsl(var(--primary)); }
 .eyebrow-strong::before { content: ""; width: 14px; height: 1px; background: hsl(var(--primary)); box-shadow: 0 0 8px hsl(var(--primary) / 0.6); display: inline-block; }
 .lede { font-size: 16.5px; line-height: 1.7; color: hsl(var(--muted-foreground)); max-width: 52rem; }
 
-/* ---- Layout ---- */
 .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 1.25rem; }
 @media (min-width: 640px) { .wrap { padding: 0 1.5rem; } }
 .wrap--narrow { max-width: var(--maxw-narrow); }
 main { padding-top: 68px; }
 
-/* ---- Components ---- */
 .glass { background-image: linear-gradient(180deg, hsl(var(--card-elevated)), hsl(var(--card))); border: 1px solid hsl(var(--border)); box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.05), 0 14px 30px -16px hsl(0 0% 0% / 0.6), 0 4px 12px -8px hsl(0 0% 0% / 0.4); }
 
 .card-chrome {
@@ -166,11 +156,9 @@ main { padding-top: 68px; }
 .topbar-actions { display: inline-flex; align-items: center; gap: .5rem; flex-shrink: 0; }
 .topbar-actions .btn-ghost, .topbar-actions .btn-primary { font-size: 12px; padding: .45rem .85rem; }
 
-/* Empty (no-posts) categories are grayed out and non-clickable */
 .nav-link--empty { opacity: .38; cursor: default; pointer-events: none; }
 .foot-cols .is-empty { opacity: .4; cursor: default; }
 
-/* Mobile menu (hamburger) */
 .menu-btn { display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 11px; background: hsl(var(--card-elevated)); border: 1px solid hsl(var(--border)); color: hsl(var(--foreground)); cursor: pointer; flex-shrink: 0; }
 .menu-btn:hover { border-color: hsl(var(--border-strong)); }
 .menu-btn .i-close { display: none; }
@@ -187,7 +175,6 @@ main { padding-top: 68px; }
 .mobile-actions { display: flex; gap: .6rem; }
 .mobile-actions .btn-ghost, .mobile-actions .btn-primary { flex: 1; justify-content: center; padding: .7rem 1rem; font-size: 13px; }
 
-/* Language toggle (EN/TR) — ported from the landing page */
 .lang-toggle { display: inline-flex; align-items: center; gap: .1rem; padding: .2rem; border-radius: 9999px; border: 1px solid hsl(var(--border) / 0.7); background: hsl(var(--card-elevated) / 0.55); box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.03); flex-shrink: 0; }
 .lang-opt { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .04em; color: hsl(var(--foreground) / 0.58); padding: .34rem .55rem; border-radius: 9999px; line-height: 1; background: none; border: 0; cursor: pointer; transition: color 180ms ease, background 180ms ease; }
 .lang-opt:hover { color: hsl(var(--foreground)); background: hsl(var(--card) / 0.7); }
@@ -316,6 +303,17 @@ html:not([data-lang="tr"]) [data-lang-content="tr"] { display: none !important; 
 .tag-list { display: flex; flex-wrap: wrap; gap: .5rem; }
 .back-link { font-family: var(--font-mono); font-size: 12px; color: hsl(var(--muted-foreground)); }
 .back-link:hover { color: hsl(var(--foreground)); }
+
+/* Share bar */
+.share-bar { display: flex; align-items: center; flex-wrap: wrap; gap: .9rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid hsl(var(--border)); }
+.share-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.share-btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+.share-btn { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 9999px; border: 1px solid hsl(var(--border)); background: hsl(var(--card-elevated) / 0.5); color: hsl(var(--muted-foreground)); cursor: pointer; transition: color .15s ease, border-color .15s ease, background .15s ease, transform .15s ease; }
+.share-btn:hover { color: hsl(var(--primary)); border-color: hsl(var(--primary) / 0.4); background: hsl(var(--primary) / 0.08); transform: translateY(-1px); }
+.share-copy .i-check { display: none; }
+.share-copy.is-copied { color: hsl(var(--success)); border-color: hsl(var(--success) / 0.45); background: hsl(var(--success) / 0.1); }
+.share-copy.is-copied .i-link { display: none; }
+.share-copy.is-copied .i-check { display: inline; }
 
 /* ---- Footer ---- */
 .site-foot { position: relative; border-top: 1px solid hsl(var(--border) / 0.6); padding: 3.5rem 0 2.5rem; margin-top: 3rem; }
