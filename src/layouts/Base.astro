@@ -48,6 +48,32 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : As
 const defaultOg = href("og/default.png");
 const ogImage = image ?? (Astro.site ? new URL(defaultOg, Astro.site).href : defaultOg);
 const year = new Date().getFullYear();
+
+// Site-wide structured data (brand + searchbox), emitted on every page.
+const siteHref = Astro.site ? Astro.site.href : "https://blog.xrack.io/";
+const logoAbs = Astro.site ? new URL(logo, Astro.site).href : logo;
+const orgLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "XRack Technologies",
+  url: SITE.homepage,
+  logo: logoAbs,
+  sameAs: ["https://github.com/XRack-Technologies"],
+};
+const siteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.title,
+  url: siteHref,
+  inLanguage: ["en", "tr"],
+  publisher: { "@type": "Organization", name: "XRack Technologies", url: SITE.homepage },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: `${siteHref}?q={search_term_string}` },
+    "query-input": "required name=search_term_string",
+  },
+};
+const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
 ---
 
 <!doctype html>
@@ -104,7 +130,7 @@ const year = new Date().getFullYear();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="generator" content={Astro.generator} />
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {graph.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

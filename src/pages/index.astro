@@ -154,6 +154,9 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
         }),
       );
       loadMore?.addEventListener("click", () => { visible += PAGE; apply(); });
+      // Honor ?q= so the WebSite SearchAction (sitelinks searchbox) works.
+      const q0 = new URLSearchParams(location.search).get("q");
+      if (q0) searchInput.value = q0;
       apply();
     }
   </script>

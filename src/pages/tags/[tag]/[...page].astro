@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import Base from "../../../layouts/Base.astro";
 import PostCard from "../../../components/PostCard.astro";
 import T from "../../../components/T.astro";
-import { NAV } from "../../../lib/site";
+import { NAV, href } from "../../../lib/site";
 import type { GetStaticPaths, Page } from "astro";
 import type { CollectionEntry } from "astro:content";
 
@@ -26,9 +26,19 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 type Props = { page: Page<CollectionEntry<"blog">>; label: string; labelTr: string };
 const { page, label, labelTr } = Astro.props as Props;
 const count = page.total;
+
+const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: abs(href()) },
+    { "@type": "ListItem", position: 2, name: label, item: abs(href(`tags/${Astro.params.tag}`)) },
+  ],
+};
 ---
 
-<Base title={label}>
+<Base title={label} jsonLd={breadcrumbLd}>
   <section class="hero" style="padding-bottom:1rem;">
     <div class="wrap section-head">
       <span class="eyebrow-strong"><T en="Category" tr="Kategori" /></span>
