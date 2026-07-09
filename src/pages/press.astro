@@ -12,233 +12,320 @@ const initials = (name: string) => {
 };
 const pressEmail = "dogandursun@xrack.io";
 
-const facts = [
-  { label: { en: "Company", tr: "Şirket" }, value: "XRack Technologies" },
+const facts: { k: { en: string; tr: string }; v: { en: string; tr: string }; url?: string }[] = [
+  { k: { en: "Company", tr: "Şirket" }, v: { en: "XRack Technologies", tr: "XRack Technologies" } },
   {
-    label: { en: "Category", tr: "Kategori" },
-    value: {
+    k: { en: "Category", tr: "Kategori" },
+    v: {
       en: "Sovereign cognitive runtime for regulated enterprise AI",
       tr: "Regüle kurumsal yapay zekâ için bağımsız bilişsel çalışma zamanı",
     },
   },
   {
-    label: { en: "Deployment", tr: "Dağıtım" },
-    value: {
+    k: { en: "Deployment", tr: "Dağıtım" },
+    v: {
       en: "Self-hosted appliance, inside your own perimeter",
-      tr: "Kendi çevrenizde çalışan, kendi sunucunuzda barındırılan uygulama",
+      tr: "Kendi çevrenizde barındırılan uygulama",
     },
   },
-  { label: { en: "Website", tr: "Web sitesi" }, value: "xrack.io", url: SITE.homepage },
-  { label: { en: "Blog", tr: "Blog" }, value: "blog.xrack.io", url: href() },
-  { label: { en: "Press contact", tr: "Basın iletişimi" }, value: pressEmail, url: `mailto:${pressEmail}` },
+  { k: { en: "Website", tr: "Web sitesi" }, v: { en: "xrack.io", tr: "xrack.io" }, url: SITE.homepage },
+  { k: { en: "Blog", tr: "Blog" }, v: { en: "blog.xrack.io", tr: "blog.xrack.io" }, url: href() },
+  { k: { en: "Press contact", tr: "Basın iletişimi" }, v: { en: pressEmail, tr: pressEmail }, url: `mailto:${pressEmail}` },
 ];
+
+const boilerShortEn =
+  "XRack Technologies builds a sovereign cognitive runtime for regulated enterprise AI. It turns agentic systems from opaque black boxes into auditable glass boxes: agents that remember, act, verify, and prove every decision, running as a self-hosted appliance inside the customer's own perimeter, on their own model, with their own audit trail.";
+const boilerShortTr =
+  "XRack Technologies, regüle kurumsal yapay zekâ için bağımsız bir bilişsel çalışma zamanı geliştirir. Agentic sistemleri opak kara kutulardan denetlenebilir cam kutulara dönüştürür: hatırlayan, eyleme geçen, doğrulayan ve verdiği her kararı kanıtlayan ajanlar; müşterinin kendi çevresinde, kendi modeliyle ve kendi denetim kaydıyla, kendi sunucusunda barındırılan bir uygulama olarak.";
+const boilerLongEn =
+  "Free-form prompt loops drift, and when they fail you cannot say why — so regulated organizations can't put them in production. XRack replaces the open-ended loop with a deterministic cognitive cycle (observe → reason → plan → act → verify → learn) and an immutable ledger: every step an agent takes is traced, every decision carries its own evidence, and every grant of authority is scoped and expiring. The system fails closed by default. It spans four planes — the Harness (a single reasoning agent), the Grid (an accountable organization of agents), Federation (grids kept in sync across a portfolio), and Embodiment (the same audited cognition extended to physical systems) — and ships as an appliance customers run entirely within their own perimeter.";
+const boilerLongTr =
+  "Serbest biçimli prompt döngüleri savrulur ve hata verdiklerinde nedenini söyleyemezsiniz; bu yüzden regüle kurumlar onları canlıya alamaz. XRack, bu açık uçlu döngünün yerine deterministik bir bilişsel döngü (gözlemle → akıl yürüt → planla → eyleme geç → doğrula → öğren) ve değiştirilemez bir defter koyar: bir ajanın attığı her adım izlenir, her karar kendi kanıtını taşır ve her yetki kapsamlı ve sürelidir. Sistem varsayılan olarak kapalı başlar. Dört düzleme yayılır — Harness (tek bir akıl yürütme ajanı), Grid (hesap verebilir bir ajan organizasyonu), Federation (bir portföy boyunca eşitlenen gridler) ve Embodiment (aynı denetlenen bilişin fiziksel sistemlere taşınması) — ve müşterilerin tamamen kendi çevrelerinde çalıştırdığı bir uygulama olarak gelir.";
 ---
 
-<Base title="Press & Media Kit" description="Brand assets, boilerplate, bios, and press contact for XRack Technologies.">
-  <section class="hero" style="padding-bottom:1rem;">
-    <div class="wrap section-head">
-      <span class="eyebrow-strong"><T en="Press" tr="Basın" /></span>
+<Base
+  title="Press & Media Kit"
+  description="Brand assets, boilerplate, executive bios, and a media contact for XRack Technologies."
+>
+  <section class="hero press-hero">
+    <div class="hero-aura"></div>
+    <div class="wrap hero-inner">
+      <span class="status-chip"><span class="dot"></span> <T en="Press · Media Kit" tr="Basın · Medya Kiti" /></span>
       <h1 class="display-title"><T en="Press & media kit" tr="Basın ve medya kiti" /></h1>
       <p class="lede">
         <T
-          en="Everything you need to write about XRack: logo, approved boilerplate, executive bios, fast facts, and a press contact."
-          tr="XRack hakkında yazmak için gereken her şey: logo, onaylı tanıtım metni, yönetici biyografileri, hızlı bilgiler ve basın iletişimi."
+          en="Everything you need to cover XRack accurately: logo, approved boilerplate, executive bios, fast facts, and a direct press contact."
+          tr="XRack'i doğru şekilde haberleştirmek için gereken her şey: logo, onaylı tanıtım metni, yönetici biyografileri, hızlı bilgiler ve doğrudan basın iletişimi."
         />
       </p>
+      <div class="hero-cta">
+        <a class="btn-primary" href={logo} download="xrack-logo.png">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          <T en="Download logo" tr="Logoyu indir" />
+        </a>
+        <a class="btn-ghost" href={`mailto:${pressEmail}`}>
+          <T en="Media contact" tr="Basın iletişimi" />
+        </a>
+      </div>
     </div>
   </section>
 
-  <div class="wrap wrap--narrow press">
+  <div class="wrap press">
     <!-- Fast facts -->
-    <section class="press-block">
-      <h2 class="press-h"><T en="Fast facts" tr="Hızlı bilgiler" /></h2>
-      <dl class="facts">
+    <section class="press-section">
+      <span class="eyebrow-strong"><T en="Fast facts" tr="Hızlı bilgiler" /></span>
+      <div class="facts-grid">
         {
           facts.map((f) => (
-            <div class="facts__row">
-              <dt><T en={f.label.en} tr={f.label.tr} /></dt>
-              <dd>
-                {typeof f.value === "string" ? (
-                  f.url ? <a href={f.url}>{f.value}</a> : f.value
+            <div class="fact">
+              <span class="fact__k"><T en={f.k.en} tr={f.k.tr} /></span>
+              <span class="fact__v">
+                {f.url ? (
+                  <a href={f.url}>
+                    <span data-lang-content="en">{f.v.en}</span>
+                    <span data-lang-content="tr">{f.v.tr}</span>
+                  </a>
                 ) : (
                   <>
-                    <span data-lang-content="en">{f.value.en}</span>
-                    <span data-lang-content="tr">{f.value.tr}</span>
+                    <span data-lang-content="en">{f.v.en}</span>
+                    <span data-lang-content="tr">{f.v.tr}</span>
                   </>
                 )}
-              </dd>
+              </span>
             </div>
           ))
         }
-      </dl>
-    </section>
-
-    <!-- Brand assets -->
-    <section class="press-block">
-      <h2 class="press-h"><T en="Brand assets" tr="Marka varlıkları" /></h2>
-      <div class="assets">
-        <div class="asset">
-          <div class="asset__swatch asset__swatch--dark"><img src={logo} alt="XRack logo on dark" /></div>
-          <div class="asset__swatch asset__swatch--light"><img src={logo} alt="XRack logo on light" /></div>
-        </div>
-        <a class="btn-primary" href={logo} download="xrack-logo.png">
-          <T en="Download logo (PNG)" tr="Logoyu indir (PNG)" />
-        </a>
       </div>
-      <p class="press-note">
-        <T
-          en="Please keep clear space around the mark and do not stretch, recolor, or add effects to it."
-          tr="Lütfen logonun çevresinde boşluk bırakın; germeyin, rengini değiştirmeyin ve efekt eklemeyin."
-        />
-      </p>
     </section>
 
     <!-- Boilerplate -->
-    <section class="press-block">
-      <h2 class="press-h"><T en="Boilerplate" tr="Tanıtım metni" /></h2>
-      <p class="press-sub"><T en="Short" tr="Kısa" /></p>
-      <blockquote class="boiler">
-        <span data-lang-content="en">
-          XRack Technologies builds a sovereign cognitive runtime for regulated enterprise AI. It turns
-          agentic systems from opaque black boxes into auditable glass boxes: agents that remember, act,
-          verify, and prove every decision, running as a self-hosted appliance inside the customer's own
-          perimeter, on their own model, with their own audit trail.
-        </span>
-        <span data-lang-content="tr">
-          XRack Technologies, regüle kurumsal yapay zekâ için bağımsız bir bilişsel çalışma zamanı
-          geliştirir. Agentic sistemleri opak kara kutulardan denetlenebilir cam kutulara dönüştürür:
-          hatırlayan, eyleme geçen, doğrulayan ve verdiği her kararı kanıtlayan ajanlar; müşterinin kendi
-          çevresinde, kendi modeliyle ve kendi denetim kaydıyla çalışan, kendi sunucusunda barındırılan bir
-          uygulama olarak.
-        </span>
-      </blockquote>
-      <p class="press-sub"><T en="Long" tr="Uzun" /></p>
-      <blockquote class="boiler">
-        <span data-lang-content="en">
-          Free-form prompt loops drift, and when they fail you cannot say why — so regulated organizations
-          can't put them in production. XRack replaces the open-ended loop with a deterministic cognitive
-          cycle (observe → reason → plan → act → verify → learn) and an immutable ledger: every step an
-          agent takes is traced, every decision carries its own evidence, and every grant of authority is
-          scoped and expiring. The system fails closed by default. It spans four planes — the Harness (a
-          single reasoning agent), the Grid (an accountable organization of agents), Federation (grids kept
-          in sync across a portfolio), and Embodiment (the same audited cognition extended to physical
-          systems) — and ships as an appliance customers run entirely within their own perimeter.
-        </span>
-        <span data-lang-content="tr">
-          Serbest biçimli prompt döngüleri savrulur ve hata verdiklerinde nedenini söyleyemezsiniz; bu yüzden
-          regüle kurumlar onları canlıya alamaz. XRack, bu açık uçlu döngünün yerine deterministik bir
-          bilişsel döngü (gözlemle → akıl yürüt → planla → eyleme geç → doğrula → öğren) ve değiştirilemez bir
-          defter koyar: bir ajanın attığı her adım izlenir, her karar kendi kanıtını taşır ve her yetki
-          kapsamlı ve sürelidir. Sistem varsayılan olarak kapalı başlar. Dört düzleme yayılır — Harness (tek
-          bir akıl yürütme ajanı), Grid (hesap verebilir bir ajan organizasyonu), Federation (bir portföy
-          boyunca eşitlenen gridler) ve Embodiment (aynı denetlenen bilişin fiziksel sistemlere taşınması) —
-          ve müşterilerin tamamen kendi çevrelerinde çalıştırdığı bir uygulama olarak gelir.
-        </span>
-      </blockquote>
+    <section class="press-section">
+      <span class="eyebrow-strong"><T en="Boilerplate" tr="Tanıtım metni" /></span>
+      <p class="section-note">
+        <T en="Approved copy — quote verbatim." tr="Onaylı metin — birebir alıntılayın." />
+      </p>
+      <div class="boiler-grid">
+        <article class="boiler" data-en={boilerShortEn} data-tr={boilerShortTr}>
+          <header class="boiler__head">
+            <span class="tag-mono"><T en="Short" tr="Kısa" /></span>
+            <button class="boiler__copy" type="button" aria-label="Copy">
+              <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              <svg class="i-done" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="boiler__copy-t"><T en="Copy" tr="Kopyala" /></span>
+            </button>
+          </header>
+          <p>
+            <span data-lang-content="en">{boilerShortEn}</span>
+            <span data-lang-content="tr">{boilerShortTr}</span>
+          </p>
+        </article>
+        <article class="boiler" data-en={boilerLongEn} data-tr={boilerLongTr}>
+          <header class="boiler__head">
+            <span class="tag-mono"><T en="Long" tr="Uzun" /></span>
+            <button class="boiler__copy" type="button" aria-label="Copy">
+              <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              <svg class="i-done" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="boiler__copy-t"><T en="Copy" tr="Kopyala" /></span>
+            </button>
+          </header>
+          <p>
+            <span data-lang-content="en">{boilerLongEn}</span>
+            <span data-lang-content="tr">{boilerLongTr}</span>
+          </p>
+        </article>
+      </div>
     </section>
 
-    <!-- Executive bios -->
-    <section class="press-block">
-      <h2 class="press-h"><T en="Executives" tr="Yöneticiler" /></h2>
-      {
-        execs.map((a) => (
-          <div class="bio">
-            <span class="bio__avatar" aria-hidden="true">{initials(a.name)}</span>
-            <div class="bio__body">
-              <h3 class="bio__name">{a.name}</h3>
-              <p class="bio__role">{a.role}</p>
-              <p class="bio__text">
+    <!-- Brand assets -->
+    <section class="press-section">
+      <span class="eyebrow-strong"><T en="Brand assets" tr="Marka varlıkları" /></span>
+      <div class="assets">
+        <div class="asset-swatch asset-swatch--dark">
+          <img src={logo} alt="XRack logo on dark background" />
+          <span class="tag-mono">On dark</span>
+        </div>
+        <div class="asset-swatch asset-swatch--light">
+          <img src={logo} alt="XRack logo on light background" />
+          <span class="tag-mono">On light</span>
+        </div>
+        <div class="asset-meta">
+          <a class="btn-primary" href={logo} download="xrack-logo.png">
+            <T en="Download PNG" tr="PNG indir" />
+          </a>
+          <p class="section-note">
+            <T
+              en="Keep clear space around the mark. Don't stretch, recolor, or add effects."
+              tr="Logonun çevresinde boşluk bırakın. Germeyin, rengini değiştirmeyin, efekt eklemeyin."
+            />
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Executives -->
+    <section class="press-section">
+      <span class="eyebrow-strong"><T en="Executives" tr="Yöneticiler" /></span>
+      <div class="execs-grid">
+        {
+          execs.map((a) => (
+            <article class="card-chrome exec">
+              <div class="exec__top">
+                <span class="exec__avatar" aria-hidden="true">{initials(a.name)}</span>
+                <div>
+                  <h2 class="exec__name">{a.name}</h2>
+                  <p class="exec__role">
+                    <span data-lang-content="en">{a.roleEn}</span>
+                    <span data-lang-content="tr">{a.roleTr}</span>
+                  </p>
+                </div>
+              </div>
+              <p class="exec__bio">
                 <span data-lang-content="en">{a.bioEn}</span>
                 <span data-lang-content="tr">{a.bioTr}</span>
               </p>
-              <div class="bio__links">
-                <a href={href(`authors/${a.slug}`)}><T en="Full profile" tr="Tam profil" /></a>
-                {a.sameAs.map((u) => (
-                  <a href={u} target="_blank" rel="noopener">
-                    {u.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]}
-                  </a>
-                ))}
+              <div class="exec__links">
+                <a href={href(`authors/${a.slug}`)}><T en="Full profile" tr="Tam profil" /> &rarr;</a>
+                {a.sameAs
+                  .filter((u) => !u.includes("xrack.io"))
+                  .map((u) => (
+                    <a href={u} target="_blank" rel="noopener">
+                      {u.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]}
+                    </a>
+                  ))}
               </div>
-            </div>
-          </div>
-        ))
-      }
+            </article>
+          ))
+        }
+      </div>
     </section>
 
     <!-- Contact -->
-    <section class="press-block">
-      <h2 class="press-h"><T en="Media contact" tr="Basın iletişimi" /></h2>
-      <p>
-        <T en="For interviews, assets, or fact-checks:" tr="Röportaj, görsel veya doğrulama için:" />
-        {" "}
-        <a href={`mailto:${pressEmail}`}>{pressEmail}</a>
-      </p>
+    <section class="press-section">
+      <div class="contact-card glass">
+        <span class="eyebrow"><T en="Media contact" tr="Basın iletişimi" /></span>
+        <p class="contact-card__lead">
+          <T
+            en="For interviews, high-resolution assets, or fact-checks:"
+            tr="Röportaj, yüksek çözünürlüklü görsel veya doğrulama için:"
+          />
+        </p>
+        <a class="contact-card__mail" href={`mailto:${pressEmail}`}>{pressEmail}</a>
+        <div>
+          <a class="btn-ghost" href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a>
+        </div>
+      </div>
     </section>
 
-    <div style="margin-top:2.5rem;">
+    <div style="margin-top:3rem;">
       <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
     </div>
   </div>
 </Base>
 
 <style>
-  .press { padding-bottom: 2rem; }
-  .press-block { margin-top: 2.75rem; }
-  .press-h {
-    font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    font-size: 1.5rem;
-    margin: 0 0 1.1rem;
-  }
-  .press-sub {
+  .press-hero { padding-bottom: 1.5rem; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
+  .press { padding-bottom: 3rem; }
+  .press-section { margin-top: 4rem; }
+  .press-section > .eyebrow-strong { display: inline-flex; margin-bottom: 1.25rem; }
+  .section-note { color: hsl(var(--muted-foreground)); font-size: 14px; margin: 0 0 1.25rem; }
+  .tag-mono {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10.5px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: hsl(var(--muted-foreground));
-    margin: 1.25rem 0 0.5rem;
   }
-  .facts { margin: 0; display: grid; gap: 0; }
-  .facts__row {
+
+  /* Fast facts */
+  .facts-grid {
     display: grid;
-    grid-template-columns: 12rem 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
-    padding: 0.7rem 0;
-    border-bottom: 1px solid hsl(var(--border) / 0.6);
   }
-  .facts__row dt {
+  .fact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--card-elevated) / 0.4);
+  }
+  .fact__k {
     font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.06em;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: hsl(var(--muted-foreground));
   }
-  .facts__row dd { margin: 0; }
-  .assets { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; }
-  .asset { display: flex; gap: 0.75rem; }
-  .asset__swatch {
-    width: 96px;
-    height: 96px;
-    border-radius: var(--radius);
+  .fact__v { font-size: 15px; line-height: 1.45; color: hsl(var(--foreground)); }
+
+  /* Boilerplate */
+  .boiler-grid { display: grid; gap: 1.25rem; }
+  .boiler {
+    position: relative;
+    padding: 1.4rem 1.5rem;
+    border: 1px solid hsl(var(--border));
+    border-left: 3px solid hsl(var(--primary));
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: hsl(var(--card-elevated) / 0.4);
+  }
+  .boiler__head {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  .boiler p { margin: 0; line-height: 1.75; color: hsl(var(--foreground) / 0.92); }
+  .boiler__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card-elevated));
+    color: hsl(var(--muted-foreground));
+    border-radius: 9999px;
+    padding: 0.25rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .boiler__copy:hover { color: hsl(var(--foreground)); border-color: hsl(var(--border-strong)); }
+  .boiler__copy .i-done { display: none; }
+  .boiler__copy.is-copied { color: hsl(var(--success)); border-color: hsl(var(--success) / 0.5); }
+  .boiler__copy.is-copied .i-copy { display: none; }
+  .boiler__copy.is-copied .i-done { display: inline; }
+
+  /* Brand assets */
+  .assets { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+  .asset-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    width: 150px;
+    padding: 1.5rem 1rem 0.9rem;
+    border-radius: var(--radius);
     border: 1px solid hsl(var(--border));
   }
-  .asset__swatch img { width: 60px; height: 60px; }
-  .asset__swatch--dark { background: hsl(20 3% 8%); }
-  .asset__swatch--light { background: #ffffff; }
-  .press-note { color: hsl(var(--muted-foreground)); font-size: 14px; margin-top: 1rem; }
-  .boiler {
-    margin: 0;
-    padding: 1rem 1.25rem;
-    border-left: 3px solid hsl(var(--primary));
-    background: hsl(var(--card-elevated) / 0.4);
-    border-radius: 0 var(--radius) var(--radius) 0;
-    line-height: 1.7;
+  .asset-swatch img { width: 64px; height: 64px; }
+  .asset-swatch--dark { background: hsl(20 3% 8%); }
+  .asset-swatch--light { background: #fff; }
+  .asset-swatch--light .tag-mono { color: hsl(20 3% 45%); }
+  .asset-meta { display: flex; flex-direction: column; gap: 0.75rem; min-width: 220px; flex: 1; }
+  .asset-meta .section-note { margin: 0; }
+
+  /* Executives */
+  .execs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
   }
-  .bio { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; }
-  .bio__avatar {
+  .exec { padding: 1.5rem; }
+  .exec__top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .exec__avatar {
     flex-shrink: 0;
     width: 56px;
     height: 56px;
@@ -248,15 +335,53 @@ const facts = [
     justify-content: center;
     font-family: var(--font-display);
     font-weight: 600;
+    font-size: 1.2rem;
     color: hsl(var(--primary-foreground));
     background-image: linear-gradient(180deg, hsl(var(--primary-soft)), hsl(var(--primary)));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18);
   }
-  .bio__name { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; margin: 0; }
-  .bio__role { color: hsl(var(--muted-foreground)); font-size: 13px; margin: 0.2rem 0 0.6rem; }
-  .bio__text { margin: 0 0 0.6rem; }
-  .bio__links { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 14px; }
-  @media (max-width: 520px) {
-    .facts__row { grid-template-columns: 1fr; gap: 0.15rem; }
-    .bio { flex-direction: column; gap: 0.75rem; }
+  .exec__name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin: 0; }
+  .exec__role { color: hsl(var(--muted-foreground)); font-size: 13px; margin: 0.25rem 0 0; line-height: 1.4; }
+  .exec__bio { margin: 0 0 1rem; line-height: 1.65; color: hsl(var(--foreground) / 0.9); font-size: 15px; }
+  .exec__links { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 14px; font-weight: 500; }
+
+  /* Contact */
+  .contact-card {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .contact-card__lead { color: hsl(var(--muted-foreground)); margin: 0; }
+  .contact-card__mail {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    letter-spacing: -0.02em;
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".boiler__copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const card = btn.closest(".boiler") as HTMLElement | null;
+      if (!card) return;
+      const lang = document.documentElement.dataset.lang === "tr" ? "tr" : "en";
+      const text = (lang === "tr" ? card.dataset.tr : card.dataset.en) || "";
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); } catch (e2) {}
+        document.body.removeChild(ta);
+      }
+      btn.classList.add("is-copied");
+      window.setTimeout(() => btn.classList.remove("is-copied"), 1500);
+    });
+  });
+</script>

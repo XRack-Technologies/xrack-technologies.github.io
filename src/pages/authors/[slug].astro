@@ -45,7 +45,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: author.name,
-  jobTitle: author.role,
+  jobTitle: author.roleEn,
   url: pageUrl,
   ...(author.email ? { email: `mailto:${author.email}` } : {}),
   sameAs: author.sameAs,
@@ -61,7 +61,10 @@ const jsonLd = {
         <div>
           <span class="eyebrow-strong"><T en="Author" tr="Yazar" /></span>
           <h1 class="display-title" style="margin:.25rem 0 0;">{author.name}</h1>
-          <p class="author-role">{author.role}</p>
+          <p class="author-role">
+            <span data-lang-content="en">{author.roleEn}</span>
+            <span data-lang-content="tr">{author.roleTr}</span>
+          </p>
         </div>
       </div>
       <p class="lede author-bio">

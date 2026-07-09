@@ -1,9 +1,11 @@
-// Author registry — the source of truth for bylines, profile pages, and
-// Person JSON-LD (E-E-A-T). Add real profile URLs to `sameAs` as they exist.
+// Author / executive registry — the source of truth for bylines, profile
+// pages, the press kit, and Person JSON-LD (E-E-A-T). Add real profile URLs to
+// `sameAs` as they exist.
 export interface Author {
   slug: string;
   name: string;
-  role: string;
+  roleEn: string;
+  roleTr: string;
   bioEn: string;
   bioTr: string;
   email?: string;
@@ -14,7 +16,8 @@ export const AUTHORS: Record<string, Author> = {
   "dogan-dursun": {
     slug: "dogan-dursun",
     name: "Vincent E. Dogan Dursun",
-    role: "CEO & Co-Founder, XRack Technologies",
+    roleEn: "CEO & Co-Founder",
+    roleTr: "CEO ve Kurucu Ortak",
     bioEn:
       "Vincent E. Dogan Dursun is the CEO and co-founder of XRack Technologies, where he leads the development of a sovereign cognitive runtime for regulated enterprise AI — turning agentic systems from opaque black boxes into auditable glass boxes. He writes here about the engineering, research, and field notes behind building an observable agentic harness.",
     bioTr:
@@ -25,6 +28,17 @@ export const AUTHORS: Record<string, Author> = {
       "https://www.linkedin.com/in/egedogandursun",
       "https://github.com/egedursun",
     ],
+  },
+  "huseyin-ersay": {
+    slug: "huseyin-ersay",
+    name: "Hüseyin Ersay",
+    roleEn: "Co-Founder · Lawyer · AI regulation & governance",
+    roleTr: "Kurucu Ortak · Avukat · Yapay zekâ regülasyonu ve yönetişimi",
+    bioEn:
+      "Hüseyin Ersay is a co-founder of XRack Technologies and a lawyer specializing in AI regulation and governance. He shapes how XRack's sovereign cognitive runtime meets the legal and compliance demands of regulated industries — from auditability and accountability to data sovereignty — so that what the runtime proves also stands up to scrutiny.",
+    bioTr:
+      "Hüseyin Ersay, XRack Technologies'in kurucu ortağı ve yapay zekâ regülasyonu ile yönetişimi alanında uzman bir avukattır. XRack'in bağımsız bilişsel çalışma zamanının, regüle sektörlerin hukuki ve uyum gereksinimlerini — denetlenebilirlikten hesap verebilirliğe ve veri egemenliğine kadar — nasıl karşıladığını şekillendirir; böylece çalışma zamanının kanıtladığı şey denetime de dayanır.",
+    sameAs: ["https://www.linkedin.com/in/huseyinersay/"],
   },
 };
 
