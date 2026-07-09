@@ -1,7 +1,7 @@
 ---
 
-title: Persisting refusal and the duty to explain
-title_tr: Reddi sürdürmek ve açıklama borcu
+title: Persisting Refusal and the Duty to Explain
+title_tr: Reddi Sürdürmek ve Açıklama Borcu
 author: Vincent E. Dogan Dursun - CEO & Co-Founder
 description: A refusal only becomes meaningful when it persists as a boundary, triggers a duty to explain, and stays separate from factual memory.
 description_tr: Bir ret ancak sınır olarak sürdüğünde, açıklama borcu doğurduğunda ve olgusal bellekten ayrı tutulduğunda anlam kazanır.
