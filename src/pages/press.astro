@@ -1,52 +1,41 @@
 ---
 import Base from "../layouts/Base.astro";
 import T from "../components/T.astro";
-import { href, SITE } from "../lib/site";
+import { href, SITE, SOCIAL } from "../lib/site";
 import { AUTHORS } from "../lib/authors";
 
 const logo = href("logo.png");
+const mascot = href("press/raxclaw.png");
 const execs = Object.values(AUTHORS);
 const initials = (name: string) => {
   const w = name.split(/\s+/).filter(Boolean);
   return ((w[0]?.[0] ?? "") + (w.length > 1 ? (w[w.length - 1][0] ?? "") : "")).toUpperCase();
 };
 const pressEmail = "support@xrack.io";
+const ogCard = Astro.site ? new URL(href("press/og-card.png"), Astro.site).href : href("press/og-card.png");
+
+// Social icon paths reused for exec profile links.
+const LINKEDIN_SVG =
+  '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>';
+const GITHUB_SVG =
+  '<path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>';
+const socialLabel = (u: string) => u.replace(/^https?:\/\/(www\.)?/, "").split("/")[0];
 
 const facts: { k: { en: string; tr: string }; v: { en: string; tr: string }; url?: string }[] = [
   { k: { en: "Company", tr: "Şirket" }, v: { en: "XRack Technologies", tr: "XRack Technologies" } },
-  {
-    k: { en: "Product", tr: "Ürün" },
-    v: {
-      en: "XRack — Sovereign Cognitive Runtime",
-      tr: "XRack — Sovereign Cognitive Runtime",
-    },
-  },
-  {
-    k: { en: "Tagline", tr: "Slogan" },
-    v: {
-      en: "The model proposes, the runtime executes, the ledger proves.",
-      tr: "Model önerir, runtime uygular, defter kanıtlar.",
-    },
-  },
-  {
-    k: { en: "Architecture", tr: "Mimari" },
-    v: {
-      en: "Four planes — Harness · Grid · Federation · Embodiment",
-      tr: "Dört düzlem — Harness · Grid · Federation · Embodiment",
-    },
-  },
-  {
-    k: { en: "Deployment", tr: "Dağıtım" },
-    v: {
-      en: "Self-hosted appliance · bring your own LLM",
-      tr: "Kendi altyapınızda barındırılır · kendi LLM'inizi getirin",
-    },
-  },
+  { k: { en: "Product", tr: "Ürün" }, v: { en: "XRack — Sovereign Cognitive Runtime", tr: "XRack — Sovereign Cognitive Runtime" } },
+  { k: { en: "Category", tr: "Kategori" }, v: { en: "Enterprise AI · agent infrastructure", tr: "Kurumsal yapay zekâ · ajan altyapısı" } },
+  { k: { en: "Architecture", tr: "Mimari" }, v: { en: "Four planes — Harness · Grid · Federation · Embodiment", tr: "Dört düzlem — Harness · Grid · Federation · Embodiment" } },
+  { k: { en: "Deployment", tr: "Dağıtım" }, v: { en: "Self-hosted appliance · bring your own LLM", tr: "Kendi altyapınızda · kendi LLM'iniz" } },
+  { k: { en: "Founded", tr: "Kuruluş" }, v: { en: "2025", tr: "2025" } },
   { k: { en: "Website", tr: "Web sitesi" }, v: { en: "xrack.io", tr: "xrack.io" }, url: SITE.homepage },
-  { k: { en: "Blog", tr: "Blog" }, v: { en: "blog.xrack.io", tr: "blog.xrack.io" }, url: href() },
   { k: { en: "Press contact", tr: "Basın iletişimi" }, v: { en: pressEmail, tr: pressEmail }, url: `mailto:${pressEmail}` },
 ];
 
+const oneLinerEn =
+  "XRack is a sovereign cognitive runtime that turns enterprise AI from an opaque black box into an auditable glass box.";
+const oneLinerTr =
+  "XRack, kurumsal yapay zekâyı opak bir kara kutudan denetlenebilir bir cam kutuya dönüştüren, bağımsız bir bilişsel çalışma zamanıdır.";
 const boilerShortEn =
   "XRack Technologies builds a self-hosted cognitive runtime for regulated enterprise AI. The model proposes, the runtime executes, the ledger proves — agents that remember, act, verify, and prove every decision, running inside the customer's own perimeter, on their own LLM, with their own audit trail.";
 const boilerShortTr =
@@ -56,54 +45,82 @@ const boilerLongEn =
 const boilerLongTr =
   "Tek runtime, dört düzlem — bir harness (zihin), bir grid (organizasyon), bir federation (portföy) ve embodiment (beden). Serbest biçimli prompt döngüleri savrulur ve hata verdiklerinde nedenini söyleyemez; bu yüzden regüle kurumlar onları çalıştıramaz. XRack, açık uçlu döngünün yerine deterministik bir bilişsel döngü (gözlemle → akıl yürüt → planla → eyleme geç → doğrula → öğren) ve değiştirilemez bir defter koyar: her adım izlenir, her karar kendi kanıtını taşır ve her yetki kapsamlı ve sürelidir. Kendi altyapınızda barındırılır, kendi LLM'inizi getirir ve varsayılan olarak kapalı başlar.";
 
-const downloads = [
-  { file: "logo.png", src: logo, name: { en: "Logo (PNG)", tr: "Logo (PNG)" }, tone: "mark" },
-  { file: "press/og-card.png", src: href("press/og-card.png"), name: { en: "Share card — EN", tr: "Paylaşım kartı — EN" }, tone: "wide" },
-  { file: "press/og-card-tr.png", src: href("press/og-card-tr.png"), name: { en: "Share card — TR", tr: "Paylaşım kartı — TR" }, tone: "wide" },
-  { file: "press/raxclaw.png", src: href("press/raxclaw.png"), name: { en: "Brand artwork", tr: "Marka görseli" }, tone: "art" },
+const boilers = [
+  { tag: { en: "One-liner", tr: "Tek cümle" }, en: oneLinerEn, tr: oneLinerTr },
+  { tag: { en: "Short", tr: "Kısa" }, en: boilerShortEn, tr: boilerShortTr },
+  { tag: { en: "Long", tr: "Uzun" }, en: boilerLongEn, tr: boilerLongTr },
 ];
 
-const screens = [
+const downloads = [
+  { src: logo, name: { en: "Logo mark", tr: "Logo işareti" }, meta: "PNG · 512×512", tone: "mark", dl: "xrack-logo.png" },
+  { src: mascot, name: { en: "Brand mascot", tr: "Marka maskotu" }, meta: "PNG · 1254×1254", tone: "art", dl: "xrack-mascot.png" },
+  { src: href("press/og-card.png"), name: { en: "Share card — EN", tr: "Paylaşım kartı — EN" }, meta: "PNG · 1200×630", tone: "wide", dl: "xrack-share-en.png" },
+  { src: href("press/og-card-tr.png"), name: { en: "Share card — TR", tr: "Paylaşım kartı — TR" }, meta: "PNG · 1200×630", tone: "wide", dl: "xrack-share-tr.png" },
+];
+
+// Themed editorial artwork (not product screenshots) — free to use alongside coverage.
+const imagery = [
   { f: "architecture", en: "Architecture", tr: "Mimari" },
   { f: "system_map", en: "System map", tr: "Sistem haritası" },
   { f: "ledger", en: "Ledger", tr: "Defter" },
   { f: "reasoning", en: "Reasoning", tr: "Akıl yürütme" },
   { f: "memory_graph", en: "Memory graph", tr: "Bellek grafiği" },
   { f: "planning", en: "Planning", tr: "Planlama" },
+  { f: "pipeline", en: "Pipeline", tr: "İşlem hattı" },
+  { f: "security", en: "Security", tr: "Güvenlik" },
+  { f: "capabilities", en: "Capabilities", tr: "Yetenekler" },
+  { f: "metrics", en: "Metrics", tr: "Metrikler" },
 ];
 ---
 
 <Base
   title="Press & Media Kit"
-  description="Brand assets, boilerplate, product screenshots, executive bios, and a media contact for XRack Technologies."
+  description="Brand assets, boilerplate, editorial artwork, executive bios, and a media contact for XRack Technologies."
+  image={ogCard}
 >
+  <!-- Hero -->
   <section class="hero press-hero">
     <div class="hero-aura"></div>
-    <div class="wrap hero-inner">
-      <span class="status-chip"><span class="dot"></span> <T en="Press · Media Kit" tr="Basın · Medya Kiti" /></span>
-      <h1 class="display-title"><T en="Press & media kit" tr="Basın ve medya kiti" /></h1>
-      <p class="lede">
-        <T
-          en="Everything you need to cover XRack accurately — logo and brand assets, approved boilerplate, product screenshots, executive bios, and a direct press contact."
-          tr="XRack'i doğru haberleştirmek için gereken her şey — logo ve marka varlıkları, onaylı tanıtım metni, ürün ekran görüntüleri, yönetici biyografileri ve doğrudan basın iletişimi."
-        />
-      </p>
-      <p class="press-tagline serif-accent">
-        <T en="“The model proposes, the runtime executes, the ledger proves.”" tr="“Model önerir, runtime uygular, defter kanıtlar.”" />
-      </p>
-      <div class="hero-cta">
-        <a class="btn-primary" href={logo} download="xrack-logo.png">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-          <T en="Download logo" tr="Logoyu indir" />
-        </a>
-        <a class="btn-ghost" href={`mailto:${pressEmail}`}><T en="Media contact" tr="Basın iletişimi" /></a>
+    <div class="press-hero__grid"></div>
+    <div class="wrap press-hero__grid-wrap">
+      <div class="press-hero__copy reveal-on-view">
+        <span class="status-chip"><span class="dot"></span> <T en="Press · Media Kit" tr="Basın · Medya Kiti" /></span>
+        <h1 class="display-title press-hero__title">
+          <T en="Press &" tr="Basın &" /> <span class="hero-accent"><T en="media kit" tr="medya kiti" /></span>
+        </h1>
+        <p class="lede press-hero__lede">
+          <T
+            en="Everything you need to cover XRack accurately — logo and brand assets, approved boilerplate, editorial artwork, executive bios, and a direct press contact."
+            tr="XRack'i doğru haberleştirmek için gereken her şey — logo ve marka varlıkları, onaylı tanıtım metni, editöryel görseller, yönetici biyografileri ve doğrudan basın iletişimi."
+          />
+        </p>
+        <p class="press-tagline serif-accent">
+          <T en="“The model proposes, the runtime executes, the ledger proves.”" tr="“Model önerir, runtime uygular, defter kanıtlar.”" />
+        </p>
+        <div class="hero-cta">
+          <a class="btn-primary" href={`mailto:${pressEmail}`}>
+            <T en="Media contact" tr="Basın iletişimi" />
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn-ghost" href={logo} download="xrack-logo.png">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            <T en="Download logo" tr="Logoyu indir" />
+          </a>
+        </div>
+      </div>
+
+      <div class="brand-stage reveal-on-view" aria-hidden="true">
+        <div class="brand-stage__halo"></div>
+        <div class="brand-stage__ring"></div>
+        <div class="brand-stage__ring brand-stage__ring--inner"></div>
+        <img class="brand-stage__img" src={mascot} alt="" width="1254" height="1254" loading="eager" />
       </div>
     </div>
   </section>
 
   <div class="wrap press">
     <!-- Fast facts -->
-    <section class="press-section">
+    <section class="press-section reveal-on-view">
       <span class="eyebrow-strong"><T en="Fast facts" tr="Hızlı bilgiler" /></span>
       <div class="facts-grid">
         {
@@ -112,7 +129,7 @@ const screens = [
               <span class="fact__k"><T en={f.k.en} tr={f.k.tr} /></span>
               <span class="fact__v">
                 {f.url ? (
-                  <a href={f.url}>
+                  <a href={f.url} target={f.url.startsWith("http") ? "_blank" : undefined} rel={f.url.startsWith("http") ? "noopener" : undefined}>
                     <span data-lang-content="en">{f.v.en}</span>
                     <span data-lang-content="tr">{f.v.tr}</span>
                   </a>
@@ -130,64 +147,67 @@ const screens = [
     </section>
 
     <!-- Boilerplate -->
-    <section class="press-section">
+    <section class="press-section reveal-on-view">
       <span class="eyebrow-strong"><T en="Boilerplate" tr="Tanıtım metni" /></span>
-      <p class="section-note"><T en="Approved copy — quote verbatim." tr="Onaylı metin — birebir alıntılayın." /></p>
+      <p class="section-note"><T en="Approved copy — quote verbatim. Tap copy to grab the current language." tr="Onaylı metin — birebir alıntılayın. Kopyala'ya dokunarak seçili dili alın." /></p>
       <div class="boiler-grid">
-        <article class="boiler" data-en={boilerShortEn} data-tr={boilerShortTr}>
-          <header class="boiler__head">
-            <span class="tag-mono"><T en="Short" tr="Kısa" /></span>
-            <button class="boiler__copy" type="button" aria-label="Copy">
-              <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-              <svg class="i-done" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              <span><T en="Copy" tr="Kopyala" /></span>
-            </button>
-          </header>
-          <p>
-            <span data-lang-content="en">{boilerShortEn}</span>
-            <span data-lang-content="tr">{boilerShortTr}</span>
-          </p>
-        </article>
-        <article class="boiler" data-en={boilerLongEn} data-tr={boilerLongTr}>
-          <header class="boiler__head">
-            <span class="tag-mono"><T en="Long" tr="Uzun" /></span>
-            <button class="boiler__copy" type="button" aria-label="Copy">
-              <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-              <svg class="i-done" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              <span><T en="Copy" tr="Kopyala" /></span>
-            </button>
-          </header>
-          <p>
-            <span data-lang-content="en">{boilerLongEn}</span>
-            <span data-lang-content="tr">{boilerLongTr}</span>
-          </p>
-        </article>
+        {
+          boilers.map((b) => (
+            <article class="boiler card-chrome" data-en={b.en} data-tr={b.tr}>
+              <header class="boiler__head">
+                <span class="tag-mono"><T en={b.tag.en} tr={b.tag.tr} /></span>
+                <button class="boiler__copy" type="button" aria-label="Copy">
+                  <svg class="i-copy" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                  <svg class="i-done" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span><T en="Copy" tr="Kopyala" /></span>
+                </button>
+              </header>
+              <p>
+                <span data-lang-content="en">{b.en}</span>
+                <span data-lang-content="tr">{b.tr}</span>
+              </p>
+            </article>
+          ))
+        }
       </div>
     </section>
 
-    <!-- Brand assets & downloads -->
-    <section class="press-section">
+    <!-- Brand assets -->
+    <section class="press-section reveal-on-view">
       <span class="eyebrow-strong"><T en="Brand assets" tr="Marka varlıkları" /></span>
-      <div class="logo-lockup">
-        <div class="asset-swatch asset-swatch--dark"><img src={logo} alt="XRack logo on dark" /><span class="tag-mono">On dark</span></div>
-        <div class="asset-swatch asset-swatch--light"><img src={logo} alt="XRack logo on light" /><span class="tag-mono">On light</span></div>
-        <p class="section-note">
-          <T
-            en="Keep clear space around the mark. Don't stretch, recolor, or add effects."
-            tr="Logonun çevresinde boşluk bırakın. Germeyin, rengini değiştirmeyin, efekt eklemeyin."
-          />
-        </p>
+      <p class="section-note">
+        <T
+          en="Keep clear space around the mark. Don't stretch, recolor, or add effects."
+          tr="Logonun çevresinde boşluk bırakın. Germeyin, rengini değiştirmeyin, efekt eklemeyin."
+        />
+      </p>
+      <div class="lockup-row">
+        <div class="swatch swatch--dark">
+          <img src={logo} alt="XRack logo on dark" />
+          <span class="tag-mono">On dark</span>
+        </div>
+        <div class="swatch swatch--light">
+          <img src={logo} alt="XRack logo on light" />
+          <span class="tag-mono">On light</span>
+        </div>
+        <div class="swatch swatch--word">
+          <span class="swatch__wordmark"><span class="brand-x">X</span>Rack</span>
+          <span class="tag-mono">Wordmark</span>
+        </div>
       </div>
       <div class="dl-grid">
         {
           downloads.map((d) => (
-            <a class="card-chrome dl" href={d.src} download>
+            <a class="card-chrome dl" href={d.src} download={d.dl}>
               <div class={`dl__preview dl__preview--${d.tone}`}>
                 <img src={d.src} alt="" loading="lazy" />
               </div>
               <div class="dl__foot">
-                <span><T en={d.name.en} tr={d.name.tr} /></span>
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                <div class="dl__meta">
+                  <span class="dl__name"><T en={d.name.en} tr={d.name.tr} /></span>
+                  <span class="dl__spec">{d.meta}</span>
+                </div>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
               </div>
             </a>
           ))
@@ -195,16 +215,19 @@ const screens = [
       </div>
     </section>
 
-    <!-- Product screenshots -->
-    <section class="press-section">
-      <span class="eyebrow-strong"><T en="Product screenshots" tr="Ürün ekran görüntüleri" /></span>
-      <p class="section-note"><T en="From the XRack runtime UI. Click to open full size." tr="XRack runtime arayüzünden. Tam boyut için tıklayın." /></p>
-      <div class="shots-grid">
+    <!-- Editorial artwork -->
+    <section class="press-section reveal-on-view">
+      <span class="eyebrow-strong"><T en="Editorial artwork" tr="Editöryel görseller" /></span>
+      <p class="section-note"><T en="Themed brand illustrations, free to use alongside coverage. Click to open full size." tr="Temalı marka illüstrasyonları; haberlerinizde kullanmakta özgürsünüz. Tam boyut için tıklayın." /></p>
+      <div class="gallery">
         {
-          screens.map((s) => (
-            <a class="card-chrome shot" href={href(`press/screens/${s.f}.png`)} target="_blank" rel="noopener">
-              <img src={href(`press/screens/${s.f}.png`)} alt={s.en} loading="lazy" />
-              <span class="shot__label"><T en={s.en} tr={s.tr} /></span>
+          imagery.map((s) => (
+            <a class="gcard" href={href(`press/screens/${s.f}.png`)} target="_blank" rel="noopener">
+              <img src={href(`press/screens/${s.f}.png`)} alt={s.en} loading="lazy" width="1360" height="768" />
+              <span class="gcard__cap">
+                <T en={s.en} tr={s.tr} />
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+              </span>
             </a>
           ))
         }
@@ -212,7 +235,7 @@ const screens = [
     </section>
 
     <!-- Executives -->
-    <section class="press-section">
+    <section class="press-section reveal-on-view">
       <span class="eyebrow-strong"><T en="Executives" tr="Yöneticiler" /></span>
       <div class="execs-grid">
         {
@@ -233,12 +256,18 @@ const screens = [
                 <span data-lang-content="tr">{a.bioTr}</span>
               </p>
               <div class="exec__links">
-                <a href={href(`authors/${a.slug}`)}><T en="Full profile" tr="Tam profil" /> &rarr;</a>
+                <a class="exec__profile" href={href(`authors/${a.slug}`)}><T en="Full profile" tr="Tam profil" /> <span aria-hidden="true">&rarr;</span></a>
                 {a.sameAs
                   .filter((u) => !u.includes("xrack.io"))
                   .map((u) => (
-                    <a href={u} target="_blank" rel="noopener">
-                      {u.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]}
+                    <a class="exec__social" href={u} target="_blank" rel="noopener" aria-label={socialLabel(u)}>
+                      {u.includes("linkedin") ? (
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true" set:html={LINKEDIN_SVG} />
+                      ) : u.includes("github") ? (
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true" set:html={GITHUB_SVG} />
+                      ) : (
+                        <span>{socialLabel(u)}</span>
+                      )}
                     </a>
                   ))}
               </div>
@@ -249,85 +278,205 @@ const screens = [
     </section>
 
     <!-- Contact -->
-    <section class="press-section">
+    <section class="press-section reveal-on-view">
       <div class="contact-card glass">
+        <div class="contact-card__glow"></div>
         <span class="eyebrow"><T en="Media contact" tr="Basın iletişimi" /></span>
         <p class="contact-card__lead">
-          <T en="For interviews, high-resolution assets, or fact-checks:" tr="Röportaj, yüksek çözünürlüklü görsel veya doğrulama için:" />
+          <T en="For interviews, high-resolution assets, or fact-checks, reach us directly:" tr="Röportaj, yüksek çözünürlüklü görsel veya doğrulama için doğrudan bize ulaşın:" />
         </p>
         <a class="contact-card__mail" href={`mailto:${pressEmail}`}>{pressEmail}</a>
-        <div><a class="btn-ghost" href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a></div>
+        <div class="contact-card__cta">
+          <a class="btn-primary" href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a>
+          <a class="btn-ghost" href={SOCIAL.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+        </div>
       </div>
     </section>
 
-    <div style="margin-top:3rem;">
-      <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
+    <div class="press-back">
+      <a class="back-link" href={href()}>&larr; <T en="Back to the blog" tr="Bloga dön" /></a>
     </div>
   </div>
 </Base>
 
 <style>
-  .press-hero { padding-bottom: 1.5rem; }
-  .press-tagline { font-size: 1.15rem; margin: 0; }
-  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 0.5rem; }
-  .press { padding-bottom: 3rem; }
-  .press-section { margin-top: 4rem; }
-  .press-section > .eyebrow-strong { display: inline-flex; margin-bottom: 1.25rem; }
-  .section-note { color: hsl(var(--muted-foreground)); font-size: 14px; margin: 0 0 1.25rem; }
+  /* ---- Hero ---------------------------------------------------------- */
+  .press-hero { padding: 5rem 0 3rem; }
+  .press-hero__grid {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.6;
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.55) 1px, transparent 1px);
+    background-size: 46px 46px;
+    -webkit-mask-image: radial-gradient(ellipse 78% 60% at 50% 0%, #000, transparent 74%);
+    mask-image: radial-gradient(ellipse 78% 60% at 50% 0%, #000, transparent 74%);
+  }
+  .press-hero__grid-wrap { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: center; }
+  @media (min-width: 900px) { .press-hero__grid-wrap { grid-template-columns: 1.05fr 0.95fr; gap: 3rem; } }
+
+  .press-hero__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 1.15rem; text-align: left; }
+  .press-hero__title { margin: 0; font-size: clamp(2.6rem, 6vw, 4.25rem); }
+  .hero-accent {
+    background: linear-gradient(100deg, hsl(22 85% 64%), hsl(6 75% 56%) 55%, hsl(348 60% 60%));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .press-hero__lede { margin: 0; max-width: 34rem; }
+  .press-tagline { font-size: 1.12rem; margin: 0; color: hsl(var(--serif-fg)); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.4rem; }
+  .hero-cta .btn-primary, .hero-cta .btn-ghost { padding: 0.6rem 1.2rem; font-size: 13px; }
+
+  /* Brand stage (mascot) */
+  .brand-stage { position: relative; display: grid; place-items: center; width: 100%; max-width: 400px; aspect-ratio: 1; margin-inline: auto; }
+  .brand-stage__halo {
+    position: absolute; inset: 6%; border-radius: 50%;
+    background: radial-gradient(circle at 50% 42%, hsl(var(--primary) / 0.4), hsl(var(--amber) / 0.14) 45%, transparent 66%);
+    filter: blur(30px); animation: haloPulse 7s ease-in-out infinite;
+  }
+  .brand-stage__ring {
+    position: absolute; inset: 4%; border-radius: 50%;
+    border: 1px solid hsl(var(--border-strong) / 0.5);
+    -webkit-mask-image: linear-gradient(180deg, #000, transparent 85%);
+    mask-image: linear-gradient(180deg, #000, transparent 85%);
+  }
+  .brand-stage__ring--inner { inset: 15%; border-color: hsl(var(--primary) / 0.22); border-style: dashed; }
+  .brand-stage__img {
+    position: relative; width: 84%; height: auto;
+    filter: drop-shadow(0 28px 55px hsl(0 0% 0% / 0.5));
+    animation: floaty 8s ease-in-out infinite;
+  }
+  @keyframes haloPulse { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+  @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+  /* ---- Sections ------------------------------------------------------ */
+  .press { padding-bottom: 4rem; }
+  .press-section { margin-top: 4.5rem; }
+  .press-section > .eyebrow-strong { display: inline-flex; margin-bottom: 1.1rem; }
+  .section-note { color: hsl(var(--muted-foreground)); font-size: 14px; line-height: 1.6; margin: 0 0 1.5rem; max-width: 46rem; }
   .tag-mono { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
 
-  .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-  .fact { display: flex; flex-direction: column; gap: 0.4rem; padding: 1.1rem 1.25rem; border: 1px solid hsl(var(--border)); border-radius: var(--radius); background: hsl(var(--card-elevated) / 0.4); }
-  .fact__k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
-  .fact__v { font-size: 15px; line-height: 1.45; color: hsl(var(--foreground)); }
+  /* Fast facts */
+  .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; }
+  .fact {
+    display: flex; flex-direction: column; gap: 0.45rem; padding: 1.15rem 1.3rem;
+    border-radius: calc(var(--radius) - 2px); border: 1px solid hsl(var(--border));
+    background-image: linear-gradient(180deg, hsl(var(--card-elevated)), hsl(var(--card)));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.04);
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .fact:hover { transform: translateY(-2px); border-color: hsl(var(--border-strong)); box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.05), 0 12px 26px -18px hsl(0 0% 0% / 0.7); }
+  .fact__k { font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(var(--primary)); }
+  .fact__v { font-size: 14.5px; line-height: 1.5; color: hsl(var(--foreground)); font-weight: 500; }
+  .fact__v a { color: hsl(var(--primary-soft)); }
+  .fact__v a:hover { color: hsl(var(--primary)); }
 
-  .boiler-grid { display: grid; gap: 1.25rem; }
-  .boiler { position: relative; padding: 1.4rem 1.5rem; border: 1px solid hsl(var(--border)); border-left: 3px solid hsl(var(--primary)); border-radius: 0 var(--radius) var(--radius) 0; background: hsl(var(--card-elevated) / 0.4); }
-  .boiler__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  /* Boilerplate */
+  .boiler-grid { display: grid; gap: 1rem; }
+  .boiler { padding: 1.4rem 1.6rem; }
+  .boiler__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; }
   .boiler p { margin: 0; line-height: 1.75; color: hsl(var(--foreground) / 0.92); }
-  .boiler__copy { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid hsl(var(--border)); background: hsl(var(--card-elevated)); color: hsl(var(--muted-foreground)); border-radius: 9999px; padding: 0.25rem 0.7rem; font-family: var(--font-mono); font-size: 11px; cursor: pointer; transition: color 0.15s ease, border-color 0.15s ease; }
-  .boiler__copy:hover { color: hsl(var(--foreground)); border-color: hsl(var(--border-strong)); }
+  .boiler__copy {
+    display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid hsl(var(--border));
+    background: hsl(var(--card-elevated)); color: hsl(var(--muted-foreground)); border-radius: 9999px;
+    padding: 0.28rem 0.75rem; font-family: var(--font-mono); font-size: 11px; cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .boiler__copy:hover { color: hsl(var(--foreground)); border-color: hsl(var(--border-strong)); background: hsl(var(--card-glass)); }
   .boiler__copy .i-done { display: none; }
   .boiler__copy.is-copied { color: hsl(var(--success)); border-color: hsl(var(--success) / 0.5); }
   .boiler__copy.is-copied .i-copy { display: none; }
   .boiler__copy.is-copied .i-done { display: inline; }
 
-  .logo-lockup { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-  .asset-swatch { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; width: 132px; padding: 1.4rem 1rem 0.8rem; border-radius: var(--radius); border: 1px solid hsl(var(--border)); }
-  .asset-swatch img { width: 58px; height: 58px; }
-  .asset-swatch--dark { background: hsl(20 3% 8%); }
-  .asset-swatch--light { background: #fff; }
-  .asset-swatch--light .tag-mono { color: hsl(20 3% 45%); }
-  .logo-lockup .section-note { margin: 0; flex: 1; min-width: 200px; }
+  /* Brand assets — lockup swatches */
+  .lockup-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.9rem; margin-bottom: 1.1rem; }
+  .swatch {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.85rem;
+    padding: 1.75rem 1rem 1rem; border-radius: var(--radius); border: 1px solid hsl(var(--border)); min-height: 148px;
+  }
+  .swatch img { width: 64px; height: 64px; }
+  .swatch--dark { background: hsl(20 3% 7%); }
+  .swatch--light { background: #fbfaf7; }
+  .swatch--light .tag-mono { color: hsl(20 3% 45%); }
+  .swatch--word { background-image: linear-gradient(180deg, hsl(var(--card-elevated)), hsl(var(--card))); }
+  .swatch__wordmark { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; letter-spacing: -0.02em; color: hsl(var(--ink)); }
+  .swatch__wordmark .brand-x { color: hsl(var(--primary)); }
 
+  /* Downloads */
   .dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
   .dl { display: flex; flex-direction: column; overflow: hidden; color: inherit; }
-  .dl__preview { display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid hsl(var(--border)); }
-  .dl__preview img { width: 100%; height: 100%; object-fit: cover; }
-  .dl__preview--mark { background: hsl(20 3% 8%); }
-  .dl__preview--mark img { width: 64px; height: 64px; object-fit: contain; }
-  .dl__preview--art { background: hsl(20 3% 8%); }
-  .dl__preview--art img { object-fit: contain; }
-  .dl__foot { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; font-size: 14px; font-weight: 500; }
-  .dl:hover .dl__foot { color: hsl(var(--primary-soft)); }
+  .dl__preview {
+    display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 10;
+    overflow: hidden; border-bottom: 1px solid hsl(var(--border));
+    background:
+      radial-gradient(120% 100% at 50% 0%, hsl(var(--primary) / 0.08), transparent 60%),
+      hsl(20 3% 7%);
+  }
+  .dl__preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .dl__preview--mark img { width: 74px; height: 74px; }
+  .dl__preview--art img { width: 88%; filter: drop-shadow(0 12px 22px hsl(0 0% 0% / 0.4)); }
+  .dl__preview--wide { padding: 0; }
+  .dl__preview--wide img { width: 100%; height: 100%; object-fit: cover; }
+  .dl__foot { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.85rem 1rem; }
+  .dl__meta { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+  .dl__name { font-size: 14px; font-weight: 600; color: hsl(var(--foreground)); }
+  .dl__spec { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; color: hsl(var(--muted-foreground)); }
+  .dl__foot svg { color: hsl(var(--muted-foreground)); flex-shrink: 0; transition: color 0.18s ease, transform 0.18s ease; }
+  .dl:hover .dl__foot svg { color: hsl(var(--primary)); transform: translateY(2px); }
 
-  .shots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-  .shot { display: block; overflow: hidden; position: relative; }
-  .shot img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
-  .shot__label { position: absolute; left: 0; right: 0; bottom: 0; padding: 0.6rem 0.9rem; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(0 0% 98%); background: linear-gradient(0deg, hsl(20 3% 4% / 0.9), transparent); }
+  /* Editorial artwork gallery */
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; }
+  .gcard {
+    position: relative; display: block; overflow: hidden; isolation: isolate; cursor: zoom-in;
+    border-radius: var(--radius); border: 1px solid hsl(var(--border));
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.28s ease, border-color 0.2s ease;
+  }
+  .gcard img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .gcard:hover { transform: translateY(-3px); border-color: hsl(var(--primary) / 0.3); box-shadow: 0 24px 46px -24px hsl(0 0% 0% / 0.8), 0 0 0 1px hsl(var(--primary) / 0.18); }
+  .gcard:hover img { transform: scale(1.05); }
+  .gcard__cap {
+    position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    padding: 1.6rem 0.9rem 0.7rem; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: hsl(0 0% 98%); background: linear-gradient(180deg, transparent, hsl(20 3% 4% / 0.9));
+  }
+  .gcard__cap svg { opacity: 0.75; }
 
-  .execs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
-  .exec { padding: 1.5rem; }
+  /* Executives */
+  .execs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.1rem; }
+  .exec { padding: 1.6rem; }
   .exec__top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-  .exec__avatar { flex-shrink: 0; width: 56px; height: 56px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; color: hsl(var(--primary-foreground)); background-image: linear-gradient(180deg, hsl(var(--primary-soft)), hsl(var(--primary))); box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18); }
-  .exec__name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin: 0; }
-  .exec__role { color: hsl(var(--muted-foreground)); font-size: 13px; margin: 0.25rem 0 0; line-height: 1.4; }
-  .exec__bio { margin: 0 0 1rem; line-height: 1.65; color: hsl(var(--foreground) / 0.9); font-size: 15px; }
-  .exec__links { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 14px; font-weight: 500; }
+  .exec__avatar {
+    flex-shrink: 0; width: 56px; height: 56px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; color: hsl(var(--primary-foreground));
+    background-image: linear-gradient(180deg, hsl(var(--primary-soft)), hsl(var(--primary)));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.2), 0 6px 16px -8px hsl(var(--primary) / 0.6);
+  }
+  .exec__name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin: 0; color: hsl(var(--ink)); }
+  .exec__role { color: hsl(var(--muted-foreground)); font-size: 12.5px; margin: 0.25rem 0 0; line-height: 1.4; }
+  .exec__bio { margin: 0 0 1.1rem; line-height: 1.65; color: hsl(var(--foreground) / 0.9); font-size: 14.5px; }
+  .exec__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem; }
+  .exec__profile { font-size: 14px; font-weight: 600; color: hsl(var(--primary-soft)); margin-right: auto; }
+  .exec__profile:hover { color: hsl(var(--primary)); }
+  .exec__social {
+    display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9999px;
+    border: 1px solid hsl(var(--border)); background: hsl(var(--card-elevated) / 0.6); color: hsl(var(--muted-foreground));
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .exec__social:hover { color: hsl(var(--foreground)); border-color: hsl(var(--border-strong)); background: hsl(var(--card-glass)); }
 
-  .contact-card { text-align: center; padding: 2.5rem 1.5rem; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
-  .contact-card__lead { color: hsl(var(--muted-foreground)); margin: 0; }
-  .contact-card__mail { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.3rem, 3vw, 1.8rem); letter-spacing: -0.02em; }
+  /* Contact */
+  .contact-card { position: relative; overflow: hidden; text-align: center; padding: 3rem 1.5rem; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+  .contact-card__glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(420px 180px at 50% 0%, hsl(var(--primary) / 0.14), transparent 70%); }
+  .contact-card > * { position: relative; z-index: 1; }
+  .contact-card__lead { color: hsl(var(--muted-foreground)); margin: 0; max-width: 34rem; }
+  .contact-card__mail { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.4rem, 3.5vw, 2rem); letter-spacing: -0.02em; color: hsl(var(--ink)); }
+  .contact-card__mail:hover { color: hsl(var(--primary-soft)); }
+  .contact-card__cta { display: flex; flex-wrap: wrap; gap: 0.7rem; justify-content: center; margin-top: 0.4rem; }
+
+  .press-back { margin-top: 3.5rem; }
+
+  @media (max-width: 640px) {
+    .press-section { margin-top: 3.25rem; }
+    .brand-stage { max-width: 300px; }
+  }
 </style>
 
 <script>
