@@ -55,7 +55,7 @@ const links = [
 </div>
 
 <style>
-  .fab { position: fixed; right: 1rem; bottom: 1rem; z-index: 70; display: none; }
+  .fab { position: fixed; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 70; display: none; }
   @media (max-width: 1119px) { .fab { display: block; } }
 
   .fab__toggle {
@@ -176,8 +176,13 @@ const links = [
       const io = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
-            fab.classList.toggle("is-hidden", entry.isIntersecting);
-            if (entry.isIntersecting) setOpen(false);
+            // Hide the FAB once the inline share bar is reached, and keep it
+            // hidden for everything below it (comments, footer) — i.e. also when
+            // the bar has scrolled above the viewport — so it doesn't reappear
+            // floating over the footer.
+            const hide = entry.isIntersecting || entry.boundingClientRect.top < 0;
+            fab.classList.toggle("is-hidden", hide);
+            if (hide) setOpen(false);
           }
         },
         { rootMargin: "0px 0px -10% 0px" },
