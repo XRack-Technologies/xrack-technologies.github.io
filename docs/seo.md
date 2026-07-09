@@ -78,6 +78,27 @@ structure (headings, internal links) + structured data** (Organization /
 WebSite / BlogPosting / Breadcrumb JSON-LD) — not from meta keywords. Do not
 reintroduce the tag.
 
+## Sitemap & feed richness (AUD-L6)
+
+- **Sitemap `lastmod`.** `astro.config.mjs` reads each post's frontmatter at
+  build time and injects a per-URL `<lastmod>` (using `updatedDate`, falling
+  back to `pubDate`) via the `@astrojs/sitemap` `serialize` hook — for both the
+  EN (`/blog/<slug>/`) and TR (`/blog/<slug>/tr/`) URL. Static pages (home,
+  about, tag indexes) carry no `lastmod` on purpose: there is no reliable
+  content date for them, and a fabricated one would mislead crawlers.
+- **Full-content RSS.** `/rss.xml` now emits the full rendered article body in
+  `<content:encoded>` (via `src/lib/feed.ts`, reusing the EN render from
+  `renderBilingual`), not just the description. Root-relative URLs are rewritten
+  to absolute so items render standalone in readers.
+- **Per-tag feeds.** `/tags/<tag>/rss.xml` exists for every category
+  (`src/pages/tags/[tag]/rss.xml.js`). Each tag page links its feed for
+  autodiscovery (`<link rel="alternate">`) and shows a visible **RSS** link.
+- **`image` / `news` sitemap extensions — deliberately skipped.** `news`
+  requires Google News registration and a rolling-2-day window (not applicable
+  to an evergreen engineering blog). Per-image entries add little for a blog
+  whose covers are optional; OG images are already exposed via `og:image`.
+  Revisit `image` if a media-heavy content line emerges.
+
 ## Verification checklist
 
 1. `curl -s https://blog.xrack.io/ | grep -E "google-site-verification|msvalidate"`
@@ -88,3 +109,5 @@ reintroduce the tag.
 4. `curl -s https://blog.xrack.io/blog/<any-post>/ | grep -c 'name="keywords"'`
    returns **0**; the same page's JSON-LD still contains a `"keywords"` field
    (`grep -o '"keywords":"[^"]*"'`).
+5. `sitemap-0.xml` shows `<lastmod>` on each `/blog/…/` URL; `/rss.xml` contains
+   `<content:encoded>`; `/tags/<tag>/rss.xml` loads for each category.

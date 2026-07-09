@@ -9,6 +9,10 @@ export const SITE = {
   twitter: "",
 };
 
+export const SOCIAL = {
+  linkedin: "https://www.linkedin.com/company/105097977",
+};
+
 export const NAV = [
   { label: "Engineering", label_tr: "Mühendislik", tag: "engineering" },
   { label: "Field Notes", label_tr: "Saha Notları", tag: "field-notes" },

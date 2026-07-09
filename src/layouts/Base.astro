@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 import { getCollection } from "astro:content";
-import { SITE, SITE_TR, NAV, href, GOOGLE_VERIFICATION, BING_VERIFICATION } from "../lib/site";
+import { SITE, SITE_TR, NAV, SOCIAL, href, GOOGLE_VERIFICATION, BING_VERIFICATION } from "../lib/site";
 import { Font } from "astro:assets";
 import T from "../components/T.astro";
 import Analytics from "../components/Analytics.astro";
@@ -17,6 +17,7 @@ interface Props {
   image?: string;
   forceLang?: "en" | "tr";
   alternates?: { en: string; tr: string };
+  feed?: { href: string; title: string };
 }
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
@@ -33,6 +34,7 @@ const {
   image,
   forceLang,
   alternates,
+  feed,
 } = Astro.props;
 const isTr = forceLang === "tr";
 const htmlLang = isTr ? "tr" : "en";
@@ -47,8 +49,6 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : As
 const defaultOg = href("og/default.png");
 const ogImage = image ?? (Astro.site ? new URL(defaultOg, Astro.site).href : defaultOg);
 const year = new Date().getFullYear();
-
-// Site-wide structured data (brand + searchbox), emitted on every page.
 const siteHref = Astro.site ? Astro.site.href : "https://blog.xrack.io/";
 const logoAbs = Astro.site ? new URL(logo, Astro.site).href : logo;
 const orgLd = {
@@ -57,7 +57,7 @@ const orgLd = {
   name: "XRack Technologies",
   url: SITE.homepage,
   logo: logoAbs,
-  sameAs: ["https://github.com/XRack-Technologies"],
+  sameAs: ["https://github.com/XRack-Technologies", SOCIAL.linkedin],
 };
 const siteLd = {
   "@context": "https://schema.org",
@@ -80,7 +80,7 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0d0d0c" />
+    <meta name="theme-color" content="#0c0b0a" />
     <script is:inline define:vars={{ forceLangVal }}>
       try {
         var _q = new URLSearchParams(location.search).get("lang");
@@ -95,6 +95,22 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
         if (_q) localStorage.setItem("xrack-blog-lang", _l);
       } catch (e) {
         document.documentElement.dataset.lang = "en";
+      }
+    </script>
+    <script is:inline>
+      try {
+        var _t = localStorage.getItem("xrack-theme");
+        if (_t !== "light" && _t !== "dark") {
+          _t =
+            window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+        }
+        document.documentElement.setAttribute("data-theme", _t);
+        var _m = document.querySelector('meta[name="theme-color"]');
+        if (_m) _m.setAttribute("content", _t === "light" ? "#f4efe6" : "#0c0b0a");
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
       }
     </script>
     <link rel="icon" href={href("favicon.ico")} sizes="any" />
@@ -117,6 +133,7 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
       )
     }
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href={href("rss.xml")} />
+    {feed && <link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />}
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -169,6 +186,10 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
         </nav>
 
         <div class="topbar-actions nav-desktop">
+          <button class="theme-toggle" type="button" data-toggle-theme aria-label="Toggle color theme">
+            <svg class="i-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            <svg class="i-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
           <div class="lang-toggle" role="group" aria-label="Language">
             <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="en">EN</button>
             <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="tr">TR</button>
@@ -204,9 +225,15 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
             }
             <a href={href("about")} aria-current={aboutActive ? "page" : undefined}><T en="About" tr="Hakkında" /></a>
           </nav>
-          <div class="lang-toggle lang-toggle--mobile" role="group" aria-label="Language">
-            <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="en">EN</button>
-            <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="tr">TR</button>
+          <div class="mobile-prefs">
+            <div class="lang-toggle lang-toggle--mobile" role="group" aria-label="Language">
+              <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="en">EN</button>
+              <button class="lang-opt" type="button" aria-pressed="false" data-lang-opt="tr">TR</button>
+            </div>
+            <button class="theme-toggle" type="button" data-toggle-theme aria-label="Toggle color theme">
+              <svg class="i-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              <svg class="i-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
           </div>
           <div class="mobile-actions">
             <a class="btn-ghost" href={SITE.homepage} target="_blank" rel="noopener">xrack.io</a>
@@ -232,6 +259,12 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
               </span>
             </a>
             <p><span data-lang-content="en">{SITE.description}</span><span data-lang-content="tr">{SITE_TR.description}</span></p>
+            <div class="foot-social">
+              <a class="social-link" href={SOCIAL.linkedin} target="_blank" rel="noopener" aria-label="XRack on LinkedIn">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <T en="Follow on LinkedIn" tr="LinkedIn'de takip et" />
+              </a>
+            </div>
           </div>
 
           <div class="foot-cols">
@@ -304,6 +337,41 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
       menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
       document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
       window.addEventListener("resize", () => { if (window.innerWidth > 900) setMenu(false); });
+      const THEME_KEY = "xrack-theme";
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      const themeToggles = document.querySelectorAll("[data-toggle-theme]");
+      const currentTheme = () =>
+        document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+      const applyTheme = (t: string) => {
+        document.documentElement.setAttribute("data-theme", t);
+        themeMeta?.setAttribute("content", t === "light" ? "#f4efe6" : "#0c0b0a");
+        themeToggles.forEach((b) =>
+          b.setAttribute("aria-label", t === "light" ? "Switch to dark theme" : "Switch to light theme"),
+        );
+        const gi = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+        gi?.contentWindow?.postMessage(
+          { giscus: { setConfig: { theme: t === "light" ? "light" : "transparent_dark" } } },
+          "https://giscus.app",
+        );
+      };
+      themeToggles.forEach((btn) =>
+        btn.addEventListener("click", () => {
+          const next = currentTheme() === "light" ? "dark" : "light";
+          applyTheme(next);
+          try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+        }),
+      );
+      applyTheme(currentTheme());
+      if (window.matchMedia) {
+        const mq = window.matchMedia("(prefers-color-scheme: light)");
+        const onThemeChange = (e: MediaQueryListEvent) => {
+          let saved = null;
+          try { saved = localStorage.getItem(THEME_KEY); } catch (err) {}
+          if (saved === "light" || saved === "dark") return;
+          applyTheme(e.matches ? "light" : "dark");
+        };
+        if (mq.addEventListener) mq.addEventListener("change", onThemeChange);
+      }
 
       const LANG_KEY = "xrack-blog-lang";
       const langButtons = document.querySelectorAll(".lang-opt");

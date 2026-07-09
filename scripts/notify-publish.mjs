@@ -1,11 +1,4 @@
-// Posts a notification for each newly-published blog post to a configurable
-// webhook (Zapier / Make / Buffer / Slack / n8n …). Invoked by the
-// "Notify on publish" GitHub Action. No-ops safely when nothing is configured.
-//
-// Env:
-//   ADDED                    newline-separated list of added files (from git diff)
-//   DISTRIBUTION_WEBHOOK_URL  target webhook (repo secret); empty = skip
-//   SITE_URL                  optional; defaults to https://blog.xrack.io
+
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 
@@ -21,7 +14,6 @@ if (added.length === 0) {
   process.exit(0);
 }
 
-// Minimal frontmatter reader (key: value between the first pair of --- fences).
 function frontmatter(text) {
   const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   const fm = {};
@@ -69,8 +61,6 @@ if (!webhook) {
 
 let failed = 0;
 for (const p of posts) {
-  // `text` makes Slack incoming-webhooks work out of the box; the structured
-  // fields let Zapier/Make/Buffer map into X/LinkedIn/etc.
   const payload = {
     text: `📣 New on the XRack blog: ${p.title}\n${p.url}`,
     title: p.title,
@@ -95,6 +85,5 @@ for (const p of posts) {
   }
 }
 
-// Don't fail the run over a distribution hiccup; the site is already deployed.
 console.log(failed ? `${failed} webhook call(s) failed.` : "All announcements sent.");
 process.exit(0);

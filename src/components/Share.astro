@@ -146,7 +146,8 @@ const links = [
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          rail.classList.toggle("is-tucked", entry.isIntersecting);
+          const tucked = entry.isIntersecting || entry.boundingClientRect.top < 0;
+          rail.classList.toggle("is-tucked", tucked);
         }
       },
       { rootMargin: "0px 0px -15% 0px" },

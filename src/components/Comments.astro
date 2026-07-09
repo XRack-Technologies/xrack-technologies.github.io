@@ -52,6 +52,11 @@ const mailto = `mailto:dogandursun@xrack.io?subject=${encodeURIComponent("Re: " 
         function lang() {
           return document.documentElement.dataset.lang === "tr" ? "tr" : "en";
         }
+        function theme() {
+          return document.documentElement.getAttribute("data-theme") === "light"
+            ? "light"
+            : "transparent_dark";
+        }
         function load() {
           if (loaded) return;
           loaded = true;
@@ -67,7 +72,7 @@ const mailto = `mailto:dogandursun@xrack.io?subject=${encodeURIComponent("Re: " 
           s.setAttribute("data-reactions-enabled", "1");
           s.setAttribute("data-emit-metadata", "0");
           s.setAttribute("data-input-position", "top");
-          s.setAttribute("data-theme", "transparent_dark");
+          s.setAttribute("data-theme", theme());
           s.setAttribute("data-lang", lang());
           s.crossOrigin = "anonymous";
           s.async = true;

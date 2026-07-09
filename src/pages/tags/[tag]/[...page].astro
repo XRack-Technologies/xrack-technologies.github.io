@@ -26,6 +26,7 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 type Props = { page: Page<CollectionEntry<"blog">>; label: string; labelTr: string };
 const { page, label, labelTr } = Astro.props as Props;
 const count = page.total;
+const feedHref = href(`tags/${Astro.params.tag}/rss.xml`);
 
 const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
 const breadcrumbLd = {
@@ -38,13 +39,21 @@ const breadcrumbLd = {
 };
 ---
 
-<Base title={label} jsonLd={breadcrumbLd}>
+<Base title={label} jsonLd={breadcrumbLd} feed={{ href: feedHref, title: `${label} — RSS` }}>
   <section class="hero" style="padding-bottom:1rem;">
     <div class="wrap section-head">
       <span class="eyebrow-strong"><T en="Category" tr="Kategori" /></span>
       <h1 class="display-title"><T en={label} tr={labelTr} /></h1>
       <p class="lede">
         <T en={`${count} ${count === 1 ? "post" : "posts"}`} tr={`${count} yazı`} />
+        {count > 0 && (
+          <>
+            {" · "}
+            <a href={feedHref} class="tag-feed-link">
+              <T en="RSS" tr="RSS" />
+            </a>
+          </>
+        )}
       </p>
     </div>
   </section>

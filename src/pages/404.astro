@@ -1,11 +1,17 @@
 ---
+import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
+import PostCard from "../components/PostCard.astro";
 import T from "../components/T.astro";
 import { href } from "../lib/site";
+
+const recent = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
 ---
 
 <Base title="404">
-  <section class="hero" style="padding-bottom:4rem;">
+  <section class="hero" style="padding-bottom:2.5rem;">
     <div class="hero-aura"></div>
     <div class="wrap hero-inner">
       <span class="eyebrow-strong">404</span>
@@ -14,13 +20,56 @@ import { href } from "../lib/site";
       </h1>
       <p class="lede">
         <T
-          en="The page you're looking for doesn't exist or was moved."
-          tr="Aradığın sayfa mevcut değil ya da taşınmış."
+          en="The page you're looking for doesn't exist or was moved. Try a search or pick up one of the recent posts below."
+          tr="Aradığın sayfa mevcut değil ya da taşınmış. Aramayı dene ya da aşağıdaki son yazılardan birine göz at."
         />
       </p>
-      <a class="btn-primary" href={href()} style="margin-top:.5rem;">
-        <T en="Back to the blog" tr="Bloga dön" />
-      </a>
+
+      <form class="notfound-search" action={href()} method="get" role="search">
+        <label class="search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input
+            type="search"
+            name="q"
+            autocomplete="off"
+            aria-label="Search posts"
+            data-ph-en="Search posts…"
+            data-ph-tr="Yazılarda ara…"
+            placeholder="Search posts…"
+          />
+        </label>
+        <button class="btn-primary" type="submit">
+          <T en="Search" tr="Ara" />
+        </button>
+        <a class="btn-ghost" href={href()}>
+          <T en="Back to the blog" tr="Bloga dön" />
+        </a>
+      </form>
     </div>
   </section>
+
+  {
+    recent.length > 0 && (
+      <section class="feed" style="padding-top:0;">
+        <div class="wrap">
+          <h2 class="eyebrow" style="margin-bottom:1.1rem;">
+            <T en="Recent posts" tr="Son yazılar" />
+          </h2>
+          <div class="card-grid">
+            {recent.map((post) => <PostCard post={post} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
 </Base>
+
+<style>
+  .notfound-search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.6rem;
+  }
+</style>
