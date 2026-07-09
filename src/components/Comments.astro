@@ -2,10 +2,8 @@
 import T from "./T.astro";
 import { GISCUS, GISCUS_ENABLED, SITE } from "../lib/site";
 
-// Comments via Giscus (GitHub Discussions) when configured; otherwise a
-// discussion-links fallback so every post still has an engagement affordance.
 interface Props {
-  term: string; // stable per-post key so EN and TR share one discussion
+  term: string;
   url: string;
   title: string;
 }
@@ -75,7 +73,6 @@ const mailto = `mailto:dogandursun@xrack.io?subject=${encodeURIComponent("Re: " 
           s.async = true;
           mount.appendChild(s);
         }
-        // Load only when the reader nears the comments (no third-party JS before that).
         if ("IntersectionObserver" in window) {
           var io = new IntersectionObserver(
             function (entries) {

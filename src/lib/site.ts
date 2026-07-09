@@ -26,8 +26,6 @@ export const GA_ID = GA_ENV || (import.meta.env.PROD ? "G-C185FJWPRX" : "");
 
 export const GOOGLE_VERIFICATION = (import.meta.env.PUBLIC_GOOGLE_VERIFICATION ?? "").trim();
 export const BING_VERIFICATION = (import.meta.env.PUBLIC_BING_VERIFICATION ?? "").trim();
-// Defaults to the blog's own (public) repo on `astro build`; env overrides in
-// any mode. Off in `astro dev` so local testing doesn't post to the live repo.
 const PROD = import.meta.env.PROD;
 export const GISCUS = {
   repo:
