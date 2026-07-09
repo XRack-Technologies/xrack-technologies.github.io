@@ -5,56 +5,75 @@ import { href, formatDate, formatDateTr } from "../../lib/site";
 import { renderBilingual, readingMinutes, enWordCount } from "../../lib/i18n";
 import T from "../../components/T.astro";
 import Share from "../../components/Share.astro";
+import ShareFab from "../../components/ShareFab.astro";
+import Comments from "../../components/Comments.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
   );
-  return posts.map((post, i) => ({
-    params: { slug: post.id },
-    props: {
-      post,
+  return posts.flatMap((post, i) => {
+    const neighbors = {
       newer: i > 0 ? posts[i - 1] : null,
       older: i < posts.length - 1 ? posts[i + 1] : null,
-    },
-  }));
+    };
+    const { bilingual } = renderBilingual(post.body ?? "");
+    const hasTr = bilingual || !!post.data.title_tr || !!post.data.description_tr;
+    const langs = hasTr ? ["en", "tr"] : ["en"];
+    return langs.map((lang) => ({
+      params: { slug: lang === "tr" ? `${post.id}/tr` : post.id },
+      props: { post, lang, ...neighbors },
+    }));
+  });
 }
 
-const { post, newer, older } = Astro.props;
+const { post, lang = "en", newer, older } = Astro.props;
+const isTr = lang === "tr";
 const { title, description, pubDate, tags, author, cover } = post.data;
 const titleTr = post.data.title_tr ?? title;
 const descriptionTr = post.data.description_tr ?? description;
 const { enHtml, trHtml, bilingual } = renderBilingual(post.body ?? "");
 const mins = readingMinutes(post.body ?? "");
 const metaDual = !!post.data.title_tr || !!post.data.description_tr;
+const hasTr = bilingual || !!post.data.title_tr || !!post.data.description_tr;
 const keywords = post.data.keywords ?? tags;
+const neighborHasTr = (p: typeof newer) =>
+  !!p && (renderBilingual(p.body ?? "").bilingual || !!p.data.title_tr || !!p.data.description_tr);
+const newerHasTr = neighborHasTr(newer);
+const olderHasTr = neighborHasTr(older);
 
 const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
-const url = abs(Astro.url.pathname);
-const image = cover ? abs(cover) : abs(href("logo.png"));
+const enUrl = abs(href(`blog/${post.id}/`));
+const trUrl = abs(href(`blog/${post.id}/tr/`));
+const selfUrl = isTr ? trUrl : enUrl;
+const ogImage = (l: "en" | "tr") =>
+  cover ? abs(cover) : abs(href(`og/${post.id}${l === "tr" ? "/tr" : ""}.png`));
+const image = ogImage(lang as "en" | "tr");
+const ogTitle = isTr ? titleTr : title;
+const ogDescription = isTr ? descriptionTr : description;
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  headline: title,
-  description,
+  headline: ogTitle,
+  description: ogDescription,
   datePublished: pubDate.toISOString(),
   dateModified: (post.data.updatedDate ?? pubDate).toISOString(),
   author: { "@type": "Person", name: author },
   publisher: { "@type": "Organization", name: "XRack Technologies" },
   keywords: keywords.join(", "),
   articleSection: tags[0],
-  inLanguage: "en",
+  inLanguage: isTr ? "tr" : "en",
   wordCount: enWordCount(post.body ?? ""),
   timeRequired: `PT${mins}M`,
   image,
-  mainEntityOfPage: url,
-  url,
+  mainEntityOfPage: selfUrl,
+  url: selfUrl,
 };
 ---
 
 <Base
-  title={title}
-  description={description}
+  title={ogTitle}
+  description={ogDescription}
   keywords={keywords}
   ogType="article"
   image={image}
@@ -62,9 +81,12 @@ const jsonLd = {
   articleTags={tags}
   showProgress={true}
   jsonLd={jsonLd}
+  forceLang={hasTr ? (isTr ? "tr" : "en") : undefined}
+  alternates={hasTr ? { en: enUrl, tr: trUrl } : undefined}
 >
   <article class="article article--post">
-    <Share url={url} title={title} variant="rail" />
+    <Share url={enUrl} urlTr={hasTr ? trUrl : undefined} title={title} titleTr={titleTr} variant="rail" />
+    <ShareFab url={enUrl} urlTr={hasTr ? trUrl : undefined} title={title} titleTr={titleTr} />
     <header class="wrap wrap--narrow article-head">
       <div class="post-card__meta" style="justify-content:center;">
         {tags[0] && <span class="pill pill-primary">{tags[0]}</span>}
@@ -124,7 +146,7 @@ const jsonLd = {
     </div>
 
     <div class="wrap wrap--narrow">
-      <Share url={url} title={title} />
+      <Share url={enUrl} urlTr={hasTr ? trUrl : undefined} title={title} titleTr={titleTr} />
     </div>
 
     <div class="wrap wrap--narrow article-foot">
@@ -134,11 +156,13 @@ const jsonLd = {
       <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
     </div>
 
+    <Comments term={post.id} url={selfUrl} title={ogTitle} />
+
     {
       (newer || older) && (
         <nav class="wrap wrap--narrow post-nav" aria-label="More posts">
           {newer ? (
-            <a class="post-nav__item post-nav__item--prev" href={href(`blog/${newer.id}`)}>
+            <a class="post-nav__item post-nav__item--prev" href={href(`blog/${newer.id}`)} data-href-tr={newerHasTr ? href(`blog/${newer.id}/tr`) : undefined}>
               <span class="post-nav__dir"><T en="Newer" tr="Daha yeni" /></span>
               <span class="post-nav__title">
                 <span data-lang-content="en">{newer.data.title}</span>
@@ -149,7 +173,7 @@ const jsonLd = {
             <span />
           )}
           {older ? (
-            <a class="post-nav__item post-nav__item--next" href={href(`blog/${older.id}`)}>
+            <a class="post-nav__item post-nav__item--next" href={href(`blog/${older.id}`)} data-href-tr={olderHasTr ? href(`blog/${older.id}/tr`) : undefined}>
               <span class="post-nav__dir"><T en="Older" tr="Daha eski" /></span>
               <span class="post-nav__title">
                 <span data-lang-content="en">{older.data.title}</span>

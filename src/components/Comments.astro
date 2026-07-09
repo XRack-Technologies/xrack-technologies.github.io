@@ -1,0 +1,125 @@
+---
+import T from "./T.astro";
+import { GISCUS, GISCUS_ENABLED, SITE } from "../lib/site";
+
+// Comments via Giscus (GitHub Discussions) when configured; otherwise a
+// discussion-links fallback so every post still has an engagement affordance.
+interface Props {
+  term: string; // stable per-post key so EN and TR share one discussion
+  url: string;
+  title: string;
+}
+const { term, url, title } = Astro.props;
+const giscus = GISCUS;
+const xIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+const mailto = `mailto:dogandursun@xrack.io?subject=${encodeURIComponent("Re: " + title)}`;
+---
+
+<section class="comments wrap wrap--narrow" aria-label="Comments">
+  <h2 class="comments__title">
+    <T en="Comments" tr="Yorumlar" />
+  </h2>
+
+  {
+    GISCUS_ENABLED ? (
+      <div id="giscus-mount" class="giscus" />
+    ) : (
+      <div class="comments__fallback">
+        <p>
+          <T
+            en="Thoughts on this piece? Continue the conversation:"
+            tr="Bu yazı hakkında düşünceleriniz mi var? Sohbete devam edin:"
+          />
+        </p>
+        <div class="comments__links">
+          <a class="btn-ghost" href={xIntent} target="_blank" rel="noopener">
+            <T en="Discuss on X" tr="X'te tartış" />
+          </a>
+          <a class="btn-ghost" href={mailto}>
+            <T en="Email the author" tr="Yazara e-posta" />
+          </a>
+        </div>
+      </div>
+    )
+  }
+</section>
+
+{
+  GISCUS_ENABLED && (
+    <script is:inline define:vars={{ giscus, term }}>
+      (function () {
+        var mount = document.getElementById("giscus-mount");
+        if (!mount) return;
+        var loaded = false;
+        function lang() {
+          return document.documentElement.dataset.lang === "tr" ? "tr" : "en";
+        }
+        function load() {
+          if (loaded) return;
+          loaded = true;
+          var s = document.createElement("script");
+          s.src = "https://giscus.app/client.js";
+          s.setAttribute("data-repo", giscus.repo);
+          s.setAttribute("data-repo-id", giscus.repoId);
+          s.setAttribute("data-category", giscus.category);
+          s.setAttribute("data-category-id", giscus.categoryId);
+          s.setAttribute("data-mapping", "specific");
+          s.setAttribute("data-term", term);
+          s.setAttribute("data-strict", "1");
+          s.setAttribute("data-reactions-enabled", "1");
+          s.setAttribute("data-emit-metadata", "0");
+          s.setAttribute("data-input-position", "top");
+          s.setAttribute("data-theme", "transparent_dark");
+          s.setAttribute("data-lang", lang());
+          s.crossOrigin = "anonymous";
+          s.async = true;
+          mount.appendChild(s);
+        }
+        // Load only when the reader nears the comments (no third-party JS before that).
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                  load();
+                  io.disconnect();
+                }
+              });
+            },
+            { rootMargin: "400px 0px" },
+          );
+          io.observe(mount);
+        } else {
+          load();
+        }
+      })();
+    </script>
+  )
+}
+
+<style>
+  .comments {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .comments__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-size: 1.4rem;
+    margin: 0 0 1.25rem;
+  }
+  .comments__fallback p {
+    color: hsl(var(--muted-foreground));
+    margin: 0 0 1rem;
+  }
+  .comments__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .giscus {
+    min-height: 8rem;
+  }
+</style>

@@ -1,0 +1,170 @@
+---
+import T from "./T.astro";
+import { GA_ID, SITE } from "../lib/site";
+
+const gaId = GA_ID;
+const ctaUrl = SITE.cta;
+---
+
+{
+  gaId && (
+    <>
+      <div
+        id="consent-banner"
+        class="consent"
+        role="dialog"
+        aria-live="polite"
+        aria-label="Analytics consent"
+        hidden
+      >
+        <p class="consent__text">
+          <T
+            en="We use privacy-friendly analytics to see which content lands. Nothing is collected until you accept — no cookies, no tracking otherwise."
+            tr="Hangi içeriğin işe yaradığını görmek için gizlilik-dostu analiz kullanıyoruz. Kabul edene kadar hiçbir şey toplanmaz — çerez yok, aksi halde takip yok."
+          />
+        </p>
+        <div class="consent__actions">
+          <button id="consent-decline" class="btn-ghost" type="button">
+            <T en="Decline" tr="Reddet" />
+          </button>
+          <button id="consent-accept" class="btn-primary" type="button">
+            <T en="Accept" tr="Kabul et" />
+          </button>
+        </div>
+      </div>
+
+      <script is:inline define:vars={{ gaId, ctaUrl }}>
+        (function () {
+          var KEY = "xrack-analytics-consent";
+          var banner = document.getElementById("consent-banner");
+
+          function loadGA() {
+            if (window.__gaLoaded) return;
+            window.__gaLoaded = true;
+            var s = document.createElement("script");
+            s.async = true;
+            s.src = "https://www.googletagmanager.com/gtag/js?id=" + gaId;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () {
+              window.dataLayer.push(arguments);
+            };
+            window.gtag("js", new Date());
+            window.gtag("config", gaId, { anonymize_ip: true });
+          }
+
+          function hide() {
+            if (banner) banner.hidden = true;
+          }
+
+          var stored = null;
+          try {
+            stored = localStorage.getItem(KEY);
+          } catch (e) {}
+
+          if (stored === "granted") loadGA();
+          else if (stored !== "denied" && banner) banner.hidden = false;
+
+          var acc = document.getElementById("consent-accept");
+          var dec = document.getElementById("consent-decline");
+          if (acc)
+            acc.addEventListener("click", function () {
+              try {
+                localStorage.setItem(KEY, "granted");
+              } catch (e) {}
+              hide();
+              loadGA();
+            });
+          if (dec)
+            dec.addEventListener("click", function () {
+              try {
+                localStorage.setItem(KEY, "denied");
+              } catch (e) {}
+              hide();
+            });
+
+          document.addEventListener("click", function (e) {
+            if (typeof window.gtag !== "function") return;
+            var el = e.target && e.target.closest ? e.target.closest("a,button") : null;
+            if (!el) return;
+            if (el.classList.contains("share-btn") || el.classList.contains("fab__item")) {
+              var net = el.getAttribute("title") || el.getAttribute("aria-label") || "Copy link";
+              window.gtag("event", "share_click", { method: net });
+              return;
+            }
+            if (el.tagName === "A" && el.href) {
+              var url;
+              try {
+                url = new URL(el.href, location.href);
+              } catch (e2) {
+                return;
+              }
+              if (el.href === ctaUrl) {
+                window.gtag("event", "cta_click", { cta_id: "book_demo", link_url: el.href });
+                return;
+              }
+              if (url.host !== location.host) {
+                window.gtag("event", "outbound_click", {
+                  link_url: el.href,
+                  link_domain: url.host,
+                });
+              }
+            }
+          });
+        })();
+      </script>
+    </>
+  )
+}
+
+<style>
+  .consent {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 90;
+    max-width: 640px;
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding: 1rem 1.15rem;
+    background-image: linear-gradient(180deg, hsl(var(--card-elevated)), hsl(var(--card)));
+    border: 1px solid hsl(var(--border-strong));
+    border-radius: var(--radius);
+    box-shadow:
+      0 24px 50px -20px hsl(0 0% 0% / 0.8),
+      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  }
+  .consent[hidden] {
+    display: none;
+  }
+  .consent__text {
+    margin: 0;
+    flex: 1 1 260px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: hsl(var(--muted-foreground));
+  }
+  .consent__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  .consent__actions .btn-primary,
+  .consent__actions .btn-ghost {
+    padding: 0.45rem 1rem;
+  }
+  @media (max-width: 520px) {
+    .consent__actions {
+      width: 100%;
+    }
+    .consent__actions .btn-primary,
+    .consent__actions .btn-ghost {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+</style>

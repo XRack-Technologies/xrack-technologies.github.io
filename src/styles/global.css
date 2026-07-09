@@ -341,11 +341,6 @@ html:not([data-lang="tr"]) [data-lang-content="tr"] { display: none !important; 
   .reveal-on-view { opacity: 1; transform: none; }
 }
 
-/* ============================================================
-   Long-form article formatting (blog posts only: .article--post)
-   ============================================================ */
-
-/* Drop cap on the opening paragraph of each language block */
 .article--post .prose > p:first-of-type::first-letter {
   float: left;
   font-family: var(--font-display);
@@ -356,7 +351,6 @@ html:not([data-lang="tr"]) [data-lang-content="tr"] { display: none !important; 
   color: hsl(var(--primary));
 }
 
-/* Numbered rust eyebrow before each section heading (01, 02, …) */
 .article--post .prose { counter-reset: sec; }
 .article--post .prose h2 { counter-increment: sec; }
 .article--post .prose h2::before {
@@ -370,7 +364,6 @@ html:not([data-lang="tr"]) [data-lang-content="tr"] { display: none !important; 
   margin-bottom: 0.5rem;
 }
 
-/* Anecdote panel — a set-piece story told in a serif voice */
 .prose .anecdote {
   margin: 2.25rem 0;
   padding: 1.4rem 1.6rem;
@@ -398,6 +391,5 @@ html:not([data-lang="tr"]) [data-lang-content="tr"] { display: none !important; 
 }
 .prose .anecdote p:last-child { margin-bottom: 0; }
 
-/* Rail tucks away once the inline share bar is in view (set by Share.astro JS) */
 .share-rail { transition: opacity .25s ease, transform .25s ease, visibility .25s; }
 .share-rail.is-tucked { opacity: 0; visibility: hidden; transform: translateY(-50%) translateX(-8px); pointer-events: none; }

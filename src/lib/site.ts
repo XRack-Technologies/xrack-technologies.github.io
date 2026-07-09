@@ -21,6 +21,26 @@ export const SITE_TR = {
     "Gözlemlenebilir agentic harness'ı geliştiren ekibin mühendislik, araştırma ve saha notları.",
 };
 
+const GA_ENV = (import.meta.env.PUBLIC_GA_ID ?? "").trim();
+export const GA_ID = GA_ENV || (import.meta.env.PROD ? "G-C185FJWPRX" : "");
+
+export const GOOGLE_VERIFICATION = (import.meta.env.PUBLIC_GOOGLE_VERIFICATION ?? "").trim();
+export const BING_VERIFICATION = (import.meta.env.PUBLIC_BING_VERIFICATION ?? "").trim();
+// Defaults to the blog's own (public) repo on `astro build`; env overrides in
+// any mode. Off in `astro dev` so local testing doesn't post to the live repo.
+const PROD = import.meta.env.PROD;
+export const GISCUS = {
+  repo:
+    (import.meta.env.PUBLIC_GISCUS_REPO ?? "").trim() ||
+    (PROD ? "XRack-Technologies/xrack-technologies.github.io" : ""),
+  repoId: (import.meta.env.PUBLIC_GISCUS_REPO_ID ?? "").trim() || (PROD ? "R_kgDOTSJspQ" : ""),
+  category: (import.meta.env.PUBLIC_GISCUS_CATEGORY ?? "").trim() || "Announcements",
+  categoryId:
+    (import.meta.env.PUBLIC_GISCUS_CATEGORY_ID ?? "").trim() ||
+    (PROD ? "DIC_kwDOTSJspc4DA1FK" : ""),
+};
+export const GISCUS_ENABLED = !!(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
+
 const BASE = import.meta.env.BASE_URL;
 
 export function href(path = ""): string {

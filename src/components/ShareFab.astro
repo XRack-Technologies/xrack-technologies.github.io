@@ -1,0 +1,178 @@
+---
+import T from "./T.astro";
+
+interface Props {
+  url: string;
+  urlTr?: string;
+  title: string;
+  titleTr?: string;
+}
+const { url, urlTr, title, titleTr = title } = Astro.props;
+const render = (tpl: string) =>
+  tpl.replaceAll("{u}", encodeURIComponent(url)).replaceAll("{t}", encodeURIComponent(title));
+
+const links = [
+  { name: "X", tpl: `https://twitter.com/intent/tweet?url={u}&text={t}`, svg: `<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>` },
+  { name: "LinkedIn", tpl: `https://www.linkedin.com/sharing/share-offsite/?url={u}`, svg: `<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>` },
+  { name: "Bluesky", tpl: `https://bsky.app/intent/compose?text={t}%20{u}`, svg: `<path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/>` },
+  { name: "Hacker News", tpl: `https://news.ycombinator.com/submitlink?u={u}&t={t}`, svg: `<path fill-rule="evenodd" clip-rule="evenodd" d="M0 24V0h24v24H0zM6.951 5.896l4.972 8.301V19.5h1.771v-5.302l4.972-8.302h-1.919l-3.938 6.687-3.938-6.687H6.951z"/>` },
+  { name: "Reddit", tpl: `https://www.reddit.com/submit?url={u}&title={t}`, svg: `<path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.016-.366.045-.545-.552-.283-.94-.877-.94-1.601 0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12c-.688 0-1.25.561-1.25 1.249 0 .688.562 1.249 1.25 1.249.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.248-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.249 0 .688.561 1.249 1.248 1.249.688 0 1.25-.561 1.25-1.249 0-.688-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>` },
+  { name: "Facebook", tpl: `https://www.facebook.com/sharer/sharer.php?u={u}`, svg: `<path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/>` },
+  { name: "WhatsApp", tpl: `https://wa.me/?text={t}%20{u}`, svg: `<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>` },
+];
+---
+
+<div
+  class="fab"
+  data-open="false"
+  data-share
+  data-share-url={url}
+  data-share-url-tr={urlTr}
+  data-title-en={title}
+  data-title-tr={titleTr}
+>
+  <div class="fab__panel" role="menu" aria-label="Share this post">
+    {
+      links.map((l) => (
+        <a class="fab__item" role="menuitem" href={render(l.tpl)} data-tpl={l.tpl} target="_blank" rel="noopener">
+          <svg class="fab__ico" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" set:html={l.svg} />
+          <span>{l.name}</span>
+        </a>
+      ))
+    }
+    <button class="fab__item fab__copy" type="button" role="menuitem" data-url={url}>
+      <svg class="fab__ico i-link" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      <svg class="fab__ico i-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+      <span><T en="Copy link" tr="Bağlantıyı kopyala" /></span>
+    </button>
+  </div>
+
+  <button class="fab__toggle" type="button" aria-label="Share this post" aria-expanded="false">
+    <svg class="i-share" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    <svg class="i-close" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>
+  </button>
+</div>
+
+<style>
+  .fab { position: fixed; right: 1rem; bottom: 1rem; z-index: 70; display: none; }
+  @media (max-width: 1119px) { .fab { display: block; } }
+
+  .fab__toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px; border-radius: 9999px; border: 0; cursor: pointer;
+    color: hsl(var(--primary-foreground));
+    background-image: linear-gradient(180deg, hsl(var(--primary-soft)), hsl(var(--primary)));
+    box-shadow: 0 1px 2px hsl(0 0% 0% / 0.4), 0 10px 26px -8px hsl(var(--primary) / 0.6);
+    transition: transform .18s ease, box-shadow .2s ease;
+  }
+  .fab__toggle:active { transform: scale(0.95); }
+  .fab .i-close { display: none; }
+  .fab[data-open="true"] .i-share { display: none; }
+  .fab[data-open="true"] .i-close { display: inline; }
+
+  .fab__panel {
+    position: absolute; right: 0; bottom: calc(100% + 0.6rem);
+    min-width: 200px; padding: 0.4rem;
+    display: flex; flex-direction: column; gap: 0.1rem;
+    background-image: linear-gradient(180deg, hsl(var(--card-elevated)), hsl(var(--card)));
+    border: 1px solid hsl(var(--border-strong));
+    border-radius: calc(var(--radius) - 2px);
+    box-shadow: 0 20px 44px -18px hsl(0 0% 0% / 0.75), inset 0 1px 0 hsl(0 0% 100% / 0.05);
+    opacity: 0; visibility: hidden; transform: translateY(6px) scale(0.98);
+    transform-origin: bottom right;
+    transition: opacity .16s ease, transform .16s ease, visibility .16s;
+  }
+  .fab[data-open="true"] .fab__panel { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+  .fab__item {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.6rem 0.7rem; border-radius: 10px; border: 0; width: 100%;
+    background: none; cursor: pointer; text-align: left;
+    font-family: var(--font-sans); font-size: 14px; color: hsl(var(--foreground) / 0.85);
+  }
+  .fab__item:hover, .fab__item:focus-visible { background: hsl(var(--card-glass)); color: hsl(var(--foreground)); }
+  .fab__ico { flex-shrink: 0; opacity: 0.9; }
+  .fab__copy .i-check { display: none; }
+  .fab__copy.is-copied { color: hsl(var(--success)); }
+  .fab__copy.is-copied .i-link { display: none; }
+  .fab__copy.is-copied .i-check { display: inline; }
+
+  .fab.is-hidden { opacity: 0; visibility: hidden; transform: translateY(8px); pointer-events: none; transition: opacity .2s ease, transform .2s ease, visibility .2s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fab__toggle, .fab__panel, .fab.is-hidden { transition: none; }
+  }
+</style>
+
+<script>
+  const fab = document.querySelector<HTMLElement>(".fab");
+  const toggle = fab?.querySelector<HTMLButtonElement>(".fab__toggle");
+  if (fab && toggle) {
+    const setOpen = (open: boolean) => {
+      fab.dataset.open = open ? "true" : "false";
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setOpen(fab.dataset.open !== "true");
+    });
+    document.addEventListener("click", (e) => {
+      if (!fab.contains(e.target as Node)) setOpen(false);
+    });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
+    fab.querySelectorAll(".fab__item").forEach((el) => {
+      el.addEventListener("click", () => {
+        if (el.classList.contains("fab__copy")) return;
+        setOpen(false);
+      });
+    });
+
+    const copyBtn = fab.querySelector<HTMLButtonElement>(".fab__copy");
+    copyBtn?.addEventListener("click", async () => {
+      const shareUrl = copyBtn.getAttribute("data-url") || location.href;
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = shareUrl; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); } catch (e2) {}
+        document.body.removeChild(ta);
+      }
+      copyBtn.classList.add("is-copied");
+      window.setTimeout(() => { copyBtn.classList.remove("is-copied"); setOpen(false); }, 1200);
+    });
+
+    const enc = encodeURIComponent;
+    const buildLinks = (lang: string) => {
+      const en = fab.dataset.shareUrl || location.href.split("?")[0];
+      const shareUrl = lang === "tr" ? fab.dataset.shareUrlTr || en : en;
+      const title = (lang === "tr" ? fab.dataset.titleTr : fab.dataset.titleEn) || "";
+      fab.querySelectorAll<HTMLAnchorElement>("a[data-tpl]").forEach((a) => {
+        const tpl = a.dataset.tpl || "";
+        a.href = tpl.replaceAll("{u}", enc(shareUrl)).replaceAll("{t}", enc(title));
+      });
+      copyBtn?.setAttribute("data-url", shareUrl);
+    };
+    const currentLang = () => (document.documentElement.dataset.lang === "tr" ? "tr" : "en");
+    buildLinks(currentLang());
+    new MutationObserver(() => buildLinks(currentLang())).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-lang"],
+    });
+
+    const bar = document.querySelector(".share-bar");
+    if (bar && "IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            fab.classList.toggle("is-hidden", entry.isIntersecting);
+            if (entry.isIntersecting) setOpen(false);
+          }
+        },
+        { rootMargin: "0px 0px -10% 0px" },
+      );
+      io.observe(bar);
+    }
+  }
+</script>
