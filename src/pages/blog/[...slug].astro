@@ -27,7 +27,6 @@ const descriptionTr = post.data.description_tr ?? description;
 const { enHtml, trHtml, bilingual } = renderBilingual(post.body ?? "");
 const mins = readingMinutes(post.body ?? "");
 const metaDual = !!post.data.title_tr || !!post.data.description_tr;
-// SEO keywords: explicit frontmatter list if given, else the post's tags.
 const keywords = post.data.keywords ?? tags;
 
 const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
@@ -65,6 +64,7 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <article class="article">
+    <Share url={url} title={title} variant="rail" />
     <header class="wrap wrap--narrow article-head">
       <div class="post-card__meta" style="justify-content:center;">
         {tags[0] && <span class="pill pill-primary">{tags[0]}</span>}

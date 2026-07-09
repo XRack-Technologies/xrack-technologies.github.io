@@ -9,7 +9,6 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
 
-// Every tag actually used, with counts — new tags appear here automatically.
 const tagCounts = new Map<string, number>();
 for (const p of posts) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
 const tagList = [...tagCounts.keys()].sort();

@@ -15,7 +15,6 @@ const primaryTag = tags[0];
 const mins = readingMinutes(post.body ?? "");
 const dual = !!post.data.title_tr || !!post.data.description_tr;
 const search = [title, titleTr, description, descriptionTr, ...tags].join(" ").toLowerCase();
-// Deterministic hue for the placeholder cover, within the warm-rust family.
 const hues = ["6 62% 50%", "12 62% 62%", "22 75% 58%", "348 58% 60%"];
 const hueSeed = [...(primaryTag ?? "xrack")].reduce((s, ch) => s + ch.charCodeAt(0), 0);
 const hue = hues[hueSeed % hues.length];
