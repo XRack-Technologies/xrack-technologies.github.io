@@ -38,6 +38,7 @@ const lists = bilingual
 <details class="toc-inline wrap wrap--narrow">
   <summary>
     <span class="toc-heading"><T en="On this page" tr="Bu sayfada" /></span>
+    <svg class="toc-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
   </summary>
   {
     lists.map((l) => (
@@ -124,8 +125,13 @@ const lists = bilingual
   }
   .toc-inline summary {
     cursor: pointer;
-    padding: 0.5rem 0;
+    padding: 0.4rem 0;
     list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    -webkit-tap-highlight-color: transparent;
   }
   .toc-inline summary::-webkit-details-marker {
     display: none;
@@ -133,6 +139,19 @@ const lists = bilingual
   .toc-inline summary .toc-heading {
     display: inline;
     margin: 0;
+  }
+  .toc-chevron {
+    flex-shrink: 0;
+    color: hsl(var(--muted-foreground));
+    transition: transform 0.22s ease, color 0.15s ease;
+  }
+  .toc-inline summary:hover .toc-chevron,
+  .toc-inline summary:hover .toc-heading {
+    color: hsl(var(--foreground));
+  }
+  .toc-inline[open] .toc-chevron {
+    transform: rotate(180deg);
+    color: hsl(var(--primary));
   }
   .toc-inline[open] summary {
     margin-bottom: 0.5rem;
