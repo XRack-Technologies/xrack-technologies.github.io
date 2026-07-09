@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import PostCard from "../components/PostCard.astro";
+import Newsletter from "../components/Newsletter.astro";
 import T from "../components/T.astro";
 import { SITE, SITE_TR, NAV } from "../lib/site";
 
@@ -24,8 +25,8 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
         <span class="dot"></span> <T en="The XRack Journal" tr="XRack Günlüğü" />
       </span>
       <h1 class="display-title">
-        <span data-lang-content="en">Notes from the <span class="serif-accent">observable</span> harness</span>
-        <span data-lang-content="tr">Gözlemlenebilir <span class="serif-accent">harness</span> üzerine notlar</span>
+        <span data-lang-content="en">Notes from the <span class="serif-accent">observable</span> harness.</span>
+        <span data-lang-content="tr">Gözlemlenebilir <span class="serif-accent">harness</span> üzerine notlar.</span>
       </h1>
       <p class="lede">
         <span data-lang-content="en">{SITE.description}</span>
@@ -88,6 +89,10 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
       </>
       )}
     </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:5rem;">
+    <Newsletter />
   </section>
 
   <script>

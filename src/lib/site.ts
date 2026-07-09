@@ -13,6 +13,11 @@ export const SOCIAL = {
   linkedin: "https://www.linkedin.com/company/105097977",
 };
 
+export const NEWSLETTER = {
+  url: "https://xrack.substack.com",
+  action: "https://xrack.substack.com/api/v1/free?nojs=true",
+};
+
 export const NAV = [
   { label: "Engineering", label_tr: "Mühendislik", tag: "engineering" },
   { label: "Field Notes", label_tr: "Saha Notları", tag: "field-notes" },
