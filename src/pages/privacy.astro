@@ -1,0 +1,210 @@
+---
+import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
+import { href } from "../lib/site";
+
+const email = "dogandursun@xrack.io";
+const updatedEn = "9 July 2026";
+const updatedTr = "9 Temmuz 2026";
+---
+
+<Base title="Privacy Policy" description="How XRack Technologies handles data on this blog: analytics, email, cookies, retention, and your rights.">
+  <article class="article">
+    <header class="wrap wrap--narrow article-head">
+      <span class="eyebrow-strong"><T en="Legal" tr="Yasal" /></span>
+      <h1 class="display-title"><T en="Privacy Policy" tr="Gizlilik Politikası" /></h1>
+      <p class="article-lead">
+        <T
+          en="How this blog handles your data — analytics, email, cookies, retention, and your rights under KVKK and GDPR."
+          tr="Bu blogun verinizi nasıl işlediği — analiz, e-posta, çerezler, saklama süreleri ve KVKK ile GDPR kapsamındaki haklarınız."
+        />
+      </p>
+      <div class="byline">
+        <T en={`Last updated: ${updatedEn}`} tr={`Son güncelleme: ${updatedTr}`} />
+      </div>
+    </header>
+
+    <!-- English -->
+    <div class="wrap wrap--narrow prose" data-lang-content="en">
+      <h2>Who we are</h2>
+      <p>
+        This blog (<code>blog.xrack.io</code>) is operated by <strong>XRack Technologies</strong>, the
+        data controller. For any privacy question or to exercise your rights, contact
+        <a href={`mailto:${email}`}>{email}</a>.
+      </p>
+
+      <h2>What we collect and why</h2>
+      <ul>
+        <li>
+          <strong>Analytics (only with your consent).</strong> If you accept the cookie banner, we load
+          Google Analytics 4 to understand which content performs — pages viewed, referrer/source,
+          approximate location (country/city, derived from IP; the IP itself is not stored), device and
+          browser, and clicks on outbound links, the “Book a Demo” CTA, and share buttons. We pass no
+          names, emails, or other identifiers into analytics. Nothing loads and no cookies are set until
+          you accept.
+        </li>
+        <li>
+          <strong>Hosting logs.</strong> The site is served by GitHub Pages, which may process your IP
+          address and request metadata transiently to deliver the site and protect against abuse. This is
+          standard server operation and not used by us for tracking.
+        </li>
+        <li>
+          <strong>Email you send us.</strong> If you email us, we process your address and message solely
+          to respond. We do not run a newsletter and do not add you to any mailing list.
+        </li>
+        <li>
+          <strong>Comments.</strong> Comments are powered by Giscus over GitHub Discussions. If you choose
+          to comment, you authenticate with your own GitHub account and your comment is stored in our
+          public GitHub repository; this is governed by GitHub’s privacy policy. We set no additional
+          cookies for comments, and the comment widget loads only when you scroll to it.
+        </li>
+      </ul>
+
+      <h2>Cookies &amp; consent</h2>
+      <p>
+        We use <strong>no non-essential cookies until you consent</strong>. The only non-essential scripts
+        are analytics, which load exclusively after you click “Accept”. Declining means nothing is loaded
+        and no analytics cookies are set. Your choice is stored locally in your browser
+        (<code>localStorage</code>), not in a cookie sent to us.
+      </p>
+      <p>
+        You can change or withdraw your choice at any time:
+        <button id="resetConsent" class="btn-ghost" type="button">Reset cookie choice</button>
+      </p>
+
+      <h2>Legal bases (KVKK &amp; GDPR)</h2>
+      <p>
+        We rely on your <strong>explicit consent</strong> for analytics (KVKK Art. 5/1; GDPR Art. 6(1)(a)),
+        and on <strong>legitimate interests</strong> for responding to your emails and for the hosting
+        provider’s security logging (GDPR Art. 6(1)(f)).
+      </p>
+
+      <h2>Sharing &amp; international transfers</h2>
+      <p>
+        We do not sell your data. Data is processed by our providers only to run the site: <strong>Google
+        </strong> (Analytics), <strong>GitHub</strong> (hosting and comments). These may process data
+        outside your country; such transfers rely on Standard Contractual Clauses and/or the EU-US Data
+        Privacy Framework.
+      </p>
+
+      <h2>Retention</h2>
+      <p>
+        Analytics event data is retained in GA4 for up to 14 months and then deleted; aggregated reports
+        may persist. Emails are kept only as long as needed to handle your request. Your consent choice
+        remains in your browser until you clear it or reset it above.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        Under KVKK (Art. 11) and GDPR you may request access, rectification, erasure, restriction, or
+        objection, withdraw consent at any time, and (GDPR) data portability. To exercise any of these,
+        email <a href={`mailto:${email}`}>{email}</a>. You may also complain to the Turkish Personal Data
+        Protection Authority (KVKK Kurumu) or your local EU data protection authority.
+      </p>
+
+      <h2>Children</h2>
+      <p>This blog is not directed at children and we do not knowingly collect their data.</p>
+
+      <h2>Changes</h2>
+      <p>We may update this policy; the “last updated” date above reflects the latest version.</p>
+    </div>
+
+    <!-- Türkçe -->
+    <div class="wrap wrap--narrow prose" data-lang-content="tr">
+      <h2>Kim olduğumuz</h2>
+      <p>
+        Bu blog (<code>blog.xrack.io</code>) veri sorumlusu <strong>XRack Technologies</strong> tarafından
+        işletilir. Gizlilikle ilgili her soru ya da haklarınızı kullanmak için:
+        <a href={`mailto:${email}`}>{email}</a>.
+      </p>
+
+      <h2>Neyi, neden topluyoruz</h2>
+      <ul>
+        <li>
+          <strong>Analiz (yalnızca onayınızla).</strong> Çerez bandını kabul ederseniz, hangi içeriğin işe
+          yaradığını anlamak için Google Analytics 4 yüklenir — görüntülenen sayfalar, yönlendiren/kaynak,
+          yaklaşık konum (IP’den türetilen ülke/şehir; IP’nin kendisi saklanmaz), cihaz ve tarayıcı, ayrıca
+          dış bağlantı, “Demo Planla” çağrısı ve paylaşım düğmelerine yapılan tıklamalar. Analize hiçbir
+          isim, e-posta veya kimlik bilgisi göndermeyiz. Siz kabul edene kadar hiçbir şey yüklenmez ve çerez
+          bırakılmaz.
+        </li>
+        <li>
+          <strong>Barındırma kayıtları.</strong> Site GitHub Pages üzerinde sunulur; site teslimi ve
+          kötüye kullanıma karşı koruma için IP adresinizi ve istek meta verilerini geçici olarak
+          işleyebilir. Bu, standart sunucu işleyişidir ve tarafımızca takip için kullanılmaz.
+        </li>
+        <li>
+          <strong>Bize gönderdiğiniz e-posta.</strong> Bize e-posta gönderirseniz, adresinizi ve mesajınızı
+          yalnızca yanıt vermek için işleriz. Bülten yayınlamıyoruz ve sizi hiçbir listeye eklemiyoruz.
+        </li>
+        <li>
+          <strong>Yorumlar.</strong> Yorumlar, GitHub Discussions üzerinde Giscus ile sağlanır. Yorum
+          yapmayı seçerseniz kendi GitHub hesabınızla oturum açarsınız ve yorumunuz herkese açık GitHub
+          deposunda saklanır; bu, GitHub’ın gizlilik politikasına tabidir. Yorumlar için ek çerez
+          bırakmıyoruz ve yorum bileşeni yalnızca ona kaydırdığınızda yüklenir.
+        </li>
+      </ul>
+
+      <h2>Çerezler ve onay</h2>
+      <p>
+        <strong>Siz onaylamadan hiçbir zorunlu olmayan çerez kullanmıyoruz.</strong> Tek zorunlu olmayan
+        betik analizdir ve yalnızca “Kabul et” dedikten sonra yüklenir. Reddetmek, hiçbir şeyin
+        yüklenmemesi ve analiz çerezi bırakılmaması demektir. Seçiminiz tarayıcınızda yerel olarak
+        (<code>localStorage</code>) tutulur, bize gönderilen bir çerezde değil.
+      </p>
+      <p>
+        Seçiminizi istediğiniz zaman değiştirebilir veya geri çekebilirsiniz:
+        <button id="resetConsentTr" class="btn-ghost" type="button">Çerez tercihini sıfırla</button>
+      </p>
+
+      <h2>Hukuki dayanaklar (KVKK ve GDPR)</h2>
+      <p>
+        Analiz için <strong>açık rızanıza</strong> (KVKK m.5/1; GDPR m.6(1)(a)), e-postalarınıza yanıt
+        vermek ve barındırma sağlayıcısının güvenlik kayıtları için <strong>meşru menfaate</strong> (GDPR
+        m.6(1)(f)) dayanırız.
+      </p>
+
+      <h2>Paylaşım ve yurt dışı aktarım</h2>
+      <p>
+        Verinizi satmıyoruz. Veri, yalnızca siteyi çalıştırmak için sağlayıcılarımızca işlenir:
+        <strong>Google</strong> (Analiz), <strong>GitHub</strong> (barındırma ve yorumlar). Bunlar veriyi
+        ülkeniz dışında işleyebilir; bu tür aktarımlar Standart Sözleşme Hükümleri ve/veya AB-ABD Veri
+        Gizliliği Çerçevesi’ne dayanır.
+      </p>
+
+      <h2>Saklama süreleri</h2>
+      <p>
+        Analiz olay verileri GA4’te en fazla 14 ay tutulur ve ardından silinir; toplulaştırılmış raporlar
+        kalabilir. E-postalar yalnızca talebinizi karşılamak için gerekli süre boyunca saklanır. Onay
+        tercihiniz, siz silene veya yukarıdan sıfırlayana kadar tarayıcınızda kalır.
+      </p>
+
+      <h2>Haklarınız</h2>
+      <p>
+        KVKK (m.11) ve GDPR kapsamında erişim, düzeltme, silme, kısıtlama veya itiraz talep edebilir,
+        rızanızı istediğiniz an geri çekebilir ve (GDPR) veri taşınabilirliği isteyebilirsiniz. Bunları
+        kullanmak için <a href={`mailto:${email}`}>{email}</a> adresine yazın. Ayrıca Kişisel Verileri
+        Koruma Kurumu’na (KVKK) ya da bulunduğunuz AB veri koruma otoritesine şikâyette bulunabilirsiniz.
+      </p>
+
+      <h2>Çocuklar</h2>
+      <p>Bu blog çocuklara yönelik değildir ve bilerek onların verisini toplamayız.</p>
+
+      <h2>Değişiklikler</h2>
+      <p>Bu politikayı güncelleyebiliriz; yukarıdaki “son güncelleme” tarihi en güncel sürümü gösterir.</p>
+    </div>
+
+    <div class="wrap wrap--narrow" style="margin-top:2.5rem;">
+      <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
+    </div>
+  </article>
+</Base>
+
+<script>
+  const reset = () => {
+    try { localStorage.removeItem("xrack-analytics-consent"); } catch (e) {}
+    location.reload();
+  };
+  document.getElementById("resetConsent")?.addEventListener("click", reset);
+  document.getElementById("resetConsentTr")?.addEventListener("click", reset);
+</script>

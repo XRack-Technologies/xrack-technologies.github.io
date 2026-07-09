@@ -1,6 +1,6 @@
 ---
 import T from "./T.astro";
-import { GA_ID, SITE } from "../lib/site";
+import { GA_ID, SITE, href } from "../lib/site";
 
 const gaId = GA_ID;
 const ctaUrl = SITE.cta;
@@ -22,6 +22,8 @@ const ctaUrl = SITE.cta;
             en="We use privacy-friendly analytics to see which content lands. Nothing is collected until you accept — no cookies, no tracking otherwise."
             tr="Hangi içeriğin işe yaradığını görmek için gizlilik-dostu analiz kullanıyoruz. Kabul edene kadar hiçbir şey toplanmaz — çerez yok, aksi halde takip yok."
           />
+          {" "}
+          <a href={href("privacy")} class="consent__link"><T en="Learn more" tr="Ayrıntılar" /></a>
         </p>
         <div class="consent__actions">
           <button id="consent-decline" class="btn-ghost" type="button">
@@ -147,6 +149,11 @@ const ctaUrl = SITE.cta;
     font-size: 13.5px;
     line-height: 1.55;
     color: hsl(var(--muted-foreground));
+  }
+  .consent__link {
+    color: hsl(var(--primary-soft));
+    text-decoration: underline;
+    white-space: nowrap;
   }
   .consent__actions {
     display: flex;

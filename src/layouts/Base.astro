@@ -264,6 +264,7 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
               <ul>
                 <li><a href="mailto:dogandursun@xrack.io">dogandursun@xrack.io</a></li>
                 <li><a href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a></li>
+                <li><a href={href("privacy")}><T en="Privacy" tr="Gizlilik" /></a></li>
               </ul>
             </div>
           </div>
@@ -271,7 +272,11 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
 
         <div class="site-foot-bottom">
           <div>&copy; {year} XRack Technologies. <T en="All rights reserved." tr="Tüm hakları saklıdır." /></div>
-          <div><T en="Built with cognition and passion." tr="Bilişle ve tutkuyla inşa edildi." /></div>
+          <div class="site-foot-bottom__links">
+            <a href={href("privacy")}><T en="Privacy" tr="Gizlilik" /></a>
+            <span aria-hidden="true">·</span>
+            <a href={href("press")}><T en="Press" tr="Basın" /></a>
+          </div>
         </div>
       </div>
     </footer>
