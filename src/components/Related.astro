@@ -1,0 +1,39 @@
+---
+import PostCard from "./PostCard.astro";
+import T from "./T.astro";
+import type { CollectionEntry } from "astro:content";
+
+// Topical "read next" block. Renders nothing when there are no other posts.
+interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class="related wrap" aria-label="Related posts">
+      <h2 class="related__title">
+        <T en="Read next" tr="Sıradaki okuma" />
+      </h2>
+      <div class="card-grid">
+        {posts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .related {
+    margin-top: 3.5rem;
+  }
+  .related__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-size: 1.4rem;
+    margin: 0 0 1.5rem;
+  }
+</style>
