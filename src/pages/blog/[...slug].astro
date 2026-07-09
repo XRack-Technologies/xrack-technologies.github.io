@@ -9,6 +9,7 @@ import ShareFab from "../../components/ShareFab.astro";
 import Comments from "../../components/Comments.astro";
 import Toc from "../../components/Toc.astro";
 import Related from "../../components/Related.astro";
+import { resolveAuthor } from "../../lib/authors";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -61,6 +62,8 @@ const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
 const enUrl = abs(href(`blog/${post.id}/`));
 const trUrl = abs(href(`blog/${post.id}/tr/`));
 const selfUrl = isTr ? trUrl : enUrl;
+const authorInfo = resolveAuthor(author);
+const authorUrl = abs(href(`authors/${authorInfo.slug}`));
 const ogImage = (l: "en" | "tr") =>
   cover ? abs(cover) : abs(href(`og/${post.id}${l === "tr" ? "/tr" : ""}.png`));
 const image = ogImage(lang as "en" | "tr");
@@ -73,7 +76,13 @@ const jsonLd = {
   description: ogDescription,
   datePublished: pubDate.toISOString(),
   dateModified: (post.data.updatedDate ?? pubDate).toISOString(),
-  author: { "@type": "Person", name: author },
+  author: {
+    "@type": "Person",
+    name: authorInfo.name,
+    url: authorUrl,
+    jobTitle: authorInfo.role,
+    sameAs: authorInfo.sameAs,
+  },
   publisher: { "@type": "Organization", name: "XRack Technologies" },
   keywords: keywords.join(", "),
   articleSection: tags[0],
@@ -136,7 +145,9 @@ const jsonLd = {
           )
         }
       </p>
-      <div class="byline"><T en="by" tr="yazan" /> <b>{author}</b></div>
+      <div class="byline">
+        <T en="by" tr="yazan" /> <a href={href(`authors/${authorInfo.slug}`)}><b>{authorInfo.name}</b></a>
+      </div>
     </header>
 
     {

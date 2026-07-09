@@ -1,0 +1,141 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import PostCard from "../../components/PostCard.astro";
+import T from "../../components/T.astro";
+import { AUTHORS, resolveAuthor, type Author } from "../../lib/authors";
+import { href } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return Object.values(AUTHORS).map((author) => ({
+    params: { slug: author.slug },
+    props: {
+      author,
+      posts: posts
+        .filter((p) => resolveAuthor(p.data.author).slug === author.slug)
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
+    },
+  }));
+}
+
+interface Props {
+  author: Author;
+  posts: Awaited<ReturnType<typeof getCollection<"blog">>>;
+}
+const { author, posts } = Astro.props as Props;
+
+const nameWords = author.name.split(/\s+/).filter(Boolean);
+const initials = (
+  (nameWords[0]?.[0] ?? "") + (nameWords.length > 1 ? (nameWords[nameWords.length - 1][0] ?? "") : "")
+).toUpperCase();
+
+const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
+const pageUrl = abs(href(`authors/${author.slug}`));
+
+const linkLabel = (u: string) => {
+  const h = u.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0];
+  if (h.includes("linkedin")) return "LinkedIn";
+  if (h === "x.com" || h.includes("twitter")) return "X";
+  if (h.includes("github")) return "GitHub";
+  return h;
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: author.name,
+  jobTitle: author.role,
+  url: pageUrl,
+  ...(author.email ? { email: `mailto:${author.email}` } : {}),
+  sameAs: author.sameAs,
+  worksFor: { "@type": "Organization", name: "XRack Technologies", url: "https://xrack.io" },
+};
+---
+
+<Base title={author.name} description={author.bioEn} jsonLd={jsonLd}>
+  <section class="hero" style="padding-bottom:1rem;">
+    <div class="wrap section-head">
+      <div class="author-head">
+        <span class="author-avatar" aria-hidden="true">{initials}</span>
+        <div>
+          <span class="eyebrow-strong"><T en="Author" tr="Yazar" /></span>
+          <h1 class="display-title" style="margin:.25rem 0 0;">{author.name}</h1>
+          <p class="author-role">{author.role}</p>
+        </div>
+      </div>
+      <p class="lede author-bio">
+        <span data-lang-content="en">{author.bioEn}</span>
+        <span data-lang-content="tr">{author.bioTr}</span>
+      </p>
+      <div class="author-links">
+        {author.sameAs.map((u) => (
+          <a class="btn-ghost" href={u} target="_blank" rel="noopener me">{linkLabel(u)}</a>
+        ))}
+        {author.email && (
+          <a class="btn-ghost" href={`mailto:${author.email}`}>
+            <T en="Email" tr="E-posta" />
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="feed" style="padding-top:1.5rem;">
+    <div class="wrap">
+      <h2 class="section-mini"><T en="Posts" tr="Yazılar" /></h2>
+      {
+        posts.length ? (
+          <div class="card-grid">{posts.map((post) => <PostCard post={post} />)}</div>
+        ) : (
+          <p class="empty"><T en="No posts yet." tr="Henüz yazı yok." /></p>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .author-head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .author-avatar {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: hsl(var(--primary-foreground));
+    background-image: linear-gradient(180deg, hsl(var(--primary-soft)), hsl(var(--primary)));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18), 0 8px 20px -8px hsl(var(--primary) / 0.6);
+  }
+  .author-role {
+    color: hsl(var(--muted-foreground));
+    font-size: 14px;
+    margin: 0.35rem 0 0;
+  }
+  .author-bio {
+    margin-top: 1.5rem;
+  }
+  .author-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+  .section-mini {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+    margin: 0 0 1.25rem;
+  }
+</style>
