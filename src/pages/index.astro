@@ -77,6 +77,11 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
       <div class="card-grid" id="postGrid">
         {posts.map((post) => <PostCard post={post} />)}
       </div>
+      <div class="load-more">
+        <button id="loadMore" class="btn-ghost" type="button" hidden>
+          <T en="Load more" tr="Daha fazla" />
+        </button>
+      </div>
       <p class="empty" id="feedEmpty" hidden>
         <T en="No posts match your search." tr="Eşleşen yazı bulunamadı." />
       </p>
@@ -89,13 +94,16 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
     const grid = document.getElementById("postGrid");
     const searchInput = document.getElementById("searchInput") as HTMLInputElement | null;
     const emptyEl = document.getElementById("feedEmpty");
+    const loadMore = document.getElementById("loadMore");
     const cards = Array.from(document.querySelectorAll<HTMLElement>(".post-card"));
     const chips = Array.from(document.querySelectorAll<HTMLElement>(".filter-chip"));
     const sortOpts = Array.from(document.querySelectorAll<HTMLElement>(".sort-opt"));
 
     if (grid && searchInput && emptyEl) {
+      const PAGE = 9;
       let activeTag = "all";
       let sortMode = "newest";
+      let visible = PAGE;
 
       const apply = () => {
         const q = searchInput.value.trim().toLowerCase();
@@ -110,11 +118,18 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
           return sortMode === "oldest" ? da.localeCompare(db) : db.localeCompare(da);
         });
         cards.forEach((c) => { c.style.display = "none"; });
-        shown.forEach((c) => { c.style.display = ""; c.classList.add("is-visible"); grid.appendChild(c); });
+        // Paginate client-side so search/filter/sort still span all posts.
+        shown.forEach((c, i) => {
+          if (i < visible) { c.style.display = ""; c.classList.add("is-visible"); }
+          grid.appendChild(c);
+        });
         emptyEl.hidden = shown.length > 0;
+        if (loadMore) loadMore.hidden = shown.length <= visible;
       };
 
-      searchInput.addEventListener("input", apply);
+      const reset = () => { visible = PAGE; };
+
+      searchInput.addEventListener("input", () => { reset(); apply(); });
       const setActive = (group: HTMLElement[], current: HTMLElement) => {
         group.forEach((el) => {
           const on = el === current;
@@ -126,6 +141,7 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
         ch.addEventListener("click", () => {
           activeTag = ch.dataset.tag ?? "all";
           setActive(chips, ch);
+          reset();
           apply();
         }),
       );
@@ -133,9 +149,11 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
         s.addEventListener("click", () => {
           sortMode = s.dataset.sort ?? "newest";
           setActive(sortOpts, s);
+          reset();
           apply();
         }),
       );
+      loadMore?.addEventListener("click", () => { visible += PAGE; apply(); });
       apply();
     }
   </script>

@@ -1,0 +1,126 @@
+---
+import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
+import { getCollection } from "astro:content";
+import { href, formatDate, formatDateTr } from "../lib/site";
+import { renderBilingual } from "../lib/i18n";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+
+const hasTr = (p: (typeof posts)[number]) =>
+  renderBilingual(p.body ?? "").bilingual || !!p.data.title_tr || !!p.data.description_tr;
+
+const byYear = new Map<number, typeof posts>();
+for (const p of posts) {
+  const y = p.data.pubDate.getUTCFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(p);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+
+<Base title="Archive" description="Every post, by date.">
+  <section class="hero" style="padding-bottom:1rem;">
+    <div class="wrap section-head">
+      <span class="eyebrow-strong"><T en="Archive" tr="Arşiv" /></span>
+      <h1 class="display-title"><T en="Everything, by date" tr="Tarihe göre her şey" /></h1>
+      <p class="lede">
+        <T en={`${posts.length} ${posts.length === 1 ? "post" : "posts"}`} tr={`${posts.length} yazı`} />
+      </p>
+    </div>
+  </section>
+
+  <section class="feed" style="padding-top:1rem;">
+    <div class="wrap wrap--narrow">
+      {
+        posts.length === 0 ? (
+          <p class="empty">
+            <T en="No posts yet." tr="Henüz yazı yok." />
+          </p>
+        ) : (
+          years.map((y) => (
+            <div class="archive-year">
+              <h2 class="archive-year__label">{y}</h2>
+              <ul class="archive-list">
+                {byYear.get(y)!.map((p) => (
+                  <li class="archive-item">
+                    <a
+                      class="archive-link"
+                      href={href(`blog/${p.id}`)}
+                      data-href-tr={hasTr(p) ? href(`blog/${p.id}/tr`) : undefined}
+                    >
+                      <time class="archive-date" datetime={p.data.pubDate.toISOString()}>
+                        <span data-lang-content="en">{formatDate(p.data.pubDate)}</span>
+                        <span data-lang-content="tr">{formatDateTr(p.data.pubDate)}</span>
+                      </time>
+                      <span class="archive-title">
+                        <span data-lang-content="en">{p.data.title}</span>
+                        <span data-lang-content="tr">{p.data.title_tr ?? p.data.title}</span>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        )
+      }
+      <div style="margin-top:2.5rem;">
+        <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .archive-year {
+    margin-bottom: 2.5rem;
+  }
+  .archive-year__label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: hsl(var(--muted-foreground));
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .archive-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .archive-link {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.65rem 0;
+    color: hsl(var(--foreground));
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+  }
+  .archive-link:hover .archive-title {
+    color: hsl(var(--primary-soft));
+  }
+  .archive-date {
+    flex-shrink: 0;
+    width: 7.5rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+  }
+  .archive-title {
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+  @media (max-width: 520px) {
+    .archive-link {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .archive-date {
+      width: auto;
+    }
+  }
+</style>

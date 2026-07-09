@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import PostCard from "../../../components/PostCard.astro";
+import T from "../../../components/T.astro";
+import { NAV } from "../../../lib/site";
+import type { GetStaticPaths, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const tags = [...new Set([...NAV.map((n) => n.tag), ...posts.flatMap((p) => p.data.tags)])];
+  return tags.flatMap((tag) => {
+    const navItem = NAV.find((n) => n.tag === tag);
+    const tagPosts = posts
+      .filter((p) => p.data.tags.includes(tag))
+      .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+    return paginate(tagPosts, {
+      params: { tag },
+      props: { label: navItem?.label ?? tag, labelTr: navItem?.label_tr ?? tag },
+      pageSize: 9,
+    });
+  });
+};
+
+type Props = { page: Page<CollectionEntry<"blog">>; label: string; labelTr: string };
+const { page, label, labelTr } = Astro.props as Props;
+const count = page.total;
+---
+
+<Base title={label}>
+  <section class="hero" style="padding-bottom:1rem;">
+    <div class="wrap section-head">
+      <span class="eyebrow-strong"><T en="Category" tr="Kategori" /></span>
+      <h1 class="display-title"><T en={label} tr={labelTr} /></h1>
+      <p class="lede">
+        <T en={`${count} ${count === 1 ? "post" : "posts"}`} tr={`${count} yazı`} />
+      </p>
+    </div>
+  </section>
+
+  <section class="feed" style="padding-top:1.5rem;">
+    <div class="wrap">
+      {
+        count ? (
+          <>
+            <div class="card-grid">{page.data.map((post) => <PostCard post={post} />)}</div>
+            {page.lastPage > 1 && (
+              <nav class="pager" aria-label="Pagination">
+                {page.url.prev ? (
+                  <a class="btn-ghost" href={page.url.prev}>
+                    &larr; <T en="Prev" tr="Önceki" />
+                  </a>
+                ) : (
+                  <span class="btn-ghost is-disabled">&larr; <T en="Prev" tr="Önceki" /></span>
+                )}
+                <span class="pager__info">{page.currentPage} / {page.lastPage}</span>
+                {page.url.next ? (
+                  <a class="btn-ghost" href={page.url.next}>
+                    <T en="Next" tr="Sonraki" /> &rarr;
+                  </a>
+                ) : (
+                  <span class="btn-ghost is-disabled"><T en="Next" tr="Sonraki" /> &rarr;</span>
+                )}
+              </nav>
+            )}
+          </>
+        ) : (
+          <p class="empty">
+            <T en="No posts in this category yet; check back soon." tr="Bu kategoride henüz yazı yok; yakında eklenecek." />
+          </p>
+        )
+      }
+    </div>
+  </section>
+</Base>
