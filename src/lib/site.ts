@@ -13,9 +13,11 @@ export const SOCIAL = {
   linkedin: "https://www.linkedin.com/company/105097977",
 };
 
+// Newsletter runs on EmailOctopus (free). We embed their hosted form widget
+// (double opt-in + unsubscribe handled by EmailOctopus); it renders inside our
+// own on-brand card.
 export const NEWSLETTER = {
-  url: "https://xrack.substack.com",
-  subscribe: "https://xrack.substack.com/subscribe",
+  emailOctopusFormId: "1d2ae97a-7bbd-11f1-9537-d10046efbb20",
 };
 
 export const NAV = [
