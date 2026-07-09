@@ -1,210 +1,474 @@
 ---
 import Base from "../layouts/Base.astro";
 import T from "../components/T.astro";
-import { href } from "../lib/site";
+import { href, SITE } from "../lib/site";
 
 const email = "support@xrack.io";
 const updatedEn = "9 July 2026";
 const updatedTr = "9 Temmuz 2026";
+
+const ICON: Record<string, string> = {
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+  ban: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+  toggle: '<rect x="1.5" y="6.5" width="21" height="11" rx="5.5"/><circle cx="16.5" cy="12" r="3"/>',
+  server: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+  building: '<path d="M3 21h18M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M10 8h.01M14 8h.01M10 12h.01M14 12h.01M10 21v-4h4v4"/>',
+  database: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  cookie: '<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5h.01M15 9h.01M9.5 15h.01M14.5 14.5h.01M12 12h.01"/>',
+  scale: '<path d="M12 3v18M8 21h8M4 7h16M7 7l-3 6a3 3 0 0 0 6 0zM17 7l3 6a3 3 0 0 1-6 0z"/>',
+  network: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  userCheck: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/>',
+  eyeOff: '<path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a13 13 0 0 1-1.67 2.68M6.6 6.6C4 8.3 2 12 2 12s3 8 10 8a9.7 9.7 0 0 0 5.4-1.6"/><path d="M3 3l18 18"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  child: '<circle cx="12" cy="5" r="3"/><path d="M12 8v7M8 11h8M9 21l3-6 3 6"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/>',
+};
+const svg = (k: string) =>
+  `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
+
+const glance = [
+  { icon: "cookie", t: { en: "No cookies until you consent", tr: "Onaylamadan çerez yok" }, s: { en: "Analytics load only after you click Accept — nothing before.", tr: "Analiz yalnızca Kabul et'e tıklayınca yüklenir — öncesinde hiçbir şey." } },
+  { icon: "ban", t: { en: "We never sell your data", tr: "Verinizi asla satmayız" }, s: { en: "No ads, no data brokers, no profiling for third parties.", tr: "Reklam yok, veri simsarı yok, üçüncü taraf profilleme yok." } },
+  { icon: "toggle", t: { en: "Analytics is opt-in", tr: "Analiz isteğe bağlı" }, s: { en: "Withdraw or reset your choice at any time.", tr: "Seçiminizi istediğiniz an geri çekin veya sıfırlayın." } },
+  { icon: "server", t: { en: "Fonts are self-hosted", tr: "Fontlar kendi sunucumuzda" }, s: { en: "No third-party font CDN ever sees your visit.", tr: "Hiçbir üçüncü taraf font CDN'i ziyaretinizi görmez." } },
+];
+
+const practices = [
+  { d: { en: "Analytics events (GA4)", tr: "Analiz olayları (GA4)" }, p: { en: "Understand which content performs", tr: "Hangi içeriğin işe yaradığını anlamak" }, b: { en: "Consent", tr: "Açık rıza" }, r: { en: "≤ 14 months", tr: "≤ 14 ay" } },
+  { d: { en: "Hosting logs (IP, request metadata)", tr: "Barındırma kayıtları (IP, istek meta verisi)" }, p: { en: "Serve the site, prevent abuse", tr: "Siteyi sunmak, kötüye kullanımı önlemek" }, b: { en: "Legitimate interest", tr: "Meşru menfaat" }, r: { en: "Transient (provider-managed)", tr: "Geçici (sağlayıcı yönetir)" } },
+  { d: { en: "Email you send us", tr: "Bize gönderdiğiniz e-posta" }, p: { en: "Reply to your message", tr: "Mesajınıza yanıt vermek" }, b: { en: "Legitimate interest", tr: "Meşru menfaat" }, r: { en: "As long as needed to resolve it", tr: "Talebi çözmek için gerekli süre" } },
+  { d: { en: "Comments (via GitHub)", tr: "Yorumlar (GitHub üzerinden)" }, p: { en: "Public discussion you start", tr: "Sizin başlattığınız herkese açık tartışma" }, b: { en: "Consent", tr: "Açık rıza" }, r: { en: "Until you delete it on GitHub", tr: "GitHub'da silene kadar" } },
+  { d: { en: "Demo booking (Calendly)", tr: "Demo randevusu (Calendly)" }, p: { en: "Schedule a call you request", tr: "Talep ettiğiniz görüşmeyi planlamak" }, b: { en: "Consent", tr: "Açık rıza" }, r: { en: "Per Calendly's policy", tr: "Calendly politikasına göre" } },
+];
+
+const processors = [
+  { name: "Google (Analytics 4)", p: { en: "Audience analytics", tr: "Kitle analizi" }, region: "US / global", url: "https://policies.google.com/privacy" },
+  { name: "GitHub (Pages + Discussions)", p: { en: "Hosting & comments", tr: "Barındırma ve yorumlar" }, region: "US / global", url: "https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" },
+  { name: "Calendly", p: { en: "Demo scheduling", tr: "Demo planlama" }, region: "US", url: "https://calendly.com/privacy" },
+];
+
+const sections: { id: string; icon: string; t: { en: string; tr: string }; body: { en: string; tr: string } }[] = [
+  {
+    id: "controller",
+    icon: "building",
+    t: { en: "Who we are", tr: "Kim olduğumuz" },
+    body: {
+      en: `<p>This blog (<code>blog.xrack.io</code>) is operated by <strong>XRack Technologies</strong>, which acts as the <strong>data controller</strong> for the personal data described here. For any privacy question, or to exercise your rights, contact us at <a href="mailto:${email}">${email}</a>.</p>`,
+      tr: `<p>Bu blog (<code>blog.xrack.io</code>), burada açıklanan kişisel veriler için <strong>veri sorumlusu</strong> olarak hareket eden <strong>XRack Technologies</strong> tarafından işletilir. Gizlilikle ilgili her soru ya da haklarınızı kullanmak için <a href="mailto:${email}">${email}</a> adresinden bize ulaşın.</p>`,
+    },
+  },
+  {
+    id: "data-we-process",
+    icon: "database",
+    t: { en: "What we process, and why", tr: "Neyi, neden işliyoruz" },
+    body: {
+      en: `<p>We keep data collection to the minimum needed to run the blog and, only with your consent, to understand what readers find useful. We never ask for names, accounts, or profiles to read.</p>
+      <ul>
+        <li><strong>Analytics — only with your consent.</strong> If you accept the cookie banner, we load Google Analytics 4 to see which content performs: pages viewed, referrer/source, approximate location (country/city derived from IP; the IP itself is not stored), device and browser, and clicks on outbound links, the "Book a Demo" CTA, and share buttons. We pass no names, emails, or identifiers into analytics.</li>
+        <li><strong>Hosting logs.</strong> The site is served by GitHub Pages, which may transiently process your IP address and request metadata to deliver the site and protect against abuse — standard server operation, not used by us for tracking.</li>
+        <li><strong>Email you send us.</strong> If you email us, we process your address and message solely to respond. We run no newsletter and add you to no mailing list.</li>
+        <li><strong>Comments.</strong> Comments use Giscus over GitHub Discussions. If you choose to comment, you authenticate with your own GitHub account and your comment is stored in our public GitHub repository, governed by GitHub's privacy policy. The widget loads only when you scroll to it and sets no extra cookies.</li>
+        <li><strong>Demo booking.</strong> The "Book a Demo" button links to Calendly. If you schedule there, Calendly processes the details you provide under its own privacy policy; that data is not stored by this blog.</li>
+      </ul>`,
+      tr: `<p>Veri toplamayı, blogu çalıştırmak ve yalnızca sizin onayınızla okuyucuların neyi faydalı bulduğunu anlamak için gereken asgari düzeyde tutarız. Okumak için isim, hesap veya profil istemeyiz.</p>
+      <ul>
+        <li><strong>Analiz — yalnızca onayınızla.</strong> Çerez bandını kabul ederseniz, hangi içeriğin işe yaradığını görmek için Google Analytics 4 yüklenir: görüntülenen sayfalar, yönlendiren/kaynak, yaklaşık konum (IP'den türetilen ülke/şehir; IP'nin kendisi saklanmaz), cihaz ve tarayıcı, ayrıca dış bağlantılara, "Demo Planla" çağrısına ve paylaşım düğmelerine tıklamalar. Analize hiçbir isim, e-posta veya kimlik göndermeyiz.</li>
+        <li><strong>Barındırma kayıtları.</strong> Site GitHub Pages üzerinde sunulur; site teslimi ve kötüye kullanıma karşı koruma için IP adresinizi ve istek meta verilerini geçici olarak işleyebilir — standart sunucu işleyişidir, tarafımızca takip için kullanılmaz.</li>
+        <li><strong>Bize gönderdiğiniz e-posta.</strong> Bize e-posta gönderirseniz, adresinizi ve mesajınızı yalnızca yanıt vermek için işleriz. Bülten yayınlamıyor, sizi hiçbir listeye eklemiyoruz.</li>
+        <li><strong>Yorumlar.</strong> Yorumlar, GitHub Discussions üzerinde Giscus ile sağlanır. Yorum yapmayı seçerseniz kendi GitHub hesabınızla oturum açarsınız ve yorumunuz, GitHub'ın gizlilik politikasına tabi olarak herkese açık GitHub depomuzda saklanır. Bileşen yalnızca ona kaydırdığınızda yüklenir ve ek çerez bırakmaz.</li>
+        <li><strong>Demo randevusu.</strong> "Demo Planla" düğmesi Calendly'ye bağlanır. Orada randevu alırsanız, verdiğiniz bilgiler Calendly tarafından kendi gizlilik politikası kapsamında işlenir; bu veri bu blogda saklanmaz.</li>
+      </ul>`,
+    },
+  },
+  {
+    id: "cookies",
+    icon: "cookie",
+    t: { en: "Cookies & consent", tr: "Çerezler ve onay" },
+    body: {
+      en: `<p>We use <strong>no non-essential cookies until you consent</strong>. The only non-essential scripts are analytics, which load exclusively after you click "Accept". Declining means nothing loads and no analytics cookies are set. Your choice is stored locally in your browser (<code>localStorage</code>), not in a cookie sent to us, so it never leaves your device.</p>
+      <p>You can change or withdraw your choice at any time using the control at the top of this page, or by clearing your browser storage for this site.</p>`,
+      tr: `<p><strong>Siz onaylamadan hiçbir zorunlu olmayan çerez kullanmıyoruz.</strong> Tek zorunlu olmayan betik analizdir ve yalnızca "Kabul et" dedikten sonra yüklenir. Reddetmek, hiçbir şeyin yüklenmemesi ve analiz çerezi bırakılmaması demektir. Seçiminiz, bize gönderilen bir çerezde değil, tarayıcınızda yerel olarak (<code>localStorage</code>) tutulur; yani cihazınızdan hiç çıkmaz.</p>
+      <p>Seçiminizi, bu sayfanın üstündeki kontrolü kullanarak ya da bu sitenin tarayıcı depolamasını temizleyerek istediğiniz zaman değiştirebilir veya geri çekebilirsiniz.</p>`,
+    },
+  },
+  {
+    id: "legal-bases",
+    icon: "scale",
+    t: { en: "Legal bases (KVKK & GDPR)", tr: "Hukuki dayanaklar (KVKK ve GDPR)" },
+    body: {
+      en: `<p>We rely on your <strong>explicit consent</strong> for analytics (KVKK Art. 5/1; GDPR Art. 6(1)(a)), and on <strong>legitimate interests</strong> for responding to emails and for the hosting provider's security logging (GDPR Art. 6(1)(f)). Where you initiate comments or a demo booking, processing rests on your consent to that specific interaction.</p>`,
+      tr: `<p>Analiz için <strong>açık rızanıza</strong> (KVKK m.5/1; GDPR m.6(1)(a)); e-postalara yanıt vermek ve barındırma sağlayıcısının güvenlik kayıtları için <strong>meşru menfaate</strong> (GDPR m.6(1)(f)) dayanırız. Yorum veya demo randevusunu siz başlattığınızda, işleme o özel etkileşime dair rızanıza dayanır.</p>`,
+    },
+  },
+  {
+    id: "sub-processors",
+    icon: "network",
+    t: { en: "Sub-processors", tr: "Alt işleyenler" },
+    body: {
+      en: `<p>We do not sell your data. It is processed by a small set of providers strictly to run the site. Each operates under its own privacy policy:</p>`,
+      tr: `<p>Verinizi satmıyoruz. Yalnızca siteyi çalıştırmak için küçük bir sağlayıcı grubu tarafından işlenir. Her biri kendi gizlilik politikası kapsamında çalışır:</p>`,
+    },
+  },
+  {
+    id: "transfers",
+    icon: "globe",
+    t: { en: "International transfers", tr: "Yurt dışı aktarım" },
+    body: {
+      en: `<p>Our providers may process data outside your country (for example, in the United States). Such transfers rely on appropriate safeguards — Standard Contractual Clauses and/or the EU-US Data Privacy Framework — and, for transfers from Türkiye, on the mechanisms permitted under KVKK.</p>`,
+      tr: `<p>Sağlayıcılarımız veriyi ülkeniz dışında (örneğin Amerika Birleşik Devletleri'nde) işleyebilir. Bu tür aktarımlar uygun güvencelere — Standart Sözleşme Hükümleri ve/veya AB-ABD Veri Gizliliği Çerçevesi'ne — ve Türkiye'den yapılan aktarımlar için KVKK kapsamında izin verilen mekanizmalara dayanır.</p>`,
+    },
+  },
+  {
+    id: "retention",
+    icon: "clock",
+    t: { en: "Retention", tr: "Saklama süreleri" },
+    body: {
+      en: `<p>Analytics event data is retained in GA4 for up to 14 months and then deleted; aggregated reports may persist. Emails are kept only as long as needed to handle your request. Comments live in GitHub until you delete them. Your consent choice remains in your browser until you clear or reset it.</p>`,
+      tr: `<p>Analiz olay verileri GA4'te en fazla 14 ay tutulur ve ardından silinir; toplulaştırılmış raporlar kalabilir. E-postalar yalnızca talebinizi karşılamak için gerekli süre boyunca saklanır. Yorumlar, siz silene kadar GitHub'da durur. Onay tercihiniz, siz temizleyene ya da sıfırlayana kadar tarayıcınızda kalır.</p>`,
+    },
+  },
+  {
+    id: "security",
+    icon: "lock",
+    t: { en: "Security", tr: "Güvenlik" },
+    body: {
+      en: `<p>The site is served over HTTPS as a static build, which keeps its attack surface small: there is no application database, no login, and no server-side store of reader data on our side. We rely on our providers' industry-standard safeguards and design the site to collect as little as possible in the first place.</p>`,
+      tr: `<p>Site, statik bir derleme olarak HTTPS üzerinden sunulur; bu da saldırı yüzeyini küçük tutar: uygulama veritabanı yok, oturum açma yok ve tarafımızda okuyucu verisinin sunucu tarafında saklanması yok. Sağlayıcılarımızın sektör standardı güvencelerine dayanır ve siteyi baştan mümkün olduğunca az veri toplayacak şekilde tasarlarız.</p>`,
+    },
+  },
+  {
+    id: "your-rights",
+    icon: "userCheck",
+    t: { en: "Your rights", tr: "Haklarınız" },
+    body: {
+      en: `<p>Under KVKK (Art. 11) and the GDPR you may request access, rectification, erasure, restriction, or objection; withdraw consent at any time; and (GDPR) request data portability. To exercise any of these, email <a href="mailto:${email}">${email}</a> — we respond within the timelines the law requires. You may also complain to the Turkish Personal Data Protection Authority (<a href="https://www.kvkk.gov.tr" target="_blank" rel="noopener">KVKK Kurumu</a>) or your local EU data protection authority.</p>`,
+      tr: `<p>KVKK (m.11) ve GDPR kapsamında erişim, düzeltme, silme, kısıtlama veya itiraz talep edebilir; rızanızı istediğiniz an geri çekebilir ve (GDPR) veri taşınabilirliği isteyebilirsiniz. Bunları kullanmak için <a href="mailto:${email}">${email}</a> adresine yazın — yasanın gerektirdiği süreler içinde yanıt veririz. Ayrıca <a href="https://www.kvkk.gov.tr" target="_blank" rel="noopener">Kişisel Verileri Koruma Kurumu'na (KVKK)</a> ya da bulunduğunuz AB veri koruma otoritesine şikâyette bulunabilirsiniz.</p>`,
+    },
+  },
+  {
+    id: "dnt",
+    icon: "eyeOff",
+    t: { en: "Tracking signals & automated decisions", tr: "Takip sinyalleri ve otomatik kararlar" },
+    body: {
+      en: `<p>Because analytics are strictly opt-in and off by default, honoring a "Do Not Track" signal is effectively built in — we load nothing until you actively accept. We do not use your data for automated decision-making or profiling that produces legal or similarly significant effects.</p>`,
+      tr: `<p>Analiz kesinlikle isteğe bağlı ve varsayılan olarak kapalı olduğundan, bir "İzleme" ("Do Not Track") sinyaline saygı göstermek fiilen zaten yerleşiktir — siz etkin biçimde kabul etmeden hiçbir şey yüklemeyiz. Verinizi, hukuki ya da benzer ölçüde önemli etki doğuran otomatik karar alma veya profilleme için kullanmayız.</p>`,
+    },
+  },
+  {
+    id: "children",
+    icon: "child",
+    t: { en: "Children", tr: "Çocuklar" },
+    body: {
+      en: `<p>This blog is not directed at children, and we do not knowingly collect their personal data. If you believe a child has provided data, contact us and we will remove it.</p>`,
+      tr: `<p>Bu blog çocuklara yönelik değildir ve bilerek onların kişisel verisini toplamayız. Bir çocuğun veri verdiğini düşünüyorsanız bize ulaşın, kaldıralım.</p>`,
+    },
+  },
+  {
+    id: "changes",
+    icon: "refresh",
+    t: { en: "Changes to this policy", tr: "Bu politikadaki değişiklikler" },
+    body: {
+      en: `<p>We may update this policy as the blog evolves. The "last updated" date reflects the current version; material changes will be made prominent here.</p>`,
+      tr: `<p>Blog geliştikçe bu politikayı güncelleyebiliriz. "Son güncelleme" tarihi mevcut sürümü yansıtır; önemli değişiklikler burada belirgin biçimde gösterilir.</p>`,
+    },
+  },
+];
 ---
 
-<Base title="Privacy Policy" description="How XRack Technologies handles data on this blog: analytics, email, cookies, retention, and your rights.">
-  <article class="article">
-    <header class="wrap wrap--narrow article-head">
-      <span class="eyebrow-strong"><T en="Legal" tr="Yasal" /></span>
+<Base
+  title="Privacy Policy"
+  description="How XRack Technologies handles data on this blog: analytics, email, cookies, sub-processors, retention, and your rights under KVKK and GDPR."
+>
+  <!-- Hero -->
+  <section class="hero privacy-hero">
+    <div class="hero-aura"></div>
+    <div class="wrap wrap--narrow hero-inner privacy-hero__inner">
+      <span class="eyebrow-strong"><T en="Legal · Privacy" tr="Yasal · Gizlilik" /></span>
       <h1 class="display-title"><T en="Privacy Policy" tr="Gizlilik Politikası" /></h1>
-      <p class="article-lead">
+      <p class="lede">
         <T
-          en="How this blog handles your data — analytics, email, cookies, retention, and your rights under KVKK and GDPR."
-          tr="Bu blogun verinizi nasıl işlediği — analiz, e-posta, çerezler, saklama süreleri ve KVKK ile GDPR kapsamındaki haklarınız."
+          en="How this blog handles your data — analytics, email, cookies, sub-processors, retention, and your rights. Written to be read, not to hide behind."
+          tr="Bu blogun verinizi nasıl işlediği — analiz, e-posta, çerezler, alt işleyenler, saklama süreleri ve haklarınız. Arkasına saklanmak için değil, okunmak için yazıldı."
         />
       </p>
-      <div class="byline">
-        <T en={`Last updated: ${updatedEn}`} tr={`Son güncelleme: ${updatedTr}`} />
+      <div class="privacy-meta">
+        <span class="pill"><T en={`Updated ${updatedEn}`} tr={`Güncellendi ${updatedTr}`} /></span>
+        <span class="pill pill-primary">KVKK</span>
+        <span class="pill pill-primary">GDPR</span>
       </div>
-    </header>
+    </div>
+  </section>
 
-    <!-- English -->
-    <div class="wrap wrap--narrow prose" data-lang-content="en">
-      <h2>Who we are</h2>
-      <p>
-        This blog (<code>blog.xrack.io</code>) is operated by <strong>XRack Technologies</strong>, the
-        data controller. For any privacy question or to exercise your rights, contact
-        <a href={`mailto:${email}`}>{email}</a>.
-      </p>
-
-      <h2>What we collect and why</h2>
-      <ul>
-        <li>
-          <strong>Analytics (only with your consent).</strong> If you accept the cookie banner, we load
-          Google Analytics 4 to understand which content performs — pages viewed, referrer/source,
-          approximate location (country/city, derived from IP; the IP itself is not stored), device and
-          browser, and clicks on outbound links, the “Book a Demo” CTA, and share buttons. We pass no
-          names, emails, or other identifiers into analytics. Nothing loads and no cookies are set until
-          you accept.
-        </li>
-        <li>
-          <strong>Hosting logs.</strong> The site is served by GitHub Pages, which may process your IP
-          address and request metadata transiently to deliver the site and protect against abuse. This is
-          standard server operation and not used by us for tracking.
-        </li>
-        <li>
-          <strong>Email you send us.</strong> If you email us, we process your address and message solely
-          to respond. We do not run a newsletter and do not add you to any mailing list.
-        </li>
-        <li>
-          <strong>Comments.</strong> Comments are powered by Giscus over GitHub Discussions. If you choose
-          to comment, you authenticate with your own GitHub account and your comment is stored in our
-          public GitHub repository; this is governed by GitHub’s privacy policy. We set no additional
-          cookies for comments, and the comment widget loads only when you scroll to it.
-        </li>
-      </ul>
-
-      <h2>Cookies &amp; consent</h2>
-      <p>
-        We use <strong>no non-essential cookies until you consent</strong>. The only non-essential scripts
-        are analytics, which load exclusively after you click “Accept”. Declining means nothing is loaded
-        and no analytics cookies are set. Your choice is stored locally in your browser
-        (<code>localStorage</code>), not in a cookie sent to us.
-      </p>
-      <p>
-        You can change or withdraw your choice at any time:
-        <button id="resetConsent" class="btn-ghost" type="button">Reset cookie choice</button>
-      </p>
-
-      <h2>Legal bases (KVKK &amp; GDPR)</h2>
-      <p>
-        We rely on your <strong>explicit consent</strong> for analytics (KVKK Art. 5/1; GDPR Art. 6(1)(a)),
-        and on <strong>legitimate interests</strong> for responding to your emails and for the hosting
-        provider’s security logging (GDPR Art. 6(1)(f)).
-      </p>
-
-      <h2>Sharing &amp; international transfers</h2>
-      <p>
-        We do not sell your data. Data is processed by our providers only to run the site: <strong>Google
-        </strong> (Analytics), <strong>GitHub</strong> (hosting and comments). These may process data
-        outside your country; such transfers rely on Standard Contractual Clauses and/or the EU-US Data
-        Privacy Framework.
-      </p>
-
-      <h2>Retention</h2>
-      <p>
-        Analytics event data is retained in GA4 for up to 14 months and then deleted; aggregated reports
-        may persist. Emails are kept only as long as needed to handle your request. Your consent choice
-        remains in your browser until you clear it or reset it above.
-      </p>
-
-      <h2>Your rights</h2>
-      <p>
-        Under KVKK (Art. 11) and GDPR you may request access, rectification, erasure, restriction, or
-        objection, withdraw consent at any time, and (GDPR) data portability. To exercise any of these,
-        email <a href={`mailto:${email}`}>{email}</a>. You may also complain to the Turkish Personal Data
-        Protection Authority (KVKK Kurumu) or your local EU data protection authority.
-      </p>
-
-      <h2>Children</h2>
-      <p>This blog is not directed at children and we do not knowingly collect their data.</p>
-
-      <h2>Changes</h2>
-      <p>We may update this policy; the “last updated” date above reflects the latest version.</p>
+  <div class="wrap privacy">
+    <!-- At a glance -->
+    <div class="glance-grid">
+      {
+        glance.map((g) => (
+          <div class="glance-card">
+            <span class="glance-card__ico" set:html={svg(g.icon)} />
+            <div>
+              <p class="glance-card__t"><T en={g.t.en} tr={g.t.tr} /></p>
+              <p class="glance-card__s"><T en={g.s.en} tr={g.s.tr} /></p>
+            </div>
+          </div>
+        ))
+      }
     </div>
 
-    <!-- Türkçe -->
-    <div class="wrap wrap--narrow prose" data-lang-content="tr">
-      <h2>Kim olduğumuz</h2>
-      <p>
-        Bu blog (<code>blog.xrack.io</code>) veri sorumlusu <strong>XRack Technologies</strong> tarafından
-        işletilir. Gizlilikle ilgili her soru ya da haklarınızı kullanmak için:
-        <a href={`mailto:${email}`}>{email}</a>.
-      </p>
+    <div class="privacy-body">
+      <!-- Table of contents -->
+      <aside class="privacy-toc" aria-label="Contents">
+        <p class="privacy-toc__head"><T en="On this page" tr="Bu sayfada" /></p>
+        <nav>
+          <ul>
+            <li><a class="toc-a" href="#practices"><T en="Data at a glance" tr="Bir bakışta veri" /></a></li>
+            {
+              sections.map((s) => (
+                <li>
+                  <a class="toc-a" href={`#${s.id}`}>
+                    <T en={s.t.en} tr={s.t.tr} />
+                  </a>
+                </li>
+              ))
+            }
+            <li><a class="toc-a" href="#contact"><T en="Contact & complaints" tr="İletişim ve şikâyet" /></a></li>
+          </ul>
+        </nav>
+      </aside>
 
-      <h2>Neyi, neden topluyoruz</h2>
-      <ul>
-        <li>
-          <strong>Analiz (yalnızca onayınızla).</strong> Çerez bandını kabul ederseniz, hangi içeriğin işe
-          yaradığını anlamak için Google Analytics 4 yüklenir — görüntülenen sayfalar, yönlendiren/kaynak,
-          yaklaşık konum (IP’den türetilen ülke/şehir; IP’nin kendisi saklanmaz), cihaz ve tarayıcı, ayrıca
-          dış bağlantı, “Demo Planla” çağrısı ve paylaşım düğmelerine yapılan tıklamalar. Analize hiçbir
-          isim, e-posta veya kimlik bilgisi göndermeyiz. Siz kabul edene kadar hiçbir şey yüklenmez ve çerez
-          bırakılmaz.
-        </li>
-        <li>
-          <strong>Barındırma kayıtları.</strong> Site GitHub Pages üzerinde sunulur; site teslimi ve
-          kötüye kullanıma karşı koruma için IP adresinizi ve istek meta verilerini geçici olarak
-          işleyebilir. Bu, standart sunucu işleyişidir ve tarafımızca takip için kullanılmaz.
-        </li>
-        <li>
-          <strong>Bize gönderdiğiniz e-posta.</strong> Bize e-posta gönderirseniz, adresinizi ve mesajınızı
-          yalnızca yanıt vermek için işleriz. Bülten yayınlamıyoruz ve sizi hiçbir listeye eklemiyoruz.
-        </li>
-        <li>
-          <strong>Yorumlar.</strong> Yorumlar, GitHub Discussions üzerinde Giscus ile sağlanır. Yorum
-          yapmayı seçerseniz kendi GitHub hesabınızla oturum açarsınız ve yorumunuz herkese açık GitHub
-          deposunda saklanır; bu, GitHub’ın gizlilik politikasına tabidir. Yorumlar için ek çerez
-          bırakmıyoruz ve yorum bileşeni yalnızca ona kaydırdığınızda yüklenir.
-        </li>
-      </ul>
+      <div class="privacy-main">
+        <!-- Consent control -->
+        <div class="consent-card glass">
+          <span class="consent-card__ico" set:html={svg("toggle")} />
+          <div class="consent-card__body">
+            <p class="consent-card__t"><T en="Your cookie choice" tr="Çerez tercihiniz" /></p>
+            <p class="consent-card__s">
+              <T
+                en="Analytics only run if you opt in. Reset your choice here and the banner will ask again."
+                tr="Analiz yalnızca izin verirseniz çalışır. Seçiminizi buradan sıfırlayın, banner tekrar sorar."
+              />
+            </p>
+          </div>
+          <button id="resetConsent" class="btn-ghost consent-card__btn" type="button">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg>
+            <T en="Reset cookie choice" tr="Çerez tercihini sıfırla" />
+          </button>
+        </div>
 
-      <h2>Çerezler ve onay</h2>
-      <p>
-        <strong>Siz onaylamadan hiçbir zorunlu olmayan çerez kullanmıyoruz.</strong> Tek zorunlu olmayan
-        betik analizdir ve yalnızca “Kabul et” dedikten sonra yüklenir. Reddetmek, hiçbir şeyin
-        yüklenmemesi ve analiz çerezi bırakılmaması demektir. Seçiminiz tarayıcınızda yerel olarak
-        (<code>localStorage</code>) tutulur, bize gönderilen bir çerezde değil.
-      </p>
-      <p>
-        Seçiminizi istediğiniz zaman değiştirebilir veya geri çekebilirsiniz:
-        <button id="resetConsentTr" class="btn-ghost" type="button">Çerez tercihini sıfırla</button>
-      </p>
+        <!-- Data at a glance table -->
+        <section id="practices" class="pv-section">
+          <div class="pv-section__head">
+            <span class="pv-ico" set:html={svg("database")} />
+            <h2><T en="Data at a glance" tr="Bir bakışta veri" /></h2>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th><T en="Data" tr="Veri" /></th>
+                  <th><T en="Purpose" tr="Amaç" /></th>
+                  <th><T en="Legal basis" tr="Hukuki dayanak" /></th>
+                  <th><T en="Retention" tr="Saklama" /></th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  practices.map((row) => (
+                    <tr>
+                      <td data-th="Data"><strong><T en={row.d.en} tr={row.d.tr} /></strong></td>
+                      <td data-th="Purpose"><T en={row.p.en} tr={row.p.tr} /></td>
+                      <td data-th="Legal basis"><T en={row.b.en} tr={row.b.tr} /></td>
+                      <td data-th="Retention"><T en={row.r.en} tr={row.r.tr} /></td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      <h2>Hukuki dayanaklar (KVKK ve GDPR)</h2>
-      <p>
-        Analiz için <strong>açık rızanıza</strong> (KVKK m.5/1; GDPR m.6(1)(a)), e-postalarınıza yanıt
-        vermek ve barındırma sağlayıcısının güvenlik kayıtları için <strong>meşru menfaate</strong> (GDPR
-        m.6(1)(f)) dayanırız.
-      </p>
+        <!-- Legal sections -->
+        {
+          sections.map((s) => (
+            <section id={s.id} class="pv-section">
+              <div class="pv-section__head">
+                <span class="pv-ico" set:html={svg(s.icon)} />
+                <h2><T en={s.t.en} tr={s.t.tr} /></h2>
+              </div>
+              <div class="privacy-prose" data-lang-content="en" set:html={s.body.en} />
+              <div class="privacy-prose" data-lang-content="tr" set:html={s.body.tr} />
+              {s.id === "sub-processors" && (
+                <div class="table-wrap">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th><T en="Processor" tr="İşleyen" /></th>
+                        <th><T en="Purpose" tr="Amaç" /></th>
+                        <th><T en="Region" tr="Bölge" /></th>
+                        <th><T en="Policy" tr="Politika" /></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {processors.map((pr) => (
+                        <tr>
+                          <td data-th="Processor"><strong>{pr.name}</strong></td>
+                          <td data-th="Purpose"><T en={pr.p.en} tr={pr.p.tr} /></td>
+                          <td data-th="Region">{pr.region}</td>
+                          <td data-th="Policy"><a href={pr.url} target="_blank" rel="noopener"><T en="View" tr="Görüntüle" /> ↗</a></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </section>
+          ))
+        }
 
-      <h2>Paylaşım ve yurt dışı aktarım</h2>
-      <p>
-        Verinizi satmıyoruz. Veri, yalnızca siteyi çalıştırmak için sağlayıcılarımızca işlenir:
-        <strong>Google</strong> (Analiz), <strong>GitHub</strong> (barındırma ve yorumlar). Bunlar veriyi
-        ülkeniz dışında işleyebilir; bu tür aktarımlar Standart Sözleşme Hükümleri ve/veya AB-ABD Veri
-        Gizliliği Çerçevesi’ne dayanır.
-      </p>
+        <!-- Contact -->
+        <section id="contact" class="pv-section">
+          <div class="contact-card glass">
+            <div class="contact-card__glow"></div>
+            <span class="eyebrow"><T en="Contact & complaints" tr="İletişim ve şikâyet" /></span>
+            <p class="contact-card__lead">
+              <T
+                en="Questions about your data, or want to exercise a right? Reach the controller directly:"
+                tr="Verinizle ilgili sorunuz mu var ya da bir hakkı kullanmak mı istiyorsunuz? Doğrudan veri sorumlusuna ulaşın:"
+              />
+            </p>
+            <a class="contact-card__mail" href={`mailto:${email}`}>{email}</a>
+            <div class="contact-card__cta">
+              <a class="btn-ghost" href="https://www.kvkk.gov.tr" target="_blank" rel="noopener">KVKK Kurumu ↗</a>
+              <a class="btn-ghost" href={href("about")}><T en="About XRack" tr="XRack hakkında" /></a>
+            </div>
+          </div>
+        </section>
 
-      <h2>Saklama süreleri</h2>
-      <p>
-        Analiz olay verileri GA4’te en fazla 14 ay tutulur ve ardından silinir; toplulaştırılmış raporlar
-        kalabilir. E-postalar yalnızca talebinizi karşılamak için gerekli süre boyunca saklanır. Onay
-        tercihiniz, siz silene veya yukarıdan sıfırlayana kadar tarayıcınızda kalır.
-      </p>
-
-      <h2>Haklarınız</h2>
-      <p>
-        KVKK (m.11) ve GDPR kapsamında erişim, düzeltme, silme, kısıtlama veya itiraz talep edebilir,
-        rızanızı istediğiniz an geri çekebilir ve (GDPR) veri taşınabilirliği isteyebilirsiniz. Bunları
-        kullanmak için <a href={`mailto:${email}`}>{email}</a> adresine yazın. Ayrıca Kişisel Verileri
-        Koruma Kurumu’na (KVKK) ya da bulunduğunuz AB veri koruma otoritesine şikâyette bulunabilirsiniz.
-      </p>
-
-      <h2>Çocuklar</h2>
-      <p>Bu blog çocuklara yönelik değildir ve bilerek onların verisini toplamayız.</p>
-
-      <h2>Değişiklikler</h2>
-      <p>Bu politikayı güncelleyebiliriz; yukarıdaki “son güncelleme” tarihi en güncel sürümü gösterir.</p>
+        <div class="privacy-back">
+          <a class="back-link" href={href()}>&larr; <T en="Back to the blog" tr="Bloga dön" /></a>
+        </div>
+      </div>
     </div>
-
-    <div class="wrap wrap--narrow" style="margin-top:2.5rem;">
-      <a class="back-link" href={href()}>&larr; <T en="All posts" tr="Tüm yazılar" /></a>
-    </div>
-  </article>
+  </div>
 </Base>
 
+<style>
+  .privacy-hero { padding: 5rem 0 1.5rem; }
+  .privacy-hero__inner { gap: 1.1rem; }
+  .privacy-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.4rem; }
+
+  .privacy { padding-bottom: 4rem; }
+
+  .glance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.9rem; margin: 2rem 0 3rem; }
+  .glance-card {
+    display: flex; align-items: flex-start; gap: 0.85rem; padding: 1.15rem 1.25rem;
+    border-radius: var(--radius); border: 1px solid hsl(var(--border));
+    background-image: linear-gradient(180deg, hsl(var(--card-elevated)), hsl(var(--card)));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.04);
+  }
+  .glance-card__ico {
+    flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+    width: 2.4rem; height: 2.4rem; border-radius: 10px; color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.1); box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.25);
+  }
+  .glance-card__t { margin: 0 0 0.2rem; font-size: 14.5px; font-weight: 600; color: hsl(var(--foreground)); line-height: 1.3; }
+  .glance-card__s { margin: 0; font-size: 13px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
+
+  .privacy-body { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+  @media (min-width: 1000px) { .privacy-body { grid-template-columns: 210px minmax(0, 1fr); gap: 3.5rem; } }
+
+  .privacy-toc { }
+  @media (min-width: 1000px) { .privacy-toc { position: sticky; top: 92px; align-self: start; max-height: calc(100vh - 120px); overflow-y: auto; } }
+  .privacy-toc__head { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin: 0 0 0.85rem; }
+  .privacy-toc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.1rem; border-left: 1px solid hsl(var(--border)); }
+  .toc-a { display: block; padding: 0.32rem 0.75rem; margin-left: -1px; border-left: 2px solid transparent; font-size: 13px; line-height: 1.35; color: hsl(var(--muted-foreground)); transition: color 0.15s ease, border-color 0.15s ease; }
+  .toc-a:hover { color: hsl(var(--foreground)); }
+  .toc-a.is-active { color: hsl(var(--primary-soft)); border-left-color: hsl(var(--primary)); }
+  @media (max-width: 999px) {
+    .privacy-toc { border: 1px solid hsl(var(--border)); border-radius: var(--radius); padding: 1.1rem 1.25rem; background: hsl(var(--card-elevated) / 0.4); }
+    .privacy-toc ul { border-left: 0; }
+    .toc-a { padding-left: 0; border-left: 0; }
+    .toc-a.is-active { border-left: 0; }
+  }
+
+  .privacy-main { min-width: 0; }
+
+  .consent-card { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; padding: 1.25rem 1.4rem; border-radius: var(--radius); margin-bottom: 2.5rem; }
+  .consent-card__ico { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 2.6rem; height: 2.6rem; border-radius: 10px; color: hsl(var(--primary)); background: hsl(var(--primary) / 0.1); box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.25); }
+  .consent-card__body { flex: 1; min-width: 180px; }
+  .consent-card__t { margin: 0 0 0.2rem; font-weight: 600; font-size: 15px; color: hsl(var(--foreground)); }
+  .consent-card__s { margin: 0; font-size: 13.5px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
+  .consent-card__btn { flex-shrink: 0; }
+
+  .pv-section { scroll-margin-top: 92px; margin-bottom: 2.75rem; }
+  .pv-section__head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.9rem; }
+  .pv-ico { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 2.1rem; height: 2.1rem; border-radius: 8px; color: hsl(var(--primary)); background: hsl(var(--primary) / 0.1); box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.22); }
+  .pv-section__head h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; letter-spacing: -0.015em; margin: 0; color: hsl(var(--ink)); }
+
+  .privacy-prose { font-size: 1rem; line-height: 1.75; color: hsl(var(--foreground) / 0.9); }
+  .privacy-prose p { margin: 0 0 1rem; }
+  .privacy-prose p:last-child { margin-bottom: 0; }
+  .privacy-prose ul { margin: 0 0 0.5rem; padding-left: 1.2rem; }
+  .privacy-prose li { margin-bottom: 0.65rem; }
+  .privacy-prose strong { color: hsl(var(--foreground)); font-weight: 600; }
+  .privacy-prose a { color: hsl(var(--primary-soft)); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: hsl(var(--primary) / 0.4); }
+  .privacy-prose a:hover { color: hsl(var(--primary)); }
+  .privacy-prose code { font-family: var(--font-mono); font-size: 0.85em; background: hsl(var(--card-elevated)); border: 1px solid hsl(var(--border)); border-radius: 5px; padding: 0.1em 0.35em; }
+
+  .table-wrap { overflow-x: auto; margin-top: 1.1rem; border: 1px solid hsl(var(--border)); border-radius: var(--radius); }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 520px; }
+  .data-table th { text-align: left; font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); padding: 0.75rem 1rem; background: hsl(var(--card-elevated) / 0.6); border-bottom: 1px solid hsl(var(--border)); }
+  .data-table td { padding: 0.8rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.7); vertical-align: top; line-height: 1.5; color: hsl(var(--foreground) / 0.88); }
+  .data-table tr:last-child td { border-bottom: 0; }
+  .data-table td strong { color: hsl(var(--foreground)); font-weight: 600; }
+  .data-table a { color: hsl(var(--primary-soft)); white-space: nowrap; }
+  .data-table a:hover { color: hsl(var(--primary)); }
+
+  .contact-card { position: relative; overflow: hidden; text-align: center; padding: 2.75rem 1.5rem; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 0.85rem; margin-top: 1rem; }
+  .contact-card__glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(420px 170px at 50% 0%, hsl(var(--primary) / 0.13), transparent 70%); }
+  .contact-card > * { position: relative; z-index: 1; }
+  .contact-card__lead { color: hsl(var(--muted-foreground)); margin: 0; max-width: 34rem; line-height: 1.6; }
+  .contact-card__mail { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.3rem, 3.5vw, 1.9rem); letter-spacing: -0.02em; color: hsl(var(--ink)); }
+  .contact-card__mail:hover { color: hsl(var(--primary-soft)); }
+  .contact-card__cta { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 0.5rem; }
+
+  .privacy-back { margin-top: 3rem; }
+</style>
+
 <script>
-  const reset = () => {
+  document.getElementById("resetConsent")?.addEventListener("click", () => {
     try { localStorage.removeItem("xrack-analytics-consent"); } catch (e) {}
     location.reload();
-  };
-  document.getElementById("resetConsent")?.addEventListener("click", reset);
-  document.getElementById("resetConsentTr")?.addEventListener("click", reset);
+  });
+
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc-a"));
+  const byId = new Map<string, HTMLAnchorElement>();
+  links.forEach((a) => {
+    const id = decodeURIComponent((a.getAttribute("href") || "").slice(1));
+    if (id) byId.set(id, a);
+  });
+  const sections = Array.from(document.querySelectorAll<HTMLElement>(".pv-section"));
+  if (sections.length && byId.size) {
+    let current = "";
+    const setActive = (id: string) => {
+      if (id === current) return;
+      current = id;
+      links.forEach((a) => a.classList.remove("is-active"));
+      byId.get(id)?.classList.add("is-active");
+    };
+    const onScroll = () => {
+      let active = sections[0].id;
+      for (const sec of sections) {
+        if (sec.getBoundingClientRect().top < 140) active = sec.id;
+        else break;
+      }
+      setActive(active);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    onScroll();
+  }
 </script>
