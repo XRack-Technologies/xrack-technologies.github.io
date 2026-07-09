@@ -45,8 +45,6 @@ const isActive = (tag: string) => path === href(`tags/${tag}`).replace(/\/$/, ""
 const homeActive = path === href().replace(/\/$/, "");
 const aboutActive = path === href("about").replace(/\/$/, "");
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
-// Pages without their own image fall back to a 1200x630 site card, not the
-// square logo, so social shares always render a proper card (AUD-H5).
 const defaultOg = href("og/default.png");
 const ogImage = image ?? (Astro.site ? new URL(defaultOg, Astro.site).href : defaultOg);
 const year = new Date().getFullYear();

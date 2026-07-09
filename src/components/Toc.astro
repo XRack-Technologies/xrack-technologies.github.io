@@ -1,0 +1,193 @@
+---
+import T from "./T.astro";
+import type { TocItem } from "../lib/i18n";
+
+interface Props {
+  en: TocItem[];
+  tr: TocItem[];
+  bilingual: boolean;
+}
+const { en, tr, bilingual } = Astro.props;
+const lists = bilingual
+  ? [
+      { lang: "en", items: en },
+      { lang: "tr", items: tr },
+    ]
+  : [{ lang: null, items: en }];
+---
+
+{/* Desktop: sticky scroll-synced outline in the right gutter */}
+<aside class="toc-rail" aria-label="Table of contents">
+  <p class="toc-heading"><T en="On this page" tr="Bu sayfada" /></p>
+  {
+    lists.map((l) => (
+      <nav class="toc-nav" data-lang-content={l.lang ?? undefined}>
+        <ul>
+          {l.items.map((it) => (
+            <li class={`toc-li toc-d${it.depth}`}>
+              <a class="toc-link" href={`#${it.id}`}>
+                {it.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    ))
+  }
+</aside>
+
+{/* Mobile/tablet: collapsible outline at the top of the post */}
+<details class="toc-inline wrap wrap--narrow">
+  <summary>
+    <span class="toc-heading"><T en="On this page" tr="Bu sayfada" /></span>
+  </summary>
+  {
+    lists.map((l) => (
+      <nav class="toc-nav" data-lang-content={l.lang ?? undefined}>
+        <ul>
+          {l.items.map((it) => (
+            <li class={`toc-li toc-d${it.depth}`}>
+              <a class="toc-link" href={`#${it.id}`}>
+                {it.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    ))
+  }
+</details>
+
+<style>
+  .toc-heading {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+    margin: 0 0 0.75rem;
+  }
+  .toc-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .toc-d3 {
+    padding-left: 0.9rem;
+  }
+  .toc-link {
+    display: block;
+    padding: 0.3rem 0.6rem;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: hsl(var(--muted-foreground));
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .toc-link:hover {
+    color: hsl(var(--foreground));
+  }
+  .toc-link.is-active {
+    color: hsl(var(--primary-soft));
+    border-left-color: hsl(var(--primary));
+  }
+
+  /* Desktop sticky rail (right gutter) */
+  .toc-rail {
+    position: fixed;
+    top: 96px;
+    left: calc(50vw + 372px);
+    width: 210px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    display: none;
+    z-index: 20;
+  }
+  .toc-rail .toc-nav ul {
+    border-left: 1px solid hsl(var(--border));
+  }
+  @media (min-width: 1240px) and (min-height: 640px) {
+    .toc-rail {
+      display: block;
+    }
+  }
+
+  /* Mobile/tablet collapsible box */
+  .toc-inline {
+    margin: 1.5rem auto 0;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--card-elevated) / 0.4);
+    padding: 0.5rem 1rem;
+  }
+  .toc-inline summary {
+    cursor: pointer;
+    padding: 0.5rem 0;
+    list-style: none;
+  }
+  .toc-inline summary::-webkit-details-marker {
+    display: none;
+  }
+  .toc-inline summary .toc-heading {
+    display: inline;
+    margin: 0;
+  }
+  .toc-inline[open] summary {
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .toc-inline .toc-nav ul {
+    padding-bottom: 0.5rem;
+  }
+  @media (min-width: 1240px) {
+    .toc-inline {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc-link"));
+  if (links.length) {
+    const byId = new Map<string, HTMLAnchorElement[]>();
+    links.forEach((a) => {
+      const id = decodeURIComponent((a.getAttribute("href") || "").slice(1));
+      if (!byId.has(id)) byId.set(id, []);
+      byId.get(id)!.push(a);
+    });
+
+    let current = "";
+    const setActive = (id: string) => {
+      if (id === current) return;
+      current = id;
+      links.forEach((a) => a.classList.remove("is-active"));
+      (byId.get(id) || []).forEach((a) => a.classList.add("is-active"));
+    };
+
+    const heads = Array.from(
+      document.querySelectorAll<HTMLElement>(".prose h2[id], .prose h3[id]"),
+    );
+    const onScroll = () => {
+      let active = "";
+      for (const h of heads) {
+        if (h.offsetParent === null) continue;
+        if (h.getBoundingClientRect().top < 120) active = h.id;
+        else if (active) break;
+      }
+      if (!active) {
+        const first = heads.find((h) => h.offsetParent !== null);
+        if (first) active = first.id;
+      }
+      if (active) setActive(active);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    onScroll();
+  }
+</script>

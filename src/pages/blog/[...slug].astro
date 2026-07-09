@@ -2,11 +2,12 @@
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import { href, formatDate, formatDateTr } from "../../lib/site";
-import { renderBilingual, readingMinutes, enWordCount } from "../../lib/i18n";
+import { renderBilingual, readingMinutes, enWordCount, extractHeadings } from "../../lib/i18n";
 import T from "../../components/T.astro";
 import Share from "../../components/Share.astro";
 import ShareFab from "../../components/ShareFab.astro";
 import Comments from "../../components/Comments.astro";
+import Toc from "../../components/Toc.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -33,6 +34,9 @@ const { title, description, pubDate, tags, author, cover } = post.data;
 const titleTr = post.data.title_tr ?? title;
 const descriptionTr = post.data.description_tr ?? description;
 const { enHtml, trHtml, bilingual } = renderBilingual(post.body ?? "");
+const enDoc = extractHeadings(enHtml);
+const trDoc = bilingual ? extractHeadings(trHtml, "tr-") : enDoc;
+const showToc = enDoc.toc.filter((t) => t.depth === 2).length >= 3;
 const mins = readingMinutes(post.body ?? "");
 const metaDual = !!post.data.title_tr || !!post.data.description_tr;
 const hasTr = bilingual || !!post.data.title_tr || !!post.data.description_tr;
@@ -132,15 +136,17 @@ const jsonLd = {
       )
     }
 
+    {showToc && <Toc en={enDoc.toc} tr={trDoc.toc} bilingual={bilingual} />}
+
     <div class="wrap wrap--narrow">
       {
         bilingual ? (
           <>
-            <div class="prose" data-lang-content="en" set:html={enHtml} />
-            <div class="prose" data-lang-content="tr" set:html={trHtml} />
+            <div class="prose" data-lang-content="en" set:html={enDoc.html} />
+            <div class="prose" data-lang-content="tr" set:html={trDoc.html} />
           </>
         ) : (
-          <div class="prose" set:html={enHtml} />
+          <div class="prose" set:html={enDoc.html} />
         )
       }
     </div>
