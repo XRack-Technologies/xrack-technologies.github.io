@@ -14,7 +14,6 @@ const initials = (name: string) => {
 const pressEmail = "support@xrack.io";
 const ogCard = Astro.site ? new URL(href("press/og-card.png"), Astro.site).href : href("press/og-card.png");
 
-// Social icon paths reused for exec profile links.
 const LINKEDIN_SVG =
   '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>';
 const GITHUB_SVG =
@@ -58,7 +57,6 @@ const downloads = [
   { src: href("press/og-card-tr.png"), name: { en: "Share card — TR", tr: "Paylaşım kartı — TR" }, meta: "PNG · 1200×630", tone: "wide", dl: "xrack-share-tr.png" },
 ];
 
-// Themed editorial artwork (not product screenshots) — free to use alongside coverage.
 const imagery = [
   { f: "architecture", en: "Architecture", tr: "Mimari" },
   { f: "system_map", en: "System map", tr: "Sistem haritası" },
@@ -86,7 +84,7 @@ const imagery = [
       <div class="press-hero__copy reveal-on-view">
         <span class="status-chip"><span class="dot"></span> <T en="Press · Media Kit" tr="Basın · Medya Kiti" /></span>
         <h1 class="display-title press-hero__title">
-          <T en="Press &" tr="Basın &" /> <span class="hero-accent"><T en="media kit" tr="medya kiti" /></span>
+          <T en="Press &" tr="Basın &" /> <span class="hero-accent"><T en="Media Kit" tr="Medya Kiti" /></span>
         </h1>
         <p class="lede press-hero__lede">
           <T
@@ -300,7 +298,6 @@ const imagery = [
 </Base>
 
 <style>
-  /* ---- Hero ---------------------------------------------------------- */
   .press-hero { padding: 5rem 0 3rem; }
   .press-hero__grid {
     position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.6;
@@ -325,7 +322,6 @@ const imagery = [
   .hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.4rem; }
   .hero-cta .btn-primary, .hero-cta .btn-ghost { padding: 0.6rem 1.2rem; font-size: 13px; }
 
-  /* Brand stage (mascot) */
   .brand-stage { position: relative; display: grid; place-items: center; width: 100%; max-width: 400px; aspect-ratio: 1; margin-inline: auto; }
   .brand-stage__halo {
     position: absolute; inset: 6%; border-radius: 50%;
@@ -347,14 +343,12 @@ const imagery = [
   @keyframes haloPulse { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
   @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-  /* ---- Sections ------------------------------------------------------ */
   .press { padding-bottom: 4rem; }
   .press-section { margin-top: 4.5rem; }
   .press-section > .eyebrow-strong { display: inline-flex; margin-bottom: 1.1rem; }
   .section-note { color: hsl(var(--muted-foreground)); font-size: 14px; line-height: 1.6; margin: 0 0 1.5rem; max-width: 46rem; }
   .tag-mono { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
 
-  /* Fast facts */
   .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; }
   .fact {
     display: flex; flex-direction: column; gap: 0.45rem; padding: 1.15rem 1.3rem;
@@ -369,7 +363,6 @@ const imagery = [
   .fact__v a { color: hsl(var(--primary-soft)); }
   .fact__v a:hover { color: hsl(var(--primary)); }
 
-  /* Boilerplate */
   .boiler-grid { display: grid; gap: 1rem; }
   .boiler { padding: 1.4rem 1.6rem; }
   .boiler__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; }
@@ -386,7 +379,6 @@ const imagery = [
   .boiler__copy.is-copied .i-copy { display: none; }
   .boiler__copy.is-copied .i-done { display: inline; }
 
-  /* Brand assets — lockup swatches */
   .lockup-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.9rem; margin-bottom: 1.1rem; }
   .swatch {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.85rem;
@@ -400,7 +392,6 @@ const imagery = [
   .swatch__wordmark { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; letter-spacing: -0.02em; color: hsl(var(--ink)); }
   .swatch__wordmark .brand-x { color: hsl(var(--primary)); }
 
-  /* Downloads */
   .dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
   .dl { display: flex; flex-direction: column; overflow: hidden; color: inherit; }
   .dl__preview {
@@ -422,7 +413,6 @@ const imagery = [
   .dl__foot svg { color: hsl(var(--muted-foreground)); flex-shrink: 0; transition: color 0.18s ease, transform 0.18s ease; }
   .dl:hover .dl__foot svg { color: hsl(var(--primary)); transform: translateY(2px); }
 
-  /* Editorial artwork gallery */
   .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; }
   .gcard {
     position: relative; display: block; overflow: hidden; isolation: isolate; cursor: zoom-in;
@@ -439,7 +429,6 @@ const imagery = [
   }
   .gcard__cap svg { opacity: 0.75; }
 
-  /* Executives */
   .execs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.1rem; }
   .exec { padding: 1.6rem; }
   .exec__top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
@@ -462,7 +451,6 @@ const imagery = [
   }
   .exec__social:hover { color: hsl(var(--foreground)); border-color: hsl(var(--border-strong)); background: hsl(var(--card-glass)); }
 
-  /* Contact */
   .contact-card { position: relative; overflow: hidden; text-align: center; padding: 3rem 1.5rem; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
   .contact-card__glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(420px 180px at 50% 0%, hsl(var(--primary) / 0.14), transparent 70%); }
   .contact-card > * { position: relative; z-index: 1; }
