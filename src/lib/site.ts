@@ -6,6 +6,7 @@ export const SITE = {
   author: "Vincent E. Dogan Dursun - CEO & Co-Founder",
   homepage: "https://xrack.io",
   cta: "https://calendly.com/dogandursun-xrack/20min",
+  twitter: "",
 };
 
 export const NAV = [

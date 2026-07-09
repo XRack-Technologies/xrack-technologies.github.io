@@ -81,6 +81,7 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d0d0c" />
     <script is:inline define:vars={{ forceLangVal }}>
       try {
         var _q = new URLSearchParams(location.search).get("lang");
@@ -97,7 +98,10 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
         document.documentElement.dataset.lang = "en";
       }
     </script>
-    <link rel="icon" type="image/png" href={logo} />
+    <link rel="icon" type="image/png" sizes="32x32" href={href("favicon-32.png")} />
+    <link rel="icon" type="image/png" sizes="16x16" href={href("favicon-16.png")} />
+    <link rel="apple-touch-icon" sizes="180x180" href={href("apple-touch-icon.png")} />
+    <link rel="manifest" href={href("site.webmanifest")} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
@@ -126,6 +130,8 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
     {ogType === "article" && <meta property="article:author" content={SITE.author} />}
     {articleTags.map((t) => <meta property="article:tag" content={t} />)}
     <meta name="twitter:card" content="summary_large_image" />
+    {SITE.twitter && <meta name="twitter:site" content={SITE.twitter} />}
+    {SITE.twitter && <meta name="twitter:creator" content={SITE.twitter} />}
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
