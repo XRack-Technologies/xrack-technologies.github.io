@@ -13,17 +13,17 @@ How to write and ship a post on the XRack blog. Addresses audit item **AUD-M10**
 
 ```yaml
 ---
-title: The English Title                # required
-title_tr: Türkçe Başlık                 # optional; enables the Turkish URL/meta
+title: The English Title                 # required
+title_tr: Türkçe Başlık                  # enables the Turkish URL/meta
 description: One-sentence summary.       # required; ~150–160 chars, no line breaks
-description_tr: Tek cümlelik özet.       # optional
+description_tr: Tek cümlelik özet.       # turkish description of the description
 pubDate: 2026-07-08                      # required (YYYY-MM-DD)
 updatedDate: 2026-07-20                  # optional; shows as "modified"
 cover: /covers/foo.jpg                   # optional; else a branded card is auto-generated
 series: The Justification Series         # optional; groups posts (exact string match)
 seriesOrder: 1                           # optional; ordering within the series
 tags: ["vision"]                         # 1–3 from the taxonomy below; first = primary
-keywords: ["ai governance", "kvkk"]      # optional; SEO keywords, EN + TR mixed is fine
+keywords: ["ai governance", "kvkk"]      # SEO keywords, EN + TR mixed is fine, between 10-20
 author: Vincent E. Dogan Dursun - CEO & Co-Founder   # must resolve to src/lib/authors.ts
 draft: false                             # true = excluded from build
 ---
@@ -77,6 +77,61 @@ arc. Posts without `series` are unaffected.
 - Author must be a registered profile in `src/lib/authors.ts` (bylines link to
   it and drive Person JSON-LD). Add new authors there first.
 
+## Editorial formatting
+
+Two dedicated devices carry the "essay" voice of the Justification Series. Use
+them deliberately, not decoratively — the point is that they are rare enough to
+signal weight.
+
+### Anecdotes (historical set-pieces)
+
+A self-contained story (a historical episode, a parable) is pulled out of the
+running prose into a bordered aside, never left woven into a paragraph. Use raw
+HTML inside the Markdown:
+
+```html
+<aside class="anecdote">
+<span class="anecdote-label">An old story</span>
+<p>First paragraph: tell the story in the present tense, plainly.</p>
+<p>The real point: one closing paragraph that states what the story is doing
+here and hands the thread back to the argument.</p>
+</aside>
+```
+
+- Label text: **`An old story`** (EN) / **`Eski bir hikâye`** (TR). Keep the
+  `.anecdote` / `.anecdote-label` class names exactly (styled in
+  `src/styles/global.css`).
+- One `<p>` per paragraph; last paragraph opens with `The real point:` /
+  `Asıl mesele şu:` and connects the story to the surrounding claim.
+- Place it right where the argument needs it (often just after a heading or the
+  paragraph it illustrates). The prose around it should refer to it, not repeat
+  it.
+- One anecdote per idea it serves; don't stack them.
+
+### Maxims (blockquotes)
+
+A single, sharp, self-standing sentence that crystallizes a section becomes a
+Markdown blockquote (`> …`) on its own line, not an inline aside:
+
+```markdown
+> A boundary is a refusal with memory.
+```
+
+- Reserve blockquotes for genuine aphorisms — roughly **2–4 per post**. If it
+  needs two sentences to land or restates nearby prose, keep it as prose.
+- A maxim may open a section (a definition) or close one (a takeaway); either is
+  fine. Don't put two adjacent.
+- The XRack tagline stays **inline and italicized** within its sentence
+  (*"The model proposes, the runtime executes, the ledger proves."*), not as a
+  blockquote.
+
+### Bilingual parity
+
+Both devices must mirror across the `<!-- tr -->` split: the same anecdote as an
+aside in both languages, the same sentences as blockquotes in both. Transliterate
+proper names in the classical/Turkish style already used in the series (e.g.
+Xerxes → Kserkses, Thermopylae → Thermopylai).
+
 ## Pre-publish checklist
 
 - [ ] `title` + `description` set; `description` reads well as a search snippet.
@@ -84,6 +139,8 @@ arc. Posts without `series` are unaffected.
       post is intentionally EN-only.
 - [ ] 1–3 tags from the taxonomy; primary tag first.
 - [ ] No em dashes anywhere.
+- [ ] Anecdotes use `<aside class="anecdote">`; maxims use blockquotes (2–4);
+      both mirror across EN/TR.
 - [ ] `author` resolves to a profile in `authors.ts`.
 - [ ] `series` / `seriesOrder` set if the post belongs to a series.
 - [ ] `npm run build` passes and the post renders in both languages.

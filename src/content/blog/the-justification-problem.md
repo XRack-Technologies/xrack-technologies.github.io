@@ -1,10 +1,14 @@
 ---
 title: The Justification Problem
 title_tr: Gerekçe Sorunu
+author: Vincent E. Dogan Dursun - CEO & Co-Founder
 description: What makes a decision-maker trustworthy is not the quality of its output but whether it can stand behind it; on knowing versus appearing to know, and the value of silence.
 description_tr: Bir karar vericiyi güvenilir kılan, çıktısının kalitesi değil onun arkasında durabilmesidir; bilmek ile bilir görünmek ve susmanın değeri üzerine.
 pubDate: 2026-07-08
-tags: ["vision"]
+series: The Justification Series
+seriesOrder: 1
+tags: ["vision", "engineering"]
+draft: false
 keywords:
   [
     "AI decision-making",
