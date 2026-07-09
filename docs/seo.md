@@ -59,6 +59,25 @@ step env, or as repo variables, e.g. in `.github/workflows/deploy.yml`:
 
 (Domain/DNS verification needs no env var and is the more robust choice.)
 
+## `meta keywords` — removed (AUD-L1)
+
+**Decision: removed.** The `<meta name="keywords">` tag no longer renders
+(`src/layouts/Base.astro`). Google has ignored it for over a decade and Bing
+treats it, at best, as a weak spam signal — so it carried zero ranking upside
+while risking a false sense of "SEO done." The `keywords` prop plumbing in
+`Base.astro` was dropped with it.
+
+**What we kept:** the per-post `keywords` frontmatter field
+(`src/content.config.ts`) still populates `keywords` in the **JSON-LD
+`BlogPosting`** structured data (`src/pages/blog/[...slug].astro`). That is the
+legitimate, machine-readable home for topical terms — no author-facing change,
+nothing to re-tag.
+
+**Expectation on the record:** rankings come from **content quality + on-page
+structure (headings, internal links) + structured data** (Organization /
+WebSite / BlogPosting / Breadcrumb JSON-LD) — not from meta keywords. Do not
+reintroduce the tag.
+
 ## Verification checklist
 
 1. `curl -s https://blog.xrack.io/ | grep -E "google-site-verification|msvalidate"`
@@ -66,3 +85,6 @@ step env, or as repo variables, e.g. in `.github/workflows/deploy.yml`:
 2. GSC + Bing both show the property as **Verified**.
 3. Sitemap submitted; **Coverage/Pages** and **Performance** reports populate
    over the following days.
+4. `curl -s https://blog.xrack.io/blog/<any-post>/ | grep -c 'name="keywords"'`
+   returns **0**; the same page's JSON-LD still contains a `"keywords"` field
+   (`grep -o '"keywords":"[^"]*"'`).

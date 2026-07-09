@@ -53,6 +53,33 @@ GitHub identity (no new account for commenters). Rendered by
 - **Data:** comment content lives in GitHub Discussions on our repo; identity
   and auth are handled by GitHub. We store nothing extra and set no cookies.
 
+## Reactions / claps (AUD-L4)
+
+**Decision: no dedicated claps/save backend — deliberately skipped.** Per-post
+**reactions are already live** via Giscus (`data-reactions-enabled="1"` in
+`Comments.astro`): a signed-in reader can react (👍 ❤️ 🎉 …) to the post's
+discussion, and the counts are visible as social proof. That reuses the
+existing, zero-infrastructure mechanism.
+
+We are **not** building a separate Medium-style "clap" or "save" widget:
+
+- **It needs a backend we deliberately don't have.** Visible reaction *counts*
+  require shared persistent storage — a serverless function + DB, or a
+  third-party reactions service that sets cookies and calls out on every page
+  load. Both break this site's static, no-server, no-cookie, third-party-JS-
+  only-on-interaction posture (see [`analytics.md`](./analytics.md)).
+- **The need is already covered.** Giscus reactions serve the
+  reaction/social-proof case; the share bar / share FAB (`Share.astro`,
+  `ShareFab.astro`) serve low-friction distribution and implicit endorsement;
+  "save" is covered by the browser bookmark and the RSS feed (`/rss.xml`).
+- **Effort/return.** An abuse-resistant anonymous counter is well beyond the "S"
+  this item was scoped at, for a marginal signal.
+
+**Revisit trigger:** if a serverless layer is introduced later (e.g. for the
+newsletter double opt-in, AUD-C3), reconsider a privacy-friendly anonymous clap
+counter reusing that infrastructure — but only if it can be done without cookies
+or per-load third-party calls.
+
 ## Verification checklist
 
 1. With env unset: a post shows the "Comments" section with X + email links; no
@@ -60,3 +87,5 @@ GitHub identity (no new account for commenters). Rendered by
 2. With env set + deployed: scrolling to the comments loads `giscus.app`; a
    signed-in GitHub user can post; the comment appears as a Discussion in the repo.
 3. Opening the EN and TR URL of the same post shows the **same** thread.
+4. On a loaded Giscus thread, the **reaction bar** is present and a signed-in
+   user can add a reaction (AUD-L4).

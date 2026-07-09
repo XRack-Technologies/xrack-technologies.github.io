@@ -154,7 +154,7 @@ const breadcrumbLd = {
           <span data-lang-content="en">{formatDate(pubDate)}</span>
           <span data-lang-content="tr">{formatDateTr(pubDate)}</span>
         </time>
-        <span class="dot">&middot;</span>
+        <span class="dot" aria-hidden="true">&middot;</span>
         <span><T en={`${mins} min read`} tr={`${mins} dk okuma`} /></span>
       </div>
       <h1 class="display-title">
@@ -191,7 +191,7 @@ const breadcrumbLd = {
     {
       cover && (
         <figure class="article-cover wrap">
-          <img src={cover} alt={title} />
+          <img src={cover} alt="" />
         </figure>
       )
     }
@@ -202,8 +202,8 @@ const breadcrumbLd = {
       {
         bilingual ? (
           <>
-            <div class="prose" data-lang-content="en" set:html={enDoc.html} />
-            <div class="prose" data-lang-content="tr" set:html={trDoc.html} />
+            <div class="prose" lang="en" data-lang-content="en" set:html={enDoc.html} />
+            <div class="prose" lang="tr" data-lang-content="tr" set:html={trDoc.html} />
           </>
         ) : (
           <div class="prose" set:html={enDoc.html} />

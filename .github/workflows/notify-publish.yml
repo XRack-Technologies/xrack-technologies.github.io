@@ -1,0 +1,48 @@
+name: Notify on publish
+
+# Announces newly-published posts to a webhook (Zapier / Make / Buffer / Slack).
+# Optional: does nothing unless the DISTRIBUTION_WEBHOOK_URL secret is set.
+# See docs/distribution.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/blog/**"
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect newly-added posts
+        id: diff
+        run: |
+          BEFORE='${{ github.event.before }}'
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE="$(git rev-parse HEAD^ 2>/dev/null || echo '')"
+          fi
+          ADDED=""
+          if [ -n "$BEFORE" ]; then
+            ADDED="$(git diff --name-only --diff-filter=A "$BEFORE" "${{ github.sha }}" -- 'src/content/blog/**/*.md' || true)"
+          fi
+          {
+            echo "added<<EOF"
+            echo "$ADDED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Announce
+        if: steps.diff.outputs.added != ''
+        env:
+          DISTRIBUTION_WEBHOOK_URL: ${{ secrets.DISTRIBUTION_WEBHOOK_URL }}
+          ADDED: ${{ steps.diff.outputs.added }}
+          SITE_URL: https://blog.xrack.io
+        run: node scripts/notify-publish.mjs
