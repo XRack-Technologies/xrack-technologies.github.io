@@ -6,7 +6,6 @@ interface Props {
   variant?: "card" | "compact";
 }
 const { variant = "card" } = Astro.props;
-const subscribeUrl = `${NEWSLETTER.url}/subscribe`;
 ---
 
 <div class={`nl nl--${variant}`} data-newsletter-box>
@@ -19,8 +18,8 @@ const subscribeUrl = `${NEWSLETTER.url}/subscribe`;
       {
         variant === "card" ? (
           <T
-            en="Engineering, research, and field notes on building the observable agentic harness. No spam — unsubscribe anytime."
-            tr="Gözlemlenebilir agentic harness'ı inşa üzerine mühendislik, araştırma ve saha notları. Spam yok — istediğin an çık."
+            en="Engineering, research, and field notes on building the observable agentic harness. No spam, unsubscribe anytime."
+            tr="Gözlemlenebilir agentic harness'ı inşa üzerine mühendislik, araştırma ve saha notları. Spam yok, istediğin an çık."
           />
         ) : (
           <T en="Get new posts by email. No spam." tr="Yeni yazıları e-postayla al. Spam yok." />
@@ -32,12 +31,11 @@ const subscribeUrl = `${NEWSLETTER.url}/subscribe`;
   <form
     class="nl__form"
     data-newsletter
-    action={NEWSLETTER.action}
-    method="post"
+    action={NEWSLETTER.subscribe}
+    method="get"
     target="_blank"
     novalidate
   >
-    <input type="hidden" name="source" value="embed" />
     <div class="nl__row">
       <input
         class="nl__input"
@@ -53,21 +51,17 @@ const subscribeUrl = `${NEWSLETTER.url}/subscribe`;
       <button class="btn-primary nl__btn" type="submit">
         <span class="nl__btn-label"><T en="Subscribe" tr="Abone ol" /></span>
         <svg class="nl__btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
-        <span class="nl__spinner" aria-hidden="true"></span>
       </button>
     </div>
     <p class="nl__error" role="alert"><T en="Please enter a valid email address." tr="Lütfen geçerli bir e-posta adresi girin." /></p>
-    <p class="nl__failed" role="alert"><T en="Couldn't subscribe you just now — please use the Substack link below." tr="Şu an abone edemedik — aşağıdaki Substack bağlantısını kullanın." /></p>
     <p class="nl__note">
-      <T en="Double opt-in — we'll email a confirmation link." tr="Çift onay — bir doğrulama bağlantısı göndeririz." />
-      {" "}
-      <a href={subscribeUrl} target="_blank" rel="noopener"><T en="Or subscribe on Substack" tr="Veya Substack'te abone ol" /> ↗</a>
+      <T en="You'll finish on Substack, then confirm via the link they email (double opt-in)." tr="Aboneliği Substack'te tamamlar, gönderdikleri bağlantıyla onaylarsın (çift onay)." />
     </p>
   </form>
 
   <div class="nl__success" role="status" aria-live="polite">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-    <span><T en="Almost there — check your inbox to confirm your subscription." tr="Az kaldı — aboneliğini onaylamak için gelen kutunu kontrol et." /></span>
+    <span><T en="Opening Substack in a new tab — finish there to subscribe." tr="Substack yeni sekmede açılıyor — aboneliği orada tamamla." /></span>
   </div>
 </div>
 
@@ -102,38 +96,22 @@ const subscribeUrl = `${NEWSLETTER.url}/subscribe`;
   }
   .nl__input::placeholder { color: hsl(var(--muted-foreground) / 0.8); }
   .nl__input:focus { outline: none; border-color: hsl(var(--primary) / 0.6); box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15); }
-  .nl__btn { flex-shrink: 0; padding: 0.7rem 1.4rem; font-size: 14px; position: relative; }
+  .nl__btn { flex-shrink: 0; padding: 0.7rem 1.4rem; font-size: 14px; }
   .nl__btn-arrow { transition: transform 0.18s ease; }
   .nl__btn:hover .nl__btn-arrow { transform: translateX(2px); }
 
-  .nl__spinner {
-    display: none; width: 15px; height: 15px; border-radius: 50%;
-    border: 2px solid hsl(var(--primary-foreground) / 0.35); border-top-color: hsl(var(--primary-foreground));
-    animation: nlspin 0.7s linear infinite;
-  }
-  @keyframes nlspin { to { transform: rotate(360deg); } }
-
-  .nl__error, .nl__failed { display: none; margin: 0.6rem 0 0; font-size: 13px; color: hsl(var(--rose)); }
+  .nl__error { display: none; margin: 0.6rem 0 0; font-size: 13px; color: hsl(var(--rose)); }
   .nl__note { margin: 0.85rem 0 0; font-size: 12.5px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
-  .nl__note a { color: hsl(var(--primary-soft)); white-space: nowrap; }
-  .nl__note a:hover { color: hsl(var(--primary)); }
   .nl--compact .nl__note { margin-top: 0.55rem; }
 
   .nl__success {
-    display: none; align-items: center; gap: 0.6rem; margin-top: 0.5rem;
-    color: hsl(var(--success)); font-size: 14.5px; line-height: 1.5;
+    display: none; align-items: center; gap: 0.6rem; margin-top: 0.9rem;
+    color: hsl(var(--success)); font-size: 14px; line-height: 1.5;
   }
-  .nl--card .nl__success { padding: 0.5rem 0; }
   .nl__success svg { flex-shrink: 0; }
 
-  /* State machine (driven by data-state on the box) */
+  /* State machine (data-state on the box) */
   [data-newsletter-box][data-state="error"] .nl__error { display: block; }
-  [data-newsletter-box][data-state="failed"] .nl__failed { display: block; }
-  [data-newsletter-box][data-state="loading"] .nl__btn-label,
-  [data-newsletter-box][data-state="loading"] .nl__btn-arrow { visibility: hidden; }
-  [data-newsletter-box][data-state="loading"] .nl__spinner { display: inline-block; }
-  [data-newsletter-box][data-state="loading"] .nl__btn { pointer-events: none; }
-  [data-newsletter-box][data-state="done"] .nl__form { display: none; }
   [data-newsletter-box][data-state="done"] .nl__success { display: flex; }
 </style>
 
@@ -146,32 +124,22 @@ const subscribeUrl = `${NEWSLETTER.url}/subscribe`;
     if (!box || !email) return;
     const valid = (v: string) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v);
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    form.addEventListener("submit", (e) => {
+      // Native GET submit opens Substack's subscribe page (email prefilled) in a
+      // new tab — works with and without JS. Here JS only blocks invalid emails
+      // and shows an inline "opening Substack" hint on success.
       const v = (email.value || "").trim();
       if (!valid(v)) {
+        e.preventDefault();
         box.dataset.state = "error";
         email.focus();
         return;
       }
-      box.dataset.state = "loading";
-      try {
-        const body = new URLSearchParams({ email: v, source: "embed" });
-        await fetch(form.action, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body,
-        });
-        box.dataset.state = "done";
-      } catch (err) {
-        box.dataset.state = "failed";
-      }
+      box.dataset.state = "done";
     });
 
     email.addEventListener("input", () => {
-      const s = box.dataset.state;
-      if (s === "error" || s === "failed") box.dataset.state = "";
+      if (box.dataset.state === "error") box.dataset.state = "";
     });
   });
 </script>

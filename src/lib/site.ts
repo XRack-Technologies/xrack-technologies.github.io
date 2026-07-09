@@ -15,7 +15,7 @@ export const SOCIAL = {
 
 export const NEWSLETTER = {
   url: "https://xrack.substack.com",
-  action: "https://xrack.substack.com/api/v1/free?nojs=true",
+  subscribe: "https://xrack.substack.com/subscribe",
 };
 
 export const NAV = [
