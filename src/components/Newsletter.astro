@@ -41,6 +41,23 @@ const scriptSrc = `https://eomail5.com/form/${formId}.js`;
   .nl__embed { margin-top: 1.4rem; }
   .nl__embed :global(.inline-container) { max-width: 100% !important; }
   .nl__embed :global(.emailoctopus-form) { font-family: var(--font-sans) !important; }
+  /* Left-align the form (widget centers it) and align input + button on one row. */
+  .nl__embed :global(.form-container),
+  .nl__embed :global(.emailoctopus-form-wrapper),
+  .nl__embed :global(.emailoctopus-form),
+  .nl__embed :global(.main-form) {
+    margin-left: 0 !important; margin-right: 0 !important;
+    max-width: 100% !important; text-align: left !important;
+  }
+  .nl__embed :global(.main-form) {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    gap: 0.6rem !important;
+    max-width: 620px !important;
+  }
+  .nl__embed :global(.main-form > div) { flex: 1 1 240px !important; margin: 0 !important; }
+  .nl__embed :global(.emailoctopus-form-row) { margin: 0 !important; }
   .nl__embed :global(.form-control) {
     background: hsl(var(--background) / 0.5) !important;
     border: 1px solid hsl(var(--border-strong)) !important;
@@ -48,7 +65,9 @@ const scriptSrc = `https://eomail5.com/form/${formId}.js`;
     border-radius: 9999px !important;
     font-family: var(--font-sans) !important;
     font-size: 15px !important;
-    padding: 0.7rem 1.1rem !important;
+    height: 46px !important;
+    width: 100% !important;
+    padding: 0 1.1rem !important;
     box-shadow: none !important;
   }
   .nl__embed :global(.form-control::placeholder) { color: hsl(var(--muted-foreground) / 0.8) !important; }
@@ -58,7 +77,8 @@ const scriptSrc = `https://eomail5.com/form/${formId}.js`;
     color: hsl(var(--primary-foreground)) !important;
     border: 0 !important; border-radius: 9999px !important;
     font-family: var(--font-sans) !important; font-weight: 600 !important; font-size: 14px !important;
-    padding: 0.72rem 1.4rem !important; cursor: pointer !important;
+    height: 46px !important; width: auto !important; margin: 0 !important;
+    padding: 0 1.5rem !important; cursor: pointer !important;
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18), 0 6px 18px -8px hsl(var(--primary) / 0.55) !important;
     transition: transform 0.18s ease, box-shadow 0.2s ease !important;
   }
@@ -73,4 +93,9 @@ const scriptSrc = `https://eomail5.com/form/${formId}.js`;
   .nl__embed :global(.emailoctopus-error-message) { color: hsl(var(--rose)) !important; font-family: var(--font-sans) !important; }
   .nl__embed :global(.mastfoot) { opacity: 0.55; margin-top: 0.4rem; }
   .nl__embed :global(a) { color: hsl(var(--primary-soft)) !important; }
+  /* Higher specificity to beat EmailOctopus' Bootstrap `.w-100 { width:100% !important }`
+     so the button hugs its label and the row stays compact + left-aligned. */
+  .nl__embed :global(.emailoctopus-form .main-form) { max-width: 540px !important; }
+  .nl__embed :global(.emailoctopus-form .main-form > div) { flex: 1 1 auto !important; }
+  .nl__embed :global(.emailoctopus-form .main-form input.btn) { flex: 0 0 auto !important; width: auto !important; min-width: 140px !important; }
 </style>
