@@ -15,17 +15,31 @@ const pressEmail = "dogandursun@xrack.io";
 const facts: { k: { en: string; tr: string }; v: { en: string; tr: string }; url?: string }[] = [
   { k: { en: "Company", tr: "Şirket" }, v: { en: "XRack Technologies", tr: "XRack Technologies" } },
   {
-    k: { en: "Category", tr: "Kategori" },
+    k: { en: "Product", tr: "Ürün" },
     v: {
-      en: "Sovereign cognitive runtime for regulated enterprise AI",
-      tr: "Regüle kurumsal yapay zekâ için bağımsız bilişsel çalışma zamanı",
+      en: "XRack — Sovereign Cognitive Runtime",
+      tr: "XRack — Sovereign Cognitive Runtime",
+    },
+  },
+  {
+    k: { en: "Tagline", tr: "Slogan" },
+    v: {
+      en: "The model proposes, the runtime executes, the ledger proves.",
+      tr: "Model önerir, runtime uygular, defter kanıtlar.",
+    },
+  },
+  {
+    k: { en: "Architecture", tr: "Mimari" },
+    v: {
+      en: "Four planes — Harness · Grid · Federation · Embodiment",
+      tr: "Dört düzlem — Harness · Grid · Federation · Embodiment",
     },
   },
   {
     k: { en: "Deployment", tr: "Dağıtım" },
     v: {
-      en: "Self-hosted appliance, inside your own perimeter",
-      tr: "Kendi çevrenizde barındırılan uygulama",
+      en: "Self-hosted appliance · bring your own LLM",
+      tr: "Kendi altyapınızda barındırılır · kendi LLM'inizi getirin",
     },
   },
   { k: { en: "Website", tr: "Web sitesi" }, v: { en: "xrack.io", tr: "xrack.io" }, url: SITE.homepage },
@@ -34,18 +48,34 @@ const facts: { k: { en: string; tr: string }; v: { en: string; tr: string }; url
 ];
 
 const boilerShortEn =
-  "XRack Technologies builds a sovereign cognitive runtime for regulated enterprise AI. It turns agentic systems from opaque black boxes into auditable glass boxes: agents that remember, act, verify, and prove every decision, running as a self-hosted appliance inside the customer's own perimeter, on their own model, with their own audit trail.";
+  "XRack Technologies builds a self-hosted cognitive runtime for regulated enterprise AI. The model proposes, the runtime executes, the ledger proves — agents that remember, act, verify, and prove every decision, running inside the customer's own perimeter, on their own LLM, with their own audit trail.";
 const boilerShortTr =
-  "XRack Technologies, regüle kurumsal yapay zekâ için bağımsız bir bilişsel çalışma zamanı geliştirir. Agentic sistemleri opak kara kutulardan denetlenebilir cam kutulara dönüştürür: hatırlayan, eyleme geçen, doğrulayan ve verdiği her kararı kanıtlayan ajanlar; müşterinin kendi çevresinde, kendi modeliyle ve kendi denetim kaydıyla, kendi sunucusunda barındırılan bir uygulama olarak.";
+  "XRack Technologies, regüle kurumsal yapay zekâ için kendi altyapınızda barındırılan bir bilişsel runtime geliştirir. Model önerir, runtime uygular, defter kanıtlar — hatırlayan, eyleme geçen, doğrulayan ve verdiği her kararı kanıtlayan ajanlar; müşterinin kendi çevresinde, kendi LLM'iyle ve kendi denetim kaydıyla çalışır.";
 const boilerLongEn =
-  "Free-form prompt loops drift, and when they fail you cannot say why — so regulated organizations can't put them in production. XRack replaces the open-ended loop with a deterministic cognitive cycle (observe → reason → plan → act → verify → learn) and an immutable ledger: every step an agent takes is traced, every decision carries its own evidence, and every grant of authority is scoped and expiring. The system fails closed by default. It spans four planes — the Harness (a single reasoning agent), the Grid (an accountable organization of agents), Federation (grids kept in sync across a portfolio), and Embodiment (the same audited cognition extended to physical systems) — and ships as an appliance customers run entirely within their own perimeter.";
+  "One runtime, four planes — a harness (the mind), a grid (the organization), a federation (the portfolio), and embodiment (the body). Free-form prompt loops drift and, when they fail, cannot say why — so regulated organizations can't run them. XRack replaces the open-ended loop with a deterministic cognitive cycle (observe → reason → plan → act → verify → learn) and an immutable ledger: every step is traced, every decision carries its own evidence, and every grant of authority is scoped and expiring. It ships self-hosted, bring your own LLM, and fails closed by default.";
 const boilerLongTr =
-  "Serbest biçimli prompt döngüleri savrulur ve hata verdiklerinde nedenini söyleyemezsiniz; bu yüzden regüle kurumlar onları canlıya alamaz. XRack, bu açık uçlu döngünün yerine deterministik bir bilişsel döngü (gözlemle → akıl yürüt → planla → eyleme geç → doğrula → öğren) ve değiştirilemez bir defter koyar: bir ajanın attığı her adım izlenir, her karar kendi kanıtını taşır ve her yetki kapsamlı ve sürelidir. Sistem varsayılan olarak kapalı başlar. Dört düzleme yayılır — Harness (tek bir akıl yürütme ajanı), Grid (hesap verebilir bir ajan organizasyonu), Federation (bir portföy boyunca eşitlenen gridler) ve Embodiment (aynı denetlenen bilişin fiziksel sistemlere taşınması) — ve müşterilerin tamamen kendi çevrelerinde çalıştırdığı bir uygulama olarak gelir.";
+  "Tek runtime, dört düzlem — bir harness (zihin), bir grid (organizasyon), bir federation (portföy) ve embodiment (beden). Serbest biçimli prompt döngüleri savrulur ve hata verdiklerinde nedenini söyleyemez; bu yüzden regüle kurumlar onları çalıştıramaz. XRack, açık uçlu döngünün yerine deterministik bir bilişsel döngü (gözlemle → akıl yürüt → planla → eyleme geç → doğrula → öğren) ve değiştirilemez bir defter koyar: her adım izlenir, her karar kendi kanıtını taşır ve her yetki kapsamlı ve sürelidir. Kendi altyapınızda barındırılır, kendi LLM'inizi getirir ve varsayılan olarak kapalı başlar.";
+
+const downloads = [
+  { file: "logo.png", src: logo, name: { en: "Logo (PNG)", tr: "Logo (PNG)" }, tone: "mark" },
+  { file: "press/og-card.png", src: href("press/og-card.png"), name: { en: "Share card — EN", tr: "Paylaşım kartı — EN" }, tone: "wide" },
+  { file: "press/og-card-tr.png", src: href("press/og-card-tr.png"), name: { en: "Share card — TR", tr: "Paylaşım kartı — TR" }, tone: "wide" },
+  { file: "press/raxclaw.png", src: href("press/raxclaw.png"), name: { en: "Brand artwork", tr: "Marka görseli" }, tone: "art" },
+];
+
+const screens = [
+  { f: "architecture", en: "Architecture", tr: "Mimari" },
+  { f: "system_map", en: "System map", tr: "Sistem haritası" },
+  { f: "ledger", en: "Ledger", tr: "Defter" },
+  { f: "reasoning", en: "Reasoning", tr: "Akıl yürütme" },
+  { f: "memory_graph", en: "Memory graph", tr: "Bellek grafiği" },
+  { f: "planning", en: "Planning", tr: "Planlama" },
+];
 ---
 
 <Base
   title="Press & Media Kit"
-  description="Brand assets, boilerplate, executive bios, and a media contact for XRack Technologies."
+  description="Brand assets, boilerplate, product screenshots, executive bios, and a media contact for XRack Technologies."
 >
   <section class="hero press-hero">
     <div class="hero-aura"></div>
@@ -54,18 +84,19 @@ const boilerLongTr =
       <h1 class="display-title"><T en="Press & media kit" tr="Basın ve medya kiti" /></h1>
       <p class="lede">
         <T
-          en="Everything you need to cover XRack accurately: logo, approved boilerplate, executive bios, fast facts, and a direct press contact."
-          tr="XRack'i doğru şekilde haberleştirmek için gereken her şey: logo, onaylı tanıtım metni, yönetici biyografileri, hızlı bilgiler ve doğrudan basın iletişimi."
+          en="Everything you need to cover XRack accurately — logo and brand assets, approved boilerplate, product screenshots, executive bios, and a direct press contact."
+          tr="XRack'i doğru haberleştirmek için gereken her şey — logo ve marka varlıkları, onaylı tanıtım metni, ürün ekran görüntüleri, yönetici biyografileri ve doğrudan basın iletişimi."
         />
+      </p>
+      <p class="press-tagline serif-accent">
+        <T en="“The model proposes, the runtime executes, the ledger proves.”" tr="“Model önerir, runtime uygular, defter kanıtlar.”" />
       </p>
       <div class="hero-cta">
         <a class="btn-primary" href={logo} download="xrack-logo.png">
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
           <T en="Download logo" tr="Logoyu indir" />
         </a>
-        <a class="btn-ghost" href={`mailto:${pressEmail}`}>
-          <T en="Media contact" tr="Basın iletişimi" />
-        </a>
+        <a class="btn-ghost" href={`mailto:${pressEmail}`}><T en="Media contact" tr="Basın iletişimi" /></a>
       </div>
     </div>
   </section>
@@ -101,9 +132,7 @@ const boilerLongTr =
     <!-- Boilerplate -->
     <section class="press-section">
       <span class="eyebrow-strong"><T en="Boilerplate" tr="Tanıtım metni" /></span>
-      <p class="section-note">
-        <T en="Approved copy — quote verbatim." tr="Onaylı metin — birebir alıntılayın." />
-      </p>
+      <p class="section-note"><T en="Approved copy — quote verbatim." tr="Onaylı metin — birebir alıntılayın." /></p>
       <div class="boiler-grid">
         <article class="boiler" data-en={boilerShortEn} data-tr={boilerShortTr}>
           <header class="boiler__head">
@@ -111,7 +140,7 @@ const boilerLongTr =
             <button class="boiler__copy" type="button" aria-label="Copy">
               <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
               <svg class="i-done" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              <span class="boiler__copy-t"><T en="Copy" tr="Kopyala" /></span>
+              <span><T en="Copy" tr="Kopyala" /></span>
             </button>
           </header>
           <p>
@@ -125,7 +154,7 @@ const boilerLongTr =
             <button class="boiler__copy" type="button" aria-label="Copy">
               <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
               <svg class="i-done" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              <span class="boiler__copy-t"><T en="Copy" tr="Kopyala" /></span>
+              <span><T en="Copy" tr="Kopyala" /></span>
             </button>
           </header>
           <p>
@@ -136,29 +165,49 @@ const boilerLongTr =
       </div>
     </section>
 
-    <!-- Brand assets -->
+    <!-- Brand assets & downloads -->
     <section class="press-section">
       <span class="eyebrow-strong"><T en="Brand assets" tr="Marka varlıkları" /></span>
-      <div class="assets">
-        <div class="asset-swatch asset-swatch--dark">
-          <img src={logo} alt="XRack logo on dark background" />
-          <span class="tag-mono">On dark</span>
-        </div>
-        <div class="asset-swatch asset-swatch--light">
-          <img src={logo} alt="XRack logo on light background" />
-          <span class="tag-mono">On light</span>
-        </div>
-        <div class="asset-meta">
-          <a class="btn-primary" href={logo} download="xrack-logo.png">
-            <T en="Download PNG" tr="PNG indir" />
-          </a>
-          <p class="section-note">
-            <T
-              en="Keep clear space around the mark. Don't stretch, recolor, or add effects."
-              tr="Logonun çevresinde boşluk bırakın. Germeyin, rengini değiştirmeyin, efekt eklemeyin."
-            />
-          </p>
-        </div>
+      <div class="logo-lockup">
+        <div class="asset-swatch asset-swatch--dark"><img src={logo} alt="XRack logo on dark" /><span class="tag-mono">On dark</span></div>
+        <div class="asset-swatch asset-swatch--light"><img src={logo} alt="XRack logo on light" /><span class="tag-mono">On light</span></div>
+        <p class="section-note">
+          <T
+            en="Keep clear space around the mark. Don't stretch, recolor, or add effects."
+            tr="Logonun çevresinde boşluk bırakın. Germeyin, rengini değiştirmeyin, efekt eklemeyin."
+          />
+        </p>
+      </div>
+      <div class="dl-grid">
+        {
+          downloads.map((d) => (
+            <a class="card-chrome dl" href={d.src} download>
+              <div class={`dl__preview dl__preview--${d.tone}`}>
+                <img src={d.src} alt="" loading="lazy" />
+              </div>
+              <div class="dl__foot">
+                <span><T en={d.name.en} tr={d.name.tr} /></span>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Product screenshots -->
+    <section class="press-section">
+      <span class="eyebrow-strong"><T en="Product screenshots" tr="Ürün ekran görüntüleri" /></span>
+      <p class="section-note"><T en="From the XRack runtime UI. Click to open full size." tr="XRack runtime arayüzünden. Tam boyut için tıklayın." /></p>
+      <div class="shots-grid">
+        {
+          screens.map((s) => (
+            <a class="card-chrome shot" href={href(`press/screens/${s.f}.png`)} target="_blank" rel="noopener">
+              <img src={href(`press/screens/${s.f}.png`)} alt={s.en} loading="lazy" />
+              <span class="shot__label"><T en={s.en} tr={s.tr} /></span>
+            </a>
+          ))
+        }
       </div>
     </section>
 
@@ -204,15 +253,10 @@ const boilerLongTr =
       <div class="contact-card glass">
         <span class="eyebrow"><T en="Media contact" tr="Basın iletişimi" /></span>
         <p class="contact-card__lead">
-          <T
-            en="For interviews, high-resolution assets, or fact-checks:"
-            tr="Röportaj, yüksek çözünürlüklü görsel veya doğrulama için:"
-          />
+          <T en="For interviews, high-resolution assets, or fact-checks:" tr="Röportaj, yüksek çözünürlüklü görsel veya doğrulama için:" />
         </p>
         <a class="contact-card__mail" href={`mailto:${pressEmail}`}>{pressEmail}</a>
-        <div>
-          <a class="btn-ghost" href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a>
-        </div>
+        <div><a class="btn-ghost" href={SITE.cta} target="_blank" rel="noopener"><T en="Book a Demo" tr="Demo Planla" /></a></div>
       </div>
     </section>
 
@@ -224,144 +268,66 @@ const boilerLongTr =
 
 <style>
   .press-hero { padding-bottom: 1.5rem; }
-  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
+  .press-tagline { font-size: 1.15rem; margin: 0; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 0.5rem; }
   .press { padding-bottom: 3rem; }
   .press-section { margin-top: 4rem; }
   .press-section > .eyebrow-strong { display: inline-flex; margin-bottom: 1.25rem; }
   .section-note { color: hsl(var(--muted-foreground)); font-size: 14px; margin: 0 0 1.25rem; }
-  .tag-mono {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: hsl(var(--muted-foreground));
-  }
+  .tag-mono { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
 
-  /* Fast facts */
-  .facts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-  }
-  .fact {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    padding: 1.1rem 1.25rem;
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-    background: hsl(var(--card-elevated) / 0.4);
-  }
-  .fact__k {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: hsl(var(--muted-foreground));
-  }
+  .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  .fact { display: flex; flex-direction: column; gap: 0.4rem; padding: 1.1rem 1.25rem; border: 1px solid hsl(var(--border)); border-radius: var(--radius); background: hsl(var(--card-elevated) / 0.4); }
+  .fact__k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
   .fact__v { font-size: 15px; line-height: 1.45; color: hsl(var(--foreground)); }
 
-  /* Boilerplate */
   .boiler-grid { display: grid; gap: 1.25rem; }
-  .boiler {
-    position: relative;
-    padding: 1.4rem 1.5rem;
-    border: 1px solid hsl(var(--border));
-    border-left: 3px solid hsl(var(--primary));
-    border-radius: 0 var(--radius) var(--radius) 0;
-    background: hsl(var(--card-elevated) / 0.4);
-  }
-  .boiler__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-  }
+  .boiler { position: relative; padding: 1.4rem 1.5rem; border: 1px solid hsl(var(--border)); border-left: 3px solid hsl(var(--primary)); border-radius: 0 var(--radius) var(--radius) 0; background: hsl(var(--card-elevated) / 0.4); }
+  .boiler__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
   .boiler p { margin: 0; line-height: 1.75; color: hsl(var(--foreground) / 0.92); }
-  .boiler__copy {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border: 1px solid hsl(var(--border));
-    background: hsl(var(--card-elevated));
-    color: hsl(var(--muted-foreground));
-    border-radius: 9999px;
-    padding: 0.25rem 0.7rem;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
-  }
+  .boiler__copy { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid hsl(var(--border)); background: hsl(var(--card-elevated)); color: hsl(var(--muted-foreground)); border-radius: 9999px; padding: 0.25rem 0.7rem; font-family: var(--font-mono); font-size: 11px; cursor: pointer; transition: color 0.15s ease, border-color 0.15s ease; }
   .boiler__copy:hover { color: hsl(var(--foreground)); border-color: hsl(var(--border-strong)); }
   .boiler__copy .i-done { display: none; }
   .boiler__copy.is-copied { color: hsl(var(--success)); border-color: hsl(var(--success) / 0.5); }
   .boiler__copy.is-copied .i-copy { display: none; }
   .boiler__copy.is-copied .i-done { display: inline; }
 
-  /* Brand assets */
-  .assets { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
-  .asset-swatch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
-    width: 150px;
-    padding: 1.5rem 1rem 0.9rem;
-    border-radius: var(--radius);
-    border: 1px solid hsl(var(--border));
-  }
-  .asset-swatch img { width: 64px; height: 64px; }
+  .logo-lockup { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .asset-swatch { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; width: 132px; padding: 1.4rem 1rem 0.8rem; border-radius: var(--radius); border: 1px solid hsl(var(--border)); }
+  .asset-swatch img { width: 58px; height: 58px; }
   .asset-swatch--dark { background: hsl(20 3% 8%); }
   .asset-swatch--light { background: #fff; }
   .asset-swatch--light .tag-mono { color: hsl(20 3% 45%); }
-  .asset-meta { display: flex; flex-direction: column; gap: 0.75rem; min-width: 220px; flex: 1; }
-  .asset-meta .section-note { margin: 0; }
+  .logo-lockup .section-note { margin: 0; flex: 1; min-width: 200px; }
 
-  /* Executives */
-  .execs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.25rem;
-  }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+  .dl { display: flex; flex-direction: column; overflow: hidden; color: inherit; }
+  .dl__preview { display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid hsl(var(--border)); }
+  .dl__preview img { width: 100%; height: 100%; object-fit: cover; }
+  .dl__preview--mark { background: hsl(20 3% 8%); }
+  .dl__preview--mark img { width: 64px; height: 64px; object-fit: contain; }
+  .dl__preview--art { background: hsl(20 3% 8%); }
+  .dl__preview--art img { object-fit: contain; }
+  .dl__foot { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; font-size: 14px; font-weight: 500; }
+  .dl:hover .dl__foot { color: hsl(var(--primary-soft)); }
+
+  .shots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .shot { display: block; overflow: hidden; position: relative; }
+  .shot img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
+  .shot__label { position: absolute; left: 0; right: 0; bottom: 0; padding: 0.6rem 0.9rem; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(var(--foreground)); background: linear-gradient(0deg, hsl(20 3% 4% / 0.9), transparent); }
+
+  .execs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
   .exec { padding: 1.5rem; }
   .exec__top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-  .exec__avatar {
-    flex-shrink: 0;
-    width: 56px;
-    height: 56px;
-    border-radius: 9999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: hsl(var(--primary-foreground));
-    background-image: linear-gradient(180deg, hsl(var(--primary-soft)), hsl(var(--primary)));
-    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18);
-  }
+  .exec__avatar { flex-shrink: 0; width: 56px; height: 56px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; color: hsl(var(--primary-foreground)); background-image: linear-gradient(180deg, hsl(var(--primary-soft)), hsl(var(--primary))); box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18); }
   .exec__name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; margin: 0; }
   .exec__role { color: hsl(var(--muted-foreground)); font-size: 13px; margin: 0.25rem 0 0; line-height: 1.4; }
   .exec__bio { margin: 0 0 1rem; line-height: 1.65; color: hsl(var(--foreground) / 0.9); font-size: 15px; }
   .exec__links { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 14px; font-weight: 500; }
 
-  /* Contact */
-  .contact-card {
-    text-align: center;
-    padding: 2.5rem 1.5rem;
-    border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.9rem;
-  }
+  .contact-card { text-align: center; padding: 2.5rem 1.5rem; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
   .contact-card__lead { color: hsl(var(--muted-foreground)); margin: 0; }
-  .contact-card__mail {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
-    letter-spacing: -0.02em;
-  }
+  .contact-card__mail { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.3rem, 3vw, 1.8rem); letter-spacing: -0.02em; }
 </style>
 
 <script>
