@@ -1,0 +1,107 @@
+---
+import T from "./T.astro";
+import { href } from "../lib/site";
+
+interface Part {
+  id: string;
+  titleEn: string;
+  titleTr: string;
+  hasTr: boolean;
+  current: boolean;
+}
+interface Props {
+  name: string;
+  parts: Part[];
+  current: number;
+  total: number;
+}
+const { name, parts, current, total } = Astro.props;
+---
+
+<nav class="series wrap wrap--narrow" aria-label="Series">
+  <div class="series__head">
+    <span class="tag-mono"><T en="Series" tr="Seri" /></span>
+    <span class="series__count"><T en={`Part ${current} of ${total}`} tr={`${total} yazılık serinin ${current}. yazısı`} /></span>
+  </div>
+  <p class="series__name">{name}</p>
+  <ol class="series__list">
+    {
+      parts.map((p, i) => (
+        <li class={p.current ? "is-current" : ""}>
+          {p.current ? (
+            <span class="series__item" aria-current="true">
+              <span class="series__n">{i + 1}</span>
+              <span><span data-lang-content="en">{p.titleEn}</span><span data-lang-content="tr">{p.titleTr}</span></span>
+            </span>
+          ) : (
+            <a
+              class="series__item"
+              href={href(`blog/${p.id}`)}
+              data-href-tr={p.hasTr ? href(`blog/${p.id}/tr`) : undefined}
+            >
+              <span class="series__n">{i + 1}</span>
+              <span><span data-lang-content="en">{p.titleEn}</span><span data-lang-content="tr">{p.titleTr}</span></span>
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .series {
+    margin: 1.5rem auto 0;
+    padding: 1.1rem 1.35rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--card-elevated) / 0.4);
+  }
+  .series__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .tag-mono, .series__count {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+  .series__count { color: hsl(var(--primary-soft)); }
+  .series__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    margin: 0.35rem 0 0.75rem;
+  }
+  .series__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.1rem; counter-reset: none; }
+  .series__item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 8px;
+    color: hsl(var(--muted-foreground));
+    font-size: 14.5px;
+    line-height: 1.4;
+  }
+  a.series__item:hover { color: hsl(var(--foreground)); background: hsl(var(--card-glass)); }
+  .is-current .series__item { color: hsl(var(--foreground)); font-weight: 500; }
+  .series__n {
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid hsl(var(--border));
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
+  }
+  .is-current .series__n {
+    border-color: hsl(var(--primary) / 0.5);
+    background: hsl(var(--primary) / 0.12);
+    color: hsl(var(--primary-soft));
+  }
+</style>

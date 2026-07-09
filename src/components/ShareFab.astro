@@ -31,23 +31,24 @@ const links = [
   data-title-en={title}
   data-title-tr={titleTr}
 >
-  <div class="fab__panel" role="menu" aria-label="Share this post">
+  <div class="fab__panel" id="fabPanel" role="group" aria-label="Share this post">
     {
       links.map((l) => (
-        <a class="fab__item" role="menuitem" href={render(l.tpl)} data-tpl={l.tpl} target="_blank" rel="noopener">
+        <a class="fab__item" href={render(l.tpl)} data-tpl={l.tpl} target="_blank" rel="noopener">
           <svg class="fab__ico" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" set:html={l.svg} />
           <span>{l.name}</span>
         </a>
       ))
     }
-    <button class="fab__item fab__copy" type="button" role="menuitem" data-url={url}>
+    <button class="fab__item fab__copy" type="button" data-url={url}>
       <svg class="fab__ico i-link" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       <svg class="fab__ico i-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
       <span><T en="Copy link" tr="Bağlantıyı kopyala" /></span>
     </button>
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
   </div>
 
-  <button class="fab__toggle" type="button" aria-label="Share this post" aria-expanded="false">
+  <button class="fab__toggle" type="button" aria-label="Share this post" aria-controls="fabPanel" aria-expanded="false">
     <svg class="i-share" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
     <svg class="i-close" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>
   </button>
@@ -140,7 +141,16 @@ const links = [
         document.body.removeChild(ta);
       }
       copyBtn.classList.add("is-copied");
-      window.setTimeout(() => { copyBtn.classList.remove("is-copied"); setOpen(false); }, 1200);
+      const status = fab.querySelector("[data-copy-status]");
+      if (status) {
+        status.textContent =
+          document.documentElement.dataset.lang === "tr" ? "Bağlantı kopyalandı" : "Link copied";
+      }
+      window.setTimeout(() => {
+        copyBtn.classList.remove("is-copied");
+        if (status) status.textContent = "";
+        setOpen(false);
+      }, 1200);
     });
 
     const enc = encodeURIComponent;

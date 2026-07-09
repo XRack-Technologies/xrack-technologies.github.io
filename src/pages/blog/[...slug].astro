@@ -9,6 +9,7 @@ import ShareFab from "../../components/ShareFab.astro";
 import Comments from "../../components/Comments.astro";
 import Toc from "../../components/Toc.astro";
 import Related from "../../components/Related.astro";
+import Series from "../../components/Series.astro";
 import { resolveAuthor } from "../../lib/authors";
 
 export async function getStaticPaths() {
@@ -20,7 +21,6 @@ export async function getStaticPaths() {
       newer: i > 0 ? posts[i - 1] : null,
       older: i < posts.length - 1 ? posts[i + 1] : null,
     };
-    // "Read next": other posts ranked by shared-tag count, then recency.
     const related = posts
       .filter((p) => p.id !== post.id)
       .map((p) => ({
@@ -30,17 +30,38 @@ export async function getStaticPaths() {
       .sort((a, b) => b.shared - a.shared || b.p.data.pubDate.getTime() - a.p.data.pubDate.getTime())
       .slice(0, 3)
       .map((x) => x.p);
+    let series = null;
+    if (post.data.series) {
+      const parts = posts
+        .filter((p) => p.data.series === post.data.series)
+        .sort(
+          (a, b) =>
+            (a.data.seriesOrder ?? Infinity) - (b.data.seriesOrder ?? Infinity) ||
+            a.data.pubDate.getTime() - b.data.pubDate.getTime(),
+        )
+        .map((p) => ({
+          id: p.id,
+          titleEn: p.data.title,
+          titleTr: p.data.title_tr ?? p.data.title,
+          hasTr:
+            renderBilingual(p.body ?? "").bilingual ||
+            !!p.data.title_tr ||
+            !!p.data.description_tr,
+          current: p.id === post.id,
+        }));
+      series = { name: post.data.series, parts, current: parts.findIndex((x) => x.current) + 1, total: parts.length };
+    }
     const { bilingual } = renderBilingual(post.body ?? "");
     const hasTr = bilingual || !!post.data.title_tr || !!post.data.description_tr;
     const langs = hasTr ? ["en", "tr"] : ["en"];
     return langs.map((lang) => ({
       params: { slug: lang === "tr" ? `${post.id}/tr` : post.id },
-      props: { post, lang, related, ...neighbors },
+      props: { post, lang, related, series, ...neighbors },
     }));
   });
 }
 
-const { post, lang = "en", newer, older, related = [] } = Astro.props;
+const { post, lang = "en", newer, older, related = [], series = null } = Astro.props;
 const isTr = lang === "tr";
 const { title, description, pubDate, tags, author, cover } = post.data;
 const titleTr = post.data.title_tr ?? title;
@@ -94,7 +115,6 @@ const jsonLd = {
   url: selfUrl,
 };
 
-// Breadcrumb: Home → category → post.
 const primaryTag = tags[0];
 const catItem = NAV.find((n) => n.tag === primaryTag);
 const catName = isTr ? (catItem?.label_tr ?? primaryTag) : (catItem?.label ?? primaryTag);
@@ -115,7 +135,6 @@ const breadcrumbLd = {
 <Base
   title={ogTitle}
   description={ogDescription}
-  keywords={keywords}
   ogType="article"
   image={image}
   publishedTime={pubDate.toISOString()}
@@ -166,6 +185,8 @@ const breadcrumbLd = {
         <T en="by" tr="yazan" /> <a href={href(`authors/${authorInfo.slug}`)}><b>{authorInfo.name}</b></a>
       </div>
     </header>
+
+    {series && <Series name={series.name} parts={series.parts} current={series.current} total={series.total} />}
 
     {
       cover && (

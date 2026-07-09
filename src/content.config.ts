@@ -11,6 +11,8 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     cover: z.string().optional(),
+    series: z.string().optional(),
+    seriesOrder: z.number().optional(),
     tags: z.array(z.string()).default([]),
     keywords: z.array(z.string()).optional(),
     author: z.string().default("Vincent E. Dogan Dursun - CEO & Co-Founder"),

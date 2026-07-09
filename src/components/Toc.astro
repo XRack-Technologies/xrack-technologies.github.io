@@ -16,7 +16,6 @@ const lists = bilingual
   : [{ lang: null, items: en }];
 ---
 
-{/* Desktop: sticky scroll-synced outline in the right gutter */}
 <aside class="toc-rail" aria-label="Table of contents">
   <p class="toc-heading"><T en="On this page" tr="Bu sayfada" /></p>
   {
@@ -36,7 +35,6 @@ const lists = bilingual
   }
 </aside>
 
-{/* Mobile/tablet: collapsible outline at the top of the post */}
 <details class="toc-inline wrap wrap--narrow">
   <summary>
     <span class="toc-heading"><T en="On this page" tr="Bu sayfada" /></span>
@@ -98,7 +96,6 @@ const lists = bilingual
     border-left-color: hsl(var(--primary));
   }
 
-  /* Desktop sticky rail (right gutter) */
   .toc-rail {
     position: fixed;
     top: 96px;
@@ -118,7 +115,6 @@ const lists = bilingual
     }
   }
 
-  /* Mobile/tablet collapsible box */
   .toc-inline {
     margin: 1.5rem auto 0;
     border: 1px solid hsl(var(--border));

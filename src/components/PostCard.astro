@@ -31,7 +31,7 @@ const hue = hues[hueSeed % hues.length];
     <div class="post-card__cover">
       {
         cover ? (
-          <img src={cover} alt={title} loading="lazy" />
+          <img src={cover} alt="" loading="lazy" />
         ) : (
           <span class="post-card__cover-ph" style={`--cov:${hue}`}>{primaryTag ?? "XRack"}</span>
         )
@@ -44,7 +44,7 @@ const hue = hues[hueSeed % hues.length];
           <span data-lang-content="en">{formatDate(pubDate)}</span>
           <span data-lang-content="tr">{formatDateTr(pubDate)}</span>
         </time>
-        <span class="dot">&middot;</span>
+        <span class="dot" aria-hidden="true">&middot;</span>
         <span><T en={`${mins} min read`} tr={`${mins} dk okuma`} /></span>
       </div>
       <h2 class="post-card__title">
@@ -73,7 +73,7 @@ const hue = hues[hueSeed % hues.length];
       </p>
       <div class="post-card__foot">
         <span>{author}</span>
-        <span class="read"><T en="Read" tr="Oku" /> &rarr;</span>
+        <span class="read"><T en="Read" tr="Oku" /> <span aria-hidden="true">&rarr;</span></span>
       </div>
     </div>
   </a>

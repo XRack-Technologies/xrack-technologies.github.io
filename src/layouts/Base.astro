@@ -2,13 +2,13 @@
 import "../styles/global.css";
 import { getCollection } from "astro:content";
 import { SITE, SITE_TR, NAV, href, GOOGLE_VERIFICATION, BING_VERIFICATION } from "../lib/site";
+import { Font } from "astro:assets";
 import T from "../components/T.astro";
 import Analytics from "../components/Analytics.astro";
 
 interface Props {
   title?: string;
   description?: string;
-  keywords?: string[];
   ogType?: string;
   publishedTime?: string;
   articleTags?: string[];
@@ -25,7 +25,6 @@ const hasPosts = (tag: string) => activeTags.has(tag);
 const {
   title,
   description = SITE.description,
-  keywords = [],
   ogType = "website",
   publishedTime,
   articleTags = [],
@@ -105,7 +104,6 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
     <link rel="manifest" href={href("site.webmanifest")} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
     {GOOGLE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_VERIFICATION} />}
     {BING_VERIFICATION && <meta name="msvalidate.01" content={BING_VERIFICATION} />}
     <link rel="canonical" href={canonical} />
@@ -138,12 +136,10 @@ const graph = [orgLd, siteLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [js
     <meta name="twitter:image" content={ogImage} />
     <meta name="generator" content={Astro.generator} />
     {graph.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-bricolage" preload />
+    <Font cssVariable="--font-instrument" />
+    <Font cssVariable="--font-jetbrains" />
   </head>
   <body>
     <a class="skip-link" href="#main"><T en="Skip to content" tr="İçeriğe geç" /></a>

@@ -1,6 +1,4 @@
-// Author / executive registry — the source of truth for bylines, profile
-// pages, the press kit, and Person JSON-LD (E-E-A-T). Add real profile URLs to
-// `sameAs` as they exist.
+
 export interface Author {
   slug: string;
   name: string;
@@ -44,8 +42,6 @@ export const AUTHORS: Record<string, Author> = {
 
 export const DEFAULT_AUTHOR = "dogan-dursun";
 
-// Resolve a post's free-text `author` field to a registered profile:
-// exact slug, name match, or the name prefix before a " - " role suffix.
 export function resolveAuthor(name?: string): Author {
   if (name) {
     const byId = AUTHORS[name];

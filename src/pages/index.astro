@@ -82,7 +82,7 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
           <T en="Load more" tr="Daha fazla" />
         </button>
       </div>
-      <p class="empty" id="feedEmpty" hidden>
+      <p class="empty" id="feedEmpty" role="status" aria-live="polite" hidden>
         <T en="No posts match your search." tr="Eşleşen yazı bulunamadı." />
       </p>
       </>
@@ -118,7 +118,6 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
           return sortMode === "oldest" ? da.localeCompare(db) : db.localeCompare(da);
         });
         cards.forEach((c) => { c.style.display = "none"; });
-        // Paginate client-side so search/filter/sort still span all posts.
         shown.forEach((c, i) => {
           if (i < visible) { c.style.display = ""; c.classList.add("is-visible"); }
           grid.appendChild(c);
@@ -154,7 +153,6 @@ const labelTrFor = (t: string) => NAV.find((n) => n.tag === t)?.label_tr ?? t;
         }),
       );
       loadMore?.addEventListener("click", () => { visible += PAGE; apply(); });
-      // Honor ?q= so the WebSite SearchAction (sitelinks searchbox) works.
       const q0 = new URLSearchParams(location.search).get("q");
       if (q0) searchInput.value = q0;
       apply();
