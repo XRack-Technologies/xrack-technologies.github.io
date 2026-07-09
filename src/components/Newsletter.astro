@@ -89,6 +89,9 @@ const scriptSrc = `https://eomail5.com/form/${formId}.js`;
     font-family: var(--font-sans) !important;
     font-size: 12.5px !important; line-height: 1.5 !important;
   }
+  .nl__embed :global(.emailoctopus-form-row-consent) { margin-top: 1rem !important; display: flex !important; align-items: flex-start !important; gap: 0.5rem !important; }
+  .nl__embed :global(.emailoctopus-form-row-consent input[type="checkbox"]) { margin: 0.2rem 0 0 0 !important; flex-shrink: 0 !important; }
+  .nl__embed :global(.emailoctopus-form-row-consent label) { margin: 0 !important; }
   .nl__embed :global(.emailoctopus-success-message) { color: hsl(var(--success)) !important; font-family: var(--font-sans) !important; }
   .nl__embed :global(.emailoctopus-error-message) { color: hsl(var(--rose)) !important; font-family: var(--font-sans) !important; }
   .nl__embed :global(.mastfoot) { opacity: 0.55; margin-top: 0.4rem; }
