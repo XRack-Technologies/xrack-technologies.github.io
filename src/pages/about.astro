@@ -5,13 +5,23 @@ import { href, SITE } from "../lib/site";
 ---
 
 <Base title="About" description={SITE.description}>
-  <article class="article">
-    <header class="wrap wrap--narrow article-head">
+  <section class="hero about-hero">
+    <div class="hero-aura"></div>
+    <div class="wrap wrap--narrow hero-inner about-hero__inner reveal-on-view">
       <span class="eyebrow-strong"><T en="About" tr="Hakkında" /></span>
       <h1 class="display-title">
         <T en="The runtime, and this blog" tr="Çalışma zamanı ve bu blog" />
       </h1>
-    </header>
+      <p class="lede">
+        <T
+          en="XRack is a sovereign cognitive runtime for regulated enterprise AI — and this is where the team writes down how it is built and where it is going."
+          tr="XRack, regüle kurumsal yapay zekâ için bağımsız bir bilişsel çalışma zamanıdır; burası da ekibin onu nasıl inşa ettiğini ve nereye gittiğini yazıya döktüğü yer."
+        />
+      </p>
+    </div>
+  </section>
+
+  <article class="article about-article">
 
     <!-- English -->
     <div class="wrap wrap--narrow prose" data-lang-content="en">
@@ -131,3 +141,15 @@ import { href, SITE } from "../lib/site";
     </div>
   </article>
 </Base>
+
+<style>
+  .about-hero {
+    padding: 5rem 0 1rem;
+  }
+  .about-hero__inner {
+    gap: 1.1rem;
+  }
+  .about-article {
+    padding-top: 1.5rem;
+  }
+</style>
