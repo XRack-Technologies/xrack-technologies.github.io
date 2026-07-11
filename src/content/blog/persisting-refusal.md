@@ -18,7 +18,7 @@ keywords: [
     "açıklama borcu", 
     "yapay zeka yönetişimi"
 ]
-------------
+---
 
 ## The refusal that has to survive
 
